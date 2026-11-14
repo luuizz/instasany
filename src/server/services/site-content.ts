@@ -9,18 +9,28 @@ import { siteSections } from '../db/schema'
 
 export const SITE_CONTENT_TAG = 'site-content'
 
+type StoredSection = { key: string; data: unknown; updatedAt: Date | string }
+
 export type SectionState<K extends SiteSectionKey> = {
   data: HomeContent[K]
   updatedAt: Date | null
 }
 
-// Seção salva no banco; se não existe ou ficou fora do formato atual, vale o padrão
-async function readSections() {
-  const result = { ...homeContent } as HomeContent
-  const updatedAt: Partial<Record<SiteSectionKey, Date>> = {}
-  if (!isDatabaseConfigured()) return { content: result, updatedAt }
+async function readRows(): Promise<StoredSection[]> {
+  if (!isDatabaseConfigured()) return []
+  return db()
+    .select({ key: siteSections.key, data: siteSections.data, updatedAt: siteSections.updatedAt })
+    .from(siteSections)
+}
 
-  const rows = await db().select().from(siteSections)
+// O cache guarda só as linhas do banco; o encaixe nos padrões acontece a cada leitura,
+// então seção nova ou formato novo nunca dependem de um cache antigo
+const cachedRows = unstable_cache(readRows, ['site-sections'], { tags: [SITE_CONTENT_TAG], revalidate: 3600 })
+
+// Seção salva no banco; se não existe ou ficou fora do formato atual, vale o padrão
+function mergeWithDefaults(rows: StoredSection[]) {
+  const content = { ...homeContent }
+  const updatedAt: Partial<Record<SiteSectionKey, Date>> = {}
   for (const row of rows) {
     const key = row.key as SiteSectionKey
     const schema = siteSectionSchemas[key]
@@ -30,29 +40,25 @@ async function readSections() {
       console.error('[cms] seção fora do formato, usando o padrão:', key, parsed.error.issues[0]?.message)
       continue
     }
-    Object.assign(result, { [key]: parsed.data })
-    updatedAt[key] = row.updatedAt
+    Object.assign(content, { [key]: parsed.data })
+    updatedAt[key] = new Date(row.updatedAt)
   }
-  return { content: result, updatedAt }
+  return { content, updatedAt }
 }
 
-// Leitura pública da home, em cache até o painel salvar uma seção
-export const getHomeContent = unstable_cache(
-  async (): Promise<HomeContent> => {
-    try {
-      return (await readSections()).content
-    } catch (error) {
-      console.error('[cms] falha ao ler o conteúdo, usando o padrão:', error)
-      return homeContent
-    }
-  },
-  ['home-content'],
-  { tags: [SITE_CONTENT_TAG], revalidate: 3600 },
-)
+// Leitura pública do site, em cache até o painel salvar uma seção
+export async function getHomeContent(): Promise<HomeContent> {
+  try {
+    return mergeWithDefaults(await cachedRows()).content
+  } catch (error) {
+    console.error('[cms] falha ao ler o conteúdo, usando o padrão:', error)
+    return homeContent
+  }
+}
 
 // Leitura do painel, sempre fresca
 export async function getSection<K extends SiteSectionKey>(key: K): Promise<SectionState<K>> {
-  const { content, updatedAt } = await readSections()
+  const { content, updatedAt } = mergeWithDefaults(await readRows())
   return { data: content[key], updatedAt: updatedAt[key] ?? null }
 }
 

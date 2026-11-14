@@ -1,6 +1,6 @@
 import type { HomeContent } from '@/types/home'
 
-// Conteúdo provisório da home; vai para o CMS (banco) na etapa do backend
+// Conteúdo padrão da home: vale até a seção ser salva no painel (/admin/conteudo)
 export const homeContent: HomeContent = {
   hero: {
     eyebrow: 'Novo curso focado em Instagram',

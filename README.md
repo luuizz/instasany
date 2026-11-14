@@ -9,6 +9,9 @@ Projeto de estudo em evolução: começou como uma landing page em Next 13 com P
 - Next.js 16 (App Router) e React 19
 - Tailwind CSS 4, com os tokens da marca em `src/app/globals.css`
 - GSAP (`@gsap/react`) nas animações, respeitando `prefers-reduced-motion`
+- Postgres no Neon com Drizzle ORM e migrations SQL versionadas
+- Neon Auth com sessão em cookie no domínio do site, tudo via Server Actions
+- CMS próprio em `/admin` para o conteúdo da home
 - TypeScript strict, ESLint e Prettier
 
 ## Rodando localmente
@@ -16,7 +19,9 @@ Projeto de estudo em evolução: começou como uma landing page em Next 13 com P
 ```bash
 nvm use        # Node 22
 yarn install
-yarn dev       # http://localhost:3000
+cp .env.example .env.local   # preencha o que tiver; sem banco o site usa o conteúdo padrão
+yarn db:migrate              # com DATABASE_URL
+yarn dev                     # http://localhost:3000
 ```
 
 ## Scripts
@@ -31,12 +36,12 @@ yarn dev       # http://localhost:3000
 
 ## Fluxo de trabalho
 
-`feat/*` → PR para `dev` → PR de release `dev` → `main`. O CI roda lint, formatação, tipos e build em todo PR.
+`feat/*` → PR para `dev` → PR de release `dev` → `main`. O CI roda lint, formatação, tipos, build e as migrations num Postgres de teste em todo PR; o merge na `main` aplica as migrations no Neon.
 
 ## Roteiro
 
 - [x] Base nova: header, hero e vitrine responsivos
-- [ ] Backend: banco no Neon, login e CMS próprio para o conteúdo do site
+- [x] Backend: banco no Neon, login e CMS próprio para o conteúdo do site
 - [ ] Demais seções: benefícios, para quem é, preços, sobre nós, FAQ e rodapé
 - [ ] LMS: cursos, módulos, aulas, matrícula e progresso do aluno
 - [ ] Deploy na Vercel com migrations automáticas

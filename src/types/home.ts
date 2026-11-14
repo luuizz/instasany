@@ -1,25 +1,9 @@
-export type HeroContent = {
-  eyebrow: string
-  title: string
-  waitlistLabel: string
-  waitlistHref: string
-  ctaLabel: string
-  ctaHref: string
-}
+import type { z } from 'zod'
+import type { heroSchema, showcaseCardSchema, showcaseSchema } from '@/lib/validation/site-content'
 
-export type ShowcaseCard = {
-  src: string
-  alt: string
-  // Bloco só de composição (sem foto): fica fora da grade no celular
-  decorative?: boolean
-}
-
-export type ShowcaseContent = {
-  titleStart: string
-  titleHighlight: string
-  titleEnd: string
-  cards: ShowcaseCard[]
-}
+export type HeroContent = z.output<typeof heroSchema>
+export type ShowcaseCard = z.output<typeof showcaseCardSchema>
+export type ShowcaseContent = z.output<typeof showcaseSchema>
 
 export type HomeContent = {
   hero: HeroContent

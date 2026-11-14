@@ -1,7 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-* {
-    -webkit-font-smoothing: antialiased;
+/* Identidade da Instasany: verde-pinho com destaque em lima */
+@theme {
+  --font-sans: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-pine: #1d3531;
+  --color-pine-line: #2a4b46;
+  --color-pine-ring: #436d66;
+  --color-sage: #5d8a83;
+  --color-sage-light: #719d96;
+  --color-lime: #ccec60;
+  --color-ink: #0f1f1c;
+  --color-paper: #ffffff;
+
+  --container-grid: 77.5rem;
+  --container-hero-text: 66rem;
+  --container-hero-hands: 53.4375rem;
+  --container-hero-phones: 59.8125rem;
+  --container-cards: 82.5rem;
+
+  --spacing-header: 6rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+
+  /* As seções começam escondidas para a animação de entrada; sem JS ou com movimento reduzido, aparecem direto */
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
+@utility bg-hero {
+  background-image: url('/images/hero-bg.svg');
 }

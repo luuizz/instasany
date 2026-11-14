@@ -32,6 +32,11 @@ export function SiteFooter({ content }: { content: FooterContent }) {
             <p className={heading}>Plataforma</p>
             <ul className="flex flex-col gap-2">
               <li>
+                <Link href="/cursos" className={link}>
+                  Cursos
+                </Link>
+              </li>
+              <li>
                 <Link href="/entrar" className={link}>
                   Área do aluno
                 </Link>

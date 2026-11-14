@@ -1,4 +1,15 @@
-import { jsonb, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  index,
+  integer,
+  jsonb,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  serial,
+  text,
+  timestamp,
+} from 'drizzle-orm/pg-core'
 
 export const roleEnum = pgEnum('role', ['student', 'admin'])
 
@@ -22,3 +33,83 @@ export const siteSections = pgTable('site_sections', {
 
 export type ProfileRow = typeof profiles.$inferSelect
 export type SiteSectionRow = typeof siteSections.$inferSelect
+
+// ---- LMS ------------------------------------------------------------------
+
+export const courses = pgTable('courses', {
+  id: serial('id').primaryKey(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  summary: text('summary').notNull().default(''),
+  description: text('description').notNull().default(''),
+  coverUrl: text('cover_url'),
+  level: text('level').notNull().default('Iniciante'),
+  published: boolean('published').notNull().default(false),
+  sortOrder: integer('sort_order').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const courseModules = pgTable(
+  'course_modules',
+  {
+    id: serial('id').primaryKey(),
+    courseId: integer('course_id')
+      .notNull()
+      .references(() => courses.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    sortOrder: integer('sort_order').notNull().default(0),
+  },
+  (table) => [index('course_modules_course_idx').on(table.courseId, table.sortOrder)],
+)
+
+export const lessons = pgTable(
+  'lessons',
+  {
+    id: serial('id').primaryKey(),
+    moduleId: integer('module_id')
+      .notNull()
+      .references(() => courseModules.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    // Texto da aula; parágrafos separados por linha em branco
+    content: text('content').notNull().default(''),
+    videoUrl: text('video_url'),
+    durationMinutes: integer('duration_minutes').notNull().default(0),
+    sortOrder: integer('sort_order').notNull().default(0),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index('lessons_module_idx').on(table.moduleId, table.sortOrder)],
+)
+
+export const enrollments = pgTable(
+  'enrollments',
+  {
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    courseId: integer('course_id')
+      .notNull()
+      .references(() => courses.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.profileId, table.courseId] })],
+)
+
+export const lessonProgress = pgTable(
+  'lesson_progress',
+  {
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    lessonId: integer('lesson_id')
+      .notNull()
+      .references(() => lessons.id, { onDelete: 'cascade' }),
+    completedAt: timestamp('completed_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.profileId, table.lessonId] })],
+)
+
+export type CourseRow = typeof courses.$inferSelect
+export type CourseModuleRow = typeof courseModules.$inferSelect
+export type LessonRow = typeof lessons.$inferSelect

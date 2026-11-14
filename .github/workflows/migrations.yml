@@ -1,0 +1,36 @@
+# Aplica as migrations no banco de produção a cada merge na main.
+# Precisa do secret DATABASE_URL no repositório (Settings > Secrets and variables > Actions).
+name: Migrations
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: migrations
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    name: Aplica as migrations no Neon
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - name: Confere o secret
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Crie o secret DATABASE_URL no repositório para aplicar as migrations."
+            exit 1
+          fi
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn db:migrate

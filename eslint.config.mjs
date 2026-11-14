@@ -8,5 +8,12 @@ export default defineConfig([
   ...typescript,
   // Por último: desliga regras de estilo que brigam com o Prettier
   prettier,
-  globalIgnores(['.next/**', 'node_modules/**', 'next-env.d.ts', 'playwright-report/**', 'test-results/**']),
+  globalIgnores([
+    'database/**',
+    '.next/**',
+    'node_modules/**',
+    'next-env.d.ts',
+    'playwright-report/**',
+    'test-results/**',
+  ]),
 ])

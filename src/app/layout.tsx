@@ -1,45 +1,21 @@
-import type { Metadata } from 'next'
-import { Epilogue } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import '@fontsource-variable/epilogue'
+import { site } from '@/config/site'
 import './globals.css'
-import { Header } from '@/components/Header/header'
-import { createClient } from '@/prismicio'
 
-const epilogue = Epilogue({ 
-  subsets: ['latin'],
-  weight: ['500', '600', '700']
-})
-
-type Props = {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
- 
-export async function generateMetadata(): Promise<Metadata> {
-
-  const client = createClient();
-
-  const page = await client.getSingle("home");
- 
-  return {
-    title: page.data.meta_title || "Instasany",
-    description: page.data.meta_description || "Projeto de estudo dedicado ao Codeboost",
-    openGraph: {
-      images: [page.data.meta_image.url || ""],
-    },
-  }
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: { default: `${site.name} | Renda online com o Instagram`, template: `%s | ${site.name}` },
+  description: site.description,
+  openGraph: { siteName: site.name, locale: site.locale, type: 'website' },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export const viewport: Viewport = { themeColor: '#1d3531' }
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-br">
-      <body className={epilogue.className}>
-        <Header />
-        {children}
-        </body>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   )
 }

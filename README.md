@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Instasany
 
-## Getting Started
+Site institucional e plataforma de cursos (LMS) da Instasany, um curso fictício sobre criar e monetizar perfis no Instagram.
 
-First, run the development server:
+Projeto de estudo em evolução: começou como uma landing page em Next 13 com Prismic e está sendo refeito do zero com Next.js 16, CMS próprio e banco no Neon.
+
+## Stack
+
+- Next.js 16 (App Router) e React 19
+- Tailwind CSS 4, com os tokens da marca em `src/app/globals.css`
+- GSAP (`@gsap/react`) nas animações, respeitando `prefers-reduced-motion`
+- Postgres no Neon com Drizzle ORM e migrations SQL versionadas
+- Neon Auth com sessão em cookie no domínio do site, tudo via Server Actions
+- CMS próprio em `/admin` para o conteúdo da home
+- TypeScript strict, ESLint e Prettier
+
+## Rodando localmente
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+nvm use        # Node 22
+yarn install
+cp .env.example .env.local   # preencha o que tiver; sem banco o site usa o conteúdo padrão
+yarn db:migrate              # com DATABASE_URL
+yarn dev                     # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Comando          | O que faz                       |
+| ---------------- | ------------------------------- |
+| `yarn dev`       | servidor local (Turbopack)      |
+| `yarn build`     | build de produção               |
+| `yarn lint`      | ESLint                          |
+| `yarn format`    | Prettier (`format:check` no CI) |
+| `yarn typecheck` | checagem de tipos (TS 7)        |
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Fluxo de trabalho
 
-## Learn More
+`feat/*` → PR para `dev` → PR de release `dev` → `main`. O CI roda lint, formatação, tipos, build e as migrations num Postgres de teste em todo PR; o merge na `main` aplica as migrations no Neon.
 
-To learn more about Next.js, take a look at the following resources:
+## Roteiro
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [x] Base nova: header, hero e vitrine responsivos
+- [x] Backend: banco no Neon, login e CMS próprio para o conteúdo do site
+- [ ] Demais seções: benefícios, para quem é, preços, sobre nós, FAQ e rodapé
+- [ ] LMS: cursos, módulos, aulas, matrícula e progresso do aluno
+- [ ] Deploy na Vercel com migrations automáticas

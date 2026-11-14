@@ -1,0 +1,76 @@
+# Validação de toda mudança antes de entrar na dev ou na main
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # A main só recebe código vindo da dev (esteira feat/* → dev → main)
+  origem:
+    name: Origem do PR
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR para a main precisa vir da dev
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "$HEAD_REF" != "dev" ]; then
+            echo "::error::PRs para a main devem sair da dev (recebido: $HEAD_REF)."
+            exit 1
+          fi
+
+  front:
+    name: Lint, formatação, tipos e build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn format:check
+      - run: yarn typecheck
+      - run: yarn build
+
+  database:
+    name: Migrations (Postgres de teste)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - name: Aplica as migrations do zero
+        run: yarn db:migrate
+      - name: Segunda execução não quebra
+        run: yarn db:migrate
+      - name: Schema e migrations batem (nada novo a gerar)
+        run: |
+          yarn db:generate
+          git add -N database
+          git diff --exit-code database || { echo "::error::O schema mudou sem migration. Rode yarn db:generate e commite."; exit 1; }

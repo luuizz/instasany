@@ -35,7 +35,7 @@ src/
   components/
     ui/           primitivos sem regra de negócio (container, button)
     layout/       cabeçalho, menu, rodapé
-    home/         seções da home; animação de cada seção num hook use-*-animation.ts ao lado
+    home/         seções da home; hero e vitrine têm hook use-*-animation.ts, as demais usam ui/reveal-on-scroll (data-reveal-item)
     admin/ auth/  telas do painel e do login
   hooks/          hooks de cliente reaproveitados (use-form-action)
   config/         identidade, navegação e seções editáveis do CMS (cms.ts)
@@ -53,7 +53,8 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - Formulário de action usa `useFormAction` (`hooks/`), que mantém o que foi digitado quando a action devolve erro.
 - Login 100% no servidor: `auth.signIn.email`/`signUp.email` nas actions de `(auth)`; o usuário vem de `getSessionUser()`, nunca do navegador.
 - Perfil (`profiles`) nasce no primeiro acesso; e-mails de `ADMIN_EMAILS` entram como admin.
-- Conteúdo do site: tabela `site_sections` (uma linha por seção, `data` em jsonb validado pelo schema da seção). Seção nova: schema em `lib/validation/site-content.ts`, padrão em `data/home.ts`, campos em `config/cms.ts`.
+- Conteúdo do site: tabela `site_sections` (uma linha por seção, `data` em jsonb validado pelo schema da seção). Seção nova: schema em `lib/validation/site-content.ts`, padrão em `data/home.ts`, campos em `config/cms.ts` (tipos `text`, `textarea`, `lines` = um item por linha, `number`, `checkbox` e `list` para itens repetidos, lida por `lib/cms-form.ts`).
+- A home lê o conteúdo por `getHomeContent()`: o cache guarda só as linhas do banco e o encaixe nos padrões é feito a cada leitura, então formato novo nunca depende de cache antigo.
 
 ## Estilo
 

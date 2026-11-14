@@ -64,7 +64,7 @@ export function MobileMenu() {
           {mainNav.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={`/${item.href}`}
               onClick={close}
               className="rounded-full px-4 py-3 text-paper/70 hover:bg-pine-line hover:text-paper"
             >

@@ -11,7 +11,7 @@ Projeto de estudo em evolução: começou como uma landing page em Next 13 com P
 - GSAP (`@gsap/react`) nas animações, respeitando `prefers-reduced-motion`
 - Postgres no Neon com Drizzle ORM e migrations SQL versionadas
 - Neon Auth com sessão em cookie no domínio do site, tudo via Server Actions
-- CMS próprio em `/admin` para o conteúdo da home
+- CMS próprio em `/admin` para todas as seções da home e o rodapé
 - TypeScript strict, ESLint e Prettier
 
 ## Rodando localmente
@@ -42,6 +42,6 @@ yarn dev                     # http://localhost:3000
 
 - [x] Base nova: header, hero e vitrine responsivos
 - [x] Backend: banco no Neon, login e CMS próprio para o conteúdo do site
-- [ ] Demais seções: benefícios, para quem é, preços, sobre nós, FAQ e rodapé
+- [x] Demais seções: benefícios, para quem é, preços, sobre nós, FAQ e rodapé, todas editáveis no painel
 - [ ] LMS: cursos, módulos, aulas, matrícula e progresso do aluno
 - [ ] Deploy na Vercel com migrations automáticas

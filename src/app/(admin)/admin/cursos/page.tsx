@@ -1,22 +1,33 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { CourseCollection } from '@/components/admin/course-collection'
 import { PageHeader } from '@/components/admin/page-header'
+import { ViewToggle } from '@/components/admin/view-toggle'
 import { ButtonLink } from '@/components/ui/button'
-import { formatDuration } from '@/lib/duration'
+import { getAdminView } from '@/server/admin-view'
 import { listAllCourses } from '@/server/services/courses'
 import { createDemoCoursesAction } from './actions'
 
 export const metadata: Metadata = { title: 'Cursos' }
 
 export default async function AdminCoursesPage() {
-  const courses = await listAllCourses()
+  const [courses, view] = await Promise.all([listAllCourses(), getAdminView()])
+  const published = courses.filter((course) => course.published).length
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-6xl">
       <PageHeader
         title="Cursos"
-        description="Cursos, módulos e aulas da área do aluno."
-        actions={<ButtonLink href="/admin/cursos/novo">Novo curso</ButtonLink>}
+        description={
+          courses.length
+            ? `${courses.length} cursos, ${published} publicados e ${courses.length - published} em rascunho.`
+            : 'Cursos, módulos e aulas da área do aluno.'
+        }
+        actions={
+          <>
+            {courses.length > 0 && <ViewToggle view={view} />}
+            <ButtonLink href="/admin/cursos/novo">Novo curso</ButtonLink>
+          </>
+        }
       />
 
       {courses.length === 0 ? (
@@ -34,32 +45,7 @@ export default async function AdminCoursesPage() {
           </form>
         </div>
       ) : (
-        <ul className="flex flex-col gap-3">
-          {courses.map((course) => (
-            <li key={course.id}>
-              <Link
-                href={`/admin/cursos/${course.id}`}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-ink/10 p-5 transition hover:border-sage"
-              >
-                <div>
-                  <p className="font-semibold text-ink">{course.title}</p>
-                  <p className="text-sm text-ink/60">
-                    {course.level} · {course.lessonCount} aulas · {formatDuration(course.totalMinutes)}
-                  </p>
-                </div>
-                <span
-                  className={
-                    course.published
-                      ? 'rounded-full bg-lime/40 px-3 py-1 text-xs font-bold text-pine'
-                      : 'rounded-full bg-ink/10 px-3 py-1 text-xs font-bold text-ink/60'
-                  }
-                >
-                  {course.published ? 'Publicado' : 'Rascunho'}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <CourseCollection courses={courses} view={view} />
       )}
     </div>
   )

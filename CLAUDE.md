@@ -9,6 +9,7 @@ Postgres no Neon com Drizzle, Neon Auth. Gerenciador: **yarn**.
 yarn dev | yarn build | yarn lint | yarn format | yarn typecheck
 yarn db:generate   # gera a migration SQL depois de mudar src/server/db/schema.ts
 yarn db:migrate    # aplica as migrations de database/migrations (CI e merge na main)
+yarn e2e           # Playwright contra o build, com login de teste (ver e2e/README.md)
 ```
 
 Sem `DATABASE_URL` o site sobe com o conteúdo padrão de `src/data`; sem `NEON_AUTH_*` só o login fica indisponível. Referência das variáveis: `.env.example`.

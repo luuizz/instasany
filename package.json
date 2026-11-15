@@ -13,7 +13,8 @@
     "typecheck": "node node_modules/@typescript/native/bin/tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node scripts/migrate.mjs",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource-variable/epilogue": "5.3.0",
@@ -37,12 +38,14 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@playwright/test": "1.65.1",
     "@tailwindcss/postcss": "4.3.5",
     "@types/node": "26.6.6",
     "@types/pg": "8.23.1",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@typescript/native": "npm:typescript@7.0.2",
+    "better-auth": "1.7.25",
     "drizzle-kit": "0.31.11",
     "eslint": "10.15.0",
     "eslint-config-next": "16.4.6",

@@ -74,3 +74,41 @@ jobs:
           yarn db:generate
           git add -N database
           git diff --exit-code database || { echo "::error::O schema mudou sem migration. Rode yarn db:generate e commite."; exit 1; }
+
+  e2e:
+    name: Testes de ponta a ponta
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+      E2E_POSTGRES_URL: postgres://postgres:postgres@localhost:5432/postgres
+      # Login de teste (e2e/auth-server.mjs) no lugar do Neon Auth
+      NEON_AUTH_BASE_URL: http://127.0.0.1:4100/neondb/auth
+      NEON_AUTH_COOKIE_SECRET: e2e-cookie-secret-0123456789-0123456789
+      ADMIN_EMAILS: admin@e2e.test
+      NEXT_PUBLIC_SITE_URL: http://localhost:3200
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn playwright install --with-deps chromium
+      - run: yarn db:migrate
+      - run: yarn build
+      - run: yarn e2e
+      - name: Relatório dos testes
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-e2e
+          path: e2e/.output/
+          retention-days: 7

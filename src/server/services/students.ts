@@ -77,7 +77,8 @@ async function courseProgress(profileId: string): Promise<StudentCourseProgress[
       (select max(lp.completed_at) from lesson_progress lp
         join lessons l on l.id = lp.lesson_id
         join course_modules m on m.id = l.module_id
-        where m.course_id = c.id and lp.profile_id = en.profile_id) as last_completed
+        where m.course_id = c.id and lp.profile_id = en.profile_id) as last_completed,
+      (select ce.code from certificates ce where ce.course_id = c.id and ce.profile_id = en.profile_id) as certificate
     from enrollments en join courses c on c.id = en.course_id
     where en.profile_id = ${profileId}
     order by en.created_at desc`)
@@ -89,6 +90,7 @@ async function courseProgress(profileId: string): Promise<StudentCourseProgress[
     completed: num(row.completed),
     total: num(row.total),
     lastCompletedAt: date(row.last_completed),
+    certificateCode: row.certificate ? str(row.certificate) : null,
   }))
 }
 

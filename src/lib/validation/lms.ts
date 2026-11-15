@@ -99,3 +99,8 @@ export const quizAnswersSchema = z.object({
   quizId: z.number().int().positive(),
   answers: z.array(z.number().int().min(-1)).max(QUIZ_LIMITS.questions),
 })
+
+export const reviewSchema = z.object({
+  rating: z.coerce.number().int().min(1, 'Escolha de 1 a 5 estrelas.').max(5, 'Escolha de 1 a 5 estrelas.'),
+  comment: z.string().trim().max(600, 'O comentário pode ter até 600 caracteres.').default(''),
+})

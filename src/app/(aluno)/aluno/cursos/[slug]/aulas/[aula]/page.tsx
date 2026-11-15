@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LessonAttachments } from '@/components/lms/lesson-attachments'
-import { LessonSidebar } from '@/components/lms/lesson-sidebar'
+import { CourseAside } from '@/components/lms/course-aside'
 import { VideoPlayer } from '@/components/lms/video-player'
 import { Container } from '@/components/ui/container'
 import { CheckIcon } from 'lucide-react'
@@ -88,9 +88,13 @@ export default async function LessonPage({ params }: PageProps) {
           </div>
         </div>
       </article>
-      <aside>
-        <LessonSidebar course={course} currentId={lesson.id} completed={completed} passedQuizzes={passedQuizzes} />
-      </aside>
+      <CourseAside
+        course={course}
+        profileId={profile.id}
+        completed={completed}
+        passedQuizzes={passedQuizzes}
+        currentId={lesson.id}
+      />
     </Container>
   )
 }

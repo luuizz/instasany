@@ -52,3 +52,23 @@ export type QuizResult = {
   passPercent: number
   review: { prompt: string; options: string[]; chosen: number; correct: number; explanation: string }[]
 }
+
+export type CourseCompletion = {
+  lessonsDone: number
+  lessonsTotal: number
+  quizzesPassed: number
+  quizzesTotal: number
+  complete: boolean
+}
+
+export type Certificate = {
+  code: string
+  studentName: string
+  courseTitle: string
+  courseSlug: string | null
+  totalMinutes: number
+  issuedAt: Date
+}
+
+export type CourseReview = { name: string; rating: number; comment: string; updatedAt: Date }
+export type ReviewSummary = { average: number; count: number; latest: CourseReview[] }

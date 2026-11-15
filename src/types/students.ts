@@ -23,6 +23,7 @@ export type StudentCourseProgress = {
   completed: number
   total: number
   lastCompletedAt: Date | null
+  certificateCode: string | null
 }
 
 export type ActivityItem = {

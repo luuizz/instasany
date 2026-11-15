@@ -10,6 +10,7 @@ import {
   serial,
   text,
   timestamp,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core'
 
 export const roleEnum = pgEnum('role', ['student', 'admin'])
@@ -192,6 +193,47 @@ export const quizAttempts = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [index('quiz_attempts_profile_idx').on(table.profileId, table.quizId)],
+)
+
+// Certificado de conclusão; nome, curso e carga ficam gravados como estavam na emissão
+export const certificates = pgTable(
+  'certificates',
+  {
+    id: serial('id').primaryKey(),
+    code: text('code').notNull().unique(),
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    courseId: integer('course_id')
+      .notNull()
+      .references(() => courses.id, { onDelete: 'cascade' }),
+    studentName: text('student_name').notNull(),
+    courseTitle: text('course_title').notNull(),
+    totalMinutes: integer('total_minutes').notNull().default(0),
+    issuedAt: timestamp('issued_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [uniqueIndex('certificates_profile_course_idx').on(table.profileId, table.courseId)],
+)
+
+// Nota de 1 a 5 e comentário opcional; uma avaliação por aluno e curso
+export const courseReviews = pgTable(
+  'course_reviews',
+  {
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    courseId: integer('course_id')
+      .notNull()
+      .references(() => courses.id, { onDelete: 'cascade' }),
+    rating: integer('rating').notNull(),
+    comment: text('comment').notNull().default(''),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.profileId, table.courseId] }),
+    index('course_reviews_course_idx').on(table.courseId),
+  ],
 )
 
 export type CourseRow = typeof courses.$inferSelect

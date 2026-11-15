@@ -24,6 +24,7 @@ async function loadOutlines(courseRows: CourseRow[]): Promise<CourseOutline[]> {
           title: lessons.title,
           durationMinutes: lessons.durationMinutes,
           videoUrl: lessons.videoUrl,
+          releaseAfterDays: lessons.releaseAfterDays,
         })
         .from(lessons)
         .where(
@@ -57,11 +58,12 @@ async function loadOutlines(courseRows: CourseRow[]): Promise<CourseOutline[]> {
         title: module.title,
         lessons: lessonRows
           .filter((lesson) => lesson.moduleId === module.id)
-          .map(({ id, title, durationMinutes, videoUrl }) => ({
+          .map(({ id, title, durationMinutes, videoUrl, releaseAfterDays }) => ({
             id,
             title,
             durationMinutes,
             hasVideo: Boolean(videoUrl),
+            releaseAfterDays,
           })),
         quizQuestions: Number(quizRows.find((quiz) => quiz.moduleId === module.id)?.questions ?? 0),
       }))

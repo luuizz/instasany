@@ -2,7 +2,13 @@ import type { COURSE_LEVELS } from '@/lib/validation/lms'
 
 export type CourseLevel = (typeof COURSE_LEVELS)[number]
 
-export type LessonItem = { id: number; title: string; durationMinutes: number; hasVideo: boolean }
+export type LessonItem = {
+  id: number
+  title: string
+  durationMinutes: number
+  hasVideo: boolean
+  releaseAfterDays: number
+}
 // quizQuestions = 0 quando o módulo não tem quiz
 export type ModuleItem = { id: number; title: string; lessons: LessonItem[]; quizQuestions: number }
 

@@ -1,4 +1,5 @@
 import {
+  type AnyPgColumn,
   bigserial,
   boolean,
   index,
@@ -233,6 +234,29 @@ export const courseReviews = pgTable(
   (table) => [
     primaryKey({ columns: [table.profileId, table.courseId] }),
     index('course_reviews_course_idx').on(table.courseId),
+  ],
+)
+
+// ---- Comunicação ------------------------------------------------------------
+
+// Dúvidas da aula: a pergunta abre a conversa (parent_id nulo) e as respostas apontam para ela
+export const lessonQuestions = pgTable(
+  'lesson_questions',
+  {
+    id: serial('id').primaryKey(),
+    lessonId: integer('lesson_id')
+      .notNull()
+      .references(() => lessons.id, { onDelete: 'cascade' }),
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    parentId: integer('parent_id').references((): AnyPgColumn => lessonQuestions.id, { onDelete: 'cascade' }),
+    body: text('body').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index('lesson_questions_lesson_idx').on(table.lessonId, table.createdAt),
+    index('lesson_questions_parent_idx').on(table.parentId),
   ],
 )
 

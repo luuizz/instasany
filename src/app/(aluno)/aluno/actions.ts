@@ -3,9 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { after } from 'next/server'
-import { requireUser } from '@/server/auth/session'
+import { lessonPositionSchema } from '@/lib/validation/lms'
+import { getCurrentProfile, requireUser } from '@/server/auth/session'
 import { recordServerEvent } from '@/server/services/analytics'
-import { setLessonCompleted } from '@/server/services/learning'
+import { saveLessonPosition, setLessonCompleted } from '@/server/services/learning'
 
 type Target = { slug: string; lessonId: number; nextId: number | null }
 
@@ -18,4 +19,16 @@ export async function toggleLessonAction(target: Target, completed: boolean) {
   revalidatePath('/aluno')
   revalidatePath(`/aluno/cursos/${target.slug}`, 'layout')
   if (completed && target.nextId) redirect(`/aluno/cursos/${target.slug}/aulas/${target.nextId}`)
+}
+
+// Posição do vídeo enviada pelo player; falha aqui nunca interrompe a aula
+export async function saveLessonPositionAction(input: unknown): Promise<void> {
+  const parsed = lessonPositionSchema.safeParse(input)
+  if (!parsed.success) return
+  try {
+    const profile = await getCurrentProfile()
+    if (profile) await saveLessonPosition(profile, parsed.data.lessonId, parsed.data.seconds)
+  } catch (error) {
+    console.error('[aula] não foi possível salvar a posição do vídeo:', error)
+  }
 }

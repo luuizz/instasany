@@ -9,8 +9,15 @@ import { slugify } from '@/lib/slug'
 export type UploadState =
   { status: 'idle' } | { status: 'uploading'; file: File; percent: number } | { status: 'error'; message: string }
 
-// Envio direto do navegador para o Vercel Blob, com progresso e cancelamento
-export function useMediaUpload(kind: MediaKind, initialUrl: string | null) {
+export type UploadedFile = { url: string; name: string; size: number; type: string }
+
+// Envio direto do navegador para o Vercel Blob, com progresso e cancelamento.
+// Com onUploaded, o arquivo é entregue a quem chamou (que salva na hora) em vez de virar o valor do campo.
+export function useMediaUpload(
+  kind: MediaKind,
+  initialUrl: string | null,
+  onUploaded?: (file: UploadedFile) => Promise<void>,
+) {
   const [url, setUrl] = useState(initialUrl ?? '')
   const [state, setState] = useState<UploadState>({ status: 'idle' })
   const [lastFile, setLastFile] = useState<{ name: string; size: number } | null>(null)
@@ -34,9 +41,13 @@ export function useMediaUpload(kind: MediaKind, initialUrl: string | null) {
         abortSignal: controller.current.signal,
         onUploadProgress: ({ percentage }) => setState({ status: 'uploading', file, percent: Math.round(percentage) }),
       })
+      setState({ status: 'idle' })
+      if (onUploaded) {
+        await onUploaded({ url: blob.url, name: file.name, size: file.size, type: file.type })
+        return
+      }
       setUrl(blob.url)
       setLastFile({ name: file.name, size: file.size })
-      setState({ status: 'idle' })
       toast.success(`${MEDIA_LABELS[kind].sent}. Salve para publicar.`)
     } catch (error) {
       if (controller.current?.signal.aborted) return setState({ status: 'idle' })

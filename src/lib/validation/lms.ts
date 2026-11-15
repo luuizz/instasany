@@ -40,3 +40,19 @@ export const lessonSchema = z.object({
 
 export type CourseInput = z.output<typeof courseSchema>
 export type LessonInput = z.output<typeof lessonSchema>
+
+export const attachmentSchema = z.object({
+  title: z.string().trim().min(1, 'Dê um nome ao material.').max(120, 'O nome pode ter até 120 caracteres.'),
+  url: z.url('Informe um endereço completo (https://...).'),
+  sizeBytes: z.number().int().min(0).default(0),
+  contentType: z.string().max(200).default(''),
+})
+
+export const lessonPositionSchema = z.object({
+  lessonId: z.number().int().positive(),
+  seconds: z
+    .number()
+    .int()
+    .min(0)
+    .max(24 * 60 * 60),
+})

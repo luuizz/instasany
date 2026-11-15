@@ -111,9 +111,44 @@ export const lessonProgress = pgTable(
   (table) => [primaryKey({ columns: [table.profileId, table.lessonId] })],
 )
 
+// Onde a pessoa parou no vídeo de cada aula, para continuar dali
+export const lessonPositions = pgTable(
+  'lesson_positions',
+  {
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    lessonId: integer('lesson_id')
+      .notNull()
+      .references(() => lessons.id, { onDelete: 'cascade' }),
+    seconds: integer('seconds').notNull().default(0),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.profileId, table.lessonId] })],
+)
+
+// Arquivos de apoio da aula (PDF, planilha, modelo), guardados no Vercel Blob
+export const lessonAttachments = pgTable(
+  'lesson_attachments',
+  {
+    id: serial('id').primaryKey(),
+    lessonId: integer('lesson_id')
+      .notNull()
+      .references(() => lessons.id, { onDelete: 'cascade' }),
+    title: text('title').notNull(),
+    url: text('url').notNull(),
+    sizeBytes: integer('size_bytes').notNull().default(0),
+    contentType: text('content_type').notNull().default(''),
+    sortOrder: integer('sort_order').notNull().default(0),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index('lesson_attachments_lesson_idx').on(table.lessonId, table.sortOrder)],
+)
+
 export type CourseRow = typeof courses.$inferSelect
 export type CourseModuleRow = typeof courseModules.$inferSelect
 export type LessonRow = typeof lessons.$inferSelect
+export type LessonAttachmentRow = typeof lessonAttachments.$inferSelect
 
 // ---- Análise de uso ---------------------------------------------------------
 

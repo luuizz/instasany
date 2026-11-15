@@ -1,11 +1,21 @@
 'use client'
 
-import { MaximizeIcon, MinimizeIcon, PauseIcon, PlayIcon, Volume2Icon, VolumeXIcon } from 'lucide-react'
+import {
+  MaximizeIcon,
+  MinimizeIcon,
+  PauseIcon,
+  PlayIcon,
+  RotateCcwIcon,
+  Volume2Icon,
+  VolumeXIcon,
+  XIcon,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { useVideoControls } from './use-video-controls'
+import { useResumePosition } from './use-resume-position'
 import { useWatchTracking } from './use-watch-tracking'
 
 const clock = (seconds: number) => {
@@ -40,7 +50,9 @@ function PlayerButton({ label, onClick, className, children }: PlayerButtonProps
 }
 
 // Player próprio, nas cores da marca, sobre o <video> nativo (sem marca de terceiros)
-export function VideoPlayer({ src, title, lessonId }: { src: string; title: string; lessonId?: number }) {
+type VideoPlayerProps = { src: string; title: string; lessonId?: number; startAt?: number }
+
+export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerProps) {
   const {
     video,
     frame,
@@ -58,6 +70,7 @@ export function VideoPlayer({ src, title, lessonId }: { src: string; title: stri
     onKeyDown,
   } = useVideoControls()
   useWatchTracking(video, lessonId)
+  const resume = useResumePosition(video, seek, lessonId, startAt)
 
   return (
     <div
@@ -76,6 +89,35 @@ export function VideoPlayer({ src, title, lessonId }: { src: string; title: stri
         onClick={toggle}
         className="size-full cursor-pointer"
       />
+
+      {resume.resumedFrom !== null && (
+        <div
+          role="status"
+          className="absolute top-4 left-4 flex animate-in items-center gap-1 rounded-full bg-ink/80 py-1 pr-1 pl-4 text-sm text-paper backdrop-blur fade-in slide-in-from-top-2"
+        >
+          Continuando de {clock(resume.resumedFrom)}
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={resume.restart}
+            className="h-8 text-lime hover:bg-paper/15 hover:text-lime"
+          >
+            <RotateCcwIcon />
+            Do início
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={resume.dismiss}
+            aria-label="Fechar aviso"
+            className="size-8 text-paper/70 hover:bg-paper/15 hover:text-paper"
+          >
+            <XIcon />
+          </Button>
+        </div>
+      )}
 
       {!playing && (
         <Button

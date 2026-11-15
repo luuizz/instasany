@@ -2,13 +2,16 @@ import { EyeIcon } from 'lucide-react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ActionsMenu } from '@/components/admin/actions-menu'
+import { LessonAttachmentsManager } from '@/components/admin/lesson-attachments-manager'
 import { LessonForm } from '@/components/admin/lesson-form'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { PageHeader } from '@/components/admin/page-header'
 import { ButtonLink } from '@/components/ui/button'
 import { isStorageConfigured } from '@/server/integrations/storage'
+import { listAttachments } from '@/server/services/attachments'
 import { getLesson } from '@/server/services/course-admin'
 import { getCourseById } from '@/server/services/courses'
-import { deleteLessonAction, saveLessonAction } from '../../../actions'
+import { addAttachmentAction, deleteLessonAction, removeAttachmentAction, saveLessonAction } from '../../../actions'
 
 type PageProps = { params: Promise<{ id: string; aula: string }> }
 
@@ -28,6 +31,7 @@ export default async function EditLessonPage({ params }: PageProps) {
   const loaded = await load(params)
   if (!loaded) notFound()
   const { lesson, course } = loaded
+  const attachments = await listAttachments(lesson.id)
   const moduleIndex = course.modules.findIndex((module) => module.id === lesson.moduleId)
   const lessonModule = course.modules[moduleIndex]
   const lessonIndex = lessonModule?.lessons.findIndex((item) => item.id === lesson.id) ?? -1
@@ -65,6 +69,22 @@ export default async function EditLessonPage({ params }: PageProps) {
         save={saveLessonAction.bind(null, lesson.id, lesson.courseId)}
         uploadsEnabled={isStorageConfigured()}
       />
+      <Card className="mt-10 rounded-3xl shadow-none">
+        <CardHeader>
+          <CardTitle className="text-lg">Materiais da aula</CardTitle>
+          <CardDescription>
+            Arquivos de apoio que o aluno baixa abaixo do texto da aula. Cada envio já fica salvo.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LessonAttachmentsManager
+            items={attachments}
+            uploadsEnabled={isStorageConfigured()}
+            add={addAttachmentAction.bind(null, lesson.id, lesson.courseId)}
+            remove={removeAttachmentAction.bind(null, lesson.id, lesson.courseId)}
+          />
+        </CardContent>
+      </Card>
     </div>
   )
 }

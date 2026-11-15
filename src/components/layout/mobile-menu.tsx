@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { mainNav } from '@/config/site'
 import { cn } from '@/lib/utils'
+import type { HeaderAccount } from './site-header'
 
-export function MobileMenu() {
+export function MobileMenu({ account }: { account: HeaderAccount }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export function MobileMenu() {
           {mainNav.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={`/${item.href}`}
               onClick={close}
               className="rounded-full px-4 py-3 text-paper/70 hover:bg-pine-line hover:text-paper"
             >
@@ -72,9 +73,20 @@ export function MobileMenu() {
             </a>
           ))}
         </nav>
-        <Link href="/entrar" onClick={close} className="mt-auto flex items-center gap-2 px-4 font-medium text-paper">
+        <Link
+          href="/cursos"
+          onClick={close}
+          className="rounded-full px-4 py-3 text-paper/70 hover:bg-pine-line hover:text-paper"
+        >
+          Cursos
+        </Link>
+        <Link
+          href={account.href}
+          onClick={close}
+          className="mt-auto flex items-center gap-2 px-4 font-medium text-paper"
+        >
           <Image src="/icons/user.svg" alt="" width={24} height={24} />
-          Fazer login
+          {account.label}
         </Link>
       </aside>
     </div>

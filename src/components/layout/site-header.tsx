@@ -1,10 +1,17 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/ui/container'
-import { mainNav, site } from '@/config/site'
+import { site } from '@/config/site'
 import { MobileMenu } from './mobile-menu'
+import { SiteNav } from './site-nav'
 
-export function SiteHeader() {
+export type HeaderAccount = { label: string; href: string }
+
+const signedOut: HeaderAccount = { label: 'Fazer login', href: '/entrar' }
+
+// O site público é estático e mostra "Fazer login" (quem já entrou é levado direto à área do aluno);
+// as áreas logadas passam o nome da pessoa
+export function SiteHeader({ account = signedOut }: { account?: HeaderAccount }) {
   return (
     <header className="relative z-30 flex h-header items-center bg-pine">
       <Container className="flex items-center justify-between gap-6">
@@ -20,33 +27,19 @@ export function SiteHeader() {
         </Link>
 
         <div className="hidden items-center gap-4 text-sm lg:flex xl:gap-20 xl:text-base">
-          <nav aria-label="Principal" className="flex gap-2">
-            {mainNav.map((item, index) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={
-                  index === 0
-                    ? 'rounded-full bg-sage px-3 py-1 text-paper'
-                    : 'px-3 py-1 text-paper/40 transition hover:text-paper'
-                }
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          <SiteNav />
           <div className="flex items-center gap-6">
-            <button type="button" aria-label="Buscar" className="cursor-pointer">
+            <Link href="/cursos" aria-label="Ver os cursos">
               <Image src="/icons/search.svg" alt="" width={22} height={23} />
-            </button>
-            <Link href="/entrar" className="flex items-center gap-2 font-medium text-paper hover:text-lime">
+            </Link>
+            <Link href={account.href} className="flex items-center gap-2 font-medium text-paper hover:text-lime">
               <Image src="/icons/user.svg" alt="" width={24} height={24} />
-              Fazer login
+              {account.label}
             </Link>
           </div>
         </div>
 
-        <MobileMenu />
+        <MobileMenu account={account} />
       </Container>
     </header>
   )

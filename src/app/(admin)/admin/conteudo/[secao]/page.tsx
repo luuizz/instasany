@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SectionForm } from '@/components/admin/section-form'
 import { findCmsSection } from '@/config/cms'
-import { getPath } from '@/lib/object-path'
 import { getSection } from '@/server/services/site-content'
 import { resetSectionAction, saveSectionAction } from '../actions'
 
@@ -22,9 +21,6 @@ export default async function SectionEditorPage({ params }: PageProps) {
   const section = findCmsSection((await params).secao)
   if (!section) notFound()
   const { data, updatedAt } = await getSection(section.key)
-  const values = Object.fromEntries(
-    section.fields.map((field) => [field.path, String(getPath(data, field.path) ?? '')]),
-  )
 
   return (
     <div className="max-w-2xl">
@@ -36,7 +32,7 @@ export default async function SectionEditorPage({ params }: PageProps) {
       <div className="mt-8">
         <SectionForm
           fields={section.fields}
-          values={values}
+          data={data}
           save={saveSectionAction.bind(null, section.key)}
           reset={resetSectionAction.bind(null, section.key)}
         />

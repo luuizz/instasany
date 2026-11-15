@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronsUpDownIcon, ExternalLinkIcon, GraduationCapIcon, LogOutIcon } from 'lucide-react'
+import { ChevronsUpDownIcon, ExternalLinkIcon, GraduationCapIcon, LogOutIcon, UserRoundIcon } from 'lucide-react'
 import Link from 'next/link'
 import { signOut } from '@/app/(auth)/actions'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -39,6 +39,12 @@ export function AccountMenu({ userName, email }: { userName: string; email: stri
           <Link href="/aluno">
             <GraduationCapIcon />
             Área do aluno
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer rounded-xl">
+          <Link href="/aluno/perfil">
+            <UserRoundIcon />
+            Meu perfil
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer rounded-xl">

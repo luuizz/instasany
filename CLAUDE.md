@@ -60,6 +60,7 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - Formulário de action usa `useFormAction` (`hooks/`), que mantém o que foi digitado quando a action devolve erro.
 - Login 100% no servidor: `auth.signIn.email`/`signUp.email` nas actions de `(auth)`; o usuário vem de `getSessionUser()`, nunca do navegador.
 - Perfil (`profiles`) nasce no primeiro acesso; e-mails de `ADMIN_EMAILS` entram como admin.
+- Senha esquecida: `/esqueci-senha` chama `auth.requestPasswordReset` (o Neon Auth envia o e-mail) e o link volta para `/redefinir-senha?token=` (`(auth)/password-actions.ts`); a resposta não revela se o e-mail existe. O aluno troca nome e senha em `/aluno/perfil` (o nome é gravado no `profiles` e no Neon Auth).
 - Conteúdo do site: tabela `site_sections` (uma linha por seção, `data` em jsonb validado pelo schema da seção). Seção nova: schema em `lib/validation/site-content.ts`, padrão em `data/home.ts`, campos em `config/cms.ts` (tipos `text`, `textarea`, `lines` = um item por linha, `number`, `checkbox` e `list` para itens repetidos, lida por `lib/cms-form.ts`).
 - LMS: `courses` → `course_modules` → `lessons`, com `enrollments` e `lesson_progress`. Leitura em `services/courses.ts` (catálogo publicado em cache com a tag `courses`), escrita do painel em `services/course-admin.ts`, matrícula e progresso em `services/learning.ts` (confere matrícula; admin vê tudo, até rascunho).
 - Matrícula é gratuita (projeto fictício). Ordem de módulos e aulas por `sort_order`, trocada com o vizinho.

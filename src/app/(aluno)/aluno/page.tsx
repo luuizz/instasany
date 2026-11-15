@@ -27,6 +27,9 @@ export default async function StudentHomePage() {
               Ir para o painel
             </Link>
           )}
+          <Link href="/aluno/perfil" className="font-semibold text-pine underline-offset-4 hover:underline">
+            Meu perfil
+          </Link>
           <SignOutButton className="text-ink/60" />
         </div>
       </header>

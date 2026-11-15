@@ -5,7 +5,7 @@ import { CourseCover } from '@/components/courses/course-cover'
 import { CourseSyllabus } from '@/components/courses/course-syllabus'
 import { Container } from '@/components/ui/container'
 import { SubmitButton } from '@/components/ui/submit-button'
-import { formatDuration } from '@/lib/duration'
+import { countLabel, formatDuration } from '@/lib/duration'
 import { getCurrentProfile } from '@/server/auth/session'
 import { getPublishedCourse } from '@/server/services/courses'
 import { isEnrolled } from '@/server/services/learning'
@@ -36,8 +36,8 @@ export default async function CoursePage({ params }: PageProps) {
             <h1 className="text-4xl/tight font-semibold text-balance text-paper sm:text-5xl/tight">{course.title}</h1>
             <p className="text-lg text-paper/70">{course.summary}</p>
             <p className="text-sm font-medium text-sage-light">
-              {course.level} · {course.modules.length} módulos · {course.lessonCount} aulas ·{' '}
-              {formatDuration(course.totalMinutes)}
+              {course.level} · {countLabel(course.modules.length, 'módulo', 'módulos')} ·{' '}
+              {countLabel(course.lessonCount, 'aula', 'aulas')} · {formatDuration(course.totalMinutes)}
             </p>
             <div className="pt-2">
               {enrolled ? (

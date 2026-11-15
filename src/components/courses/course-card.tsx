@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { formatDuration } from '@/lib/duration'
+import { countLabel, formatDuration } from '@/lib/duration'
 import type { CourseSummary } from '@/types/lms'
 import { CourseCover } from './course-cover'
 
@@ -12,7 +12,7 @@ export function CourseCard({ course, href, footer }: CourseCardProps) {
         <CourseCover title={course.title} coverUrl={course.coverUrl} className="rounded-none" />
         <div className="flex flex-1 flex-col gap-2 p-6">
           <p className="text-sm font-medium text-sage">
-            {course.level} · {course.lessonCount} aulas · {formatDuration(course.totalMinutes)}
+            {course.level} · {countLabel(course.lessonCount, 'aula', 'aulas')} · {formatDuration(course.totalMinutes)}
           </p>
           <h3 className="text-xl font-semibold text-ink group-hover:underline">{course.title}</h3>
           <p className="text-ink/60">{course.summary}</p>

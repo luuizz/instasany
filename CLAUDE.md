@@ -63,6 +63,7 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - LMS: `courses` → `course_modules` → `lessons`, com `enrollments` e `lesson_progress`. Leitura em `services/courses.ts` (catálogo publicado em cache com a tag `courses`), escrita do painel em `services/course-admin.ts`, matrícula e progresso em `services/learning.ts` (confere matrícula; admin vê tudo, até rascunho).
 - Matrícula é gratuita (projeto fictício). Ordem de módulos e aulas por `sort_order`, trocada com o vizinho.
 - Vídeos e capas: upload direto do navegador para o Vercel Blob (`components/admin/media-field.tsx` + `api/uploads`); limites em `lib/media.ts`. Arquivo trocado ou excluído sai do Blob com `after()`. Sem `BLOB_READ_WRITE_TOKEN` o painel aceita só a URL.
+- Listas do painel (cursos, seções do site) alternam entre grade e lista (`components/admin/view-toggle.tsx`); a escolha fica no cookie `painel-visualizacao`, lido no servidor por `server/admin-view.ts`.
 - Actions que mudam conteúdo público usam `updateTag` (expira o cache na hora) + `revalidatePath`.
 - A home lê o conteúdo por `getHomeContent()`: o cache guarda só as linhas do banco e o encaixe nos padrões é feito a cada leitura, então formato novo nunca depende de cache antigo.
 

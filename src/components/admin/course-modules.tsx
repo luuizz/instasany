@@ -1,6 +1,6 @@
-import { ArrowDownIcon, ArrowUpIcon, PlayCircleIcon, PlusIcon, Trash2Icon } from 'lucide-react'
+import { ArrowDownIcon, ArrowUpIcon, ListChecksIcon, PlayCircleIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonLink } from '@/components/ui/button'
 import {
   addLessonAction,
   addModuleAction,
@@ -119,12 +119,25 @@ export function CourseModules({ course }: { course: CourseOutline }) {
               </li>
             ))}
           </ol>
-          <form action={addLessonAction.bind(null, module.id, course.id)} className="mt-3">
-            <Button type="submit" variant="outline" size="sm" className="border-dashed">
-              <PlusIcon />
-              Nova aula
-            </Button>
-          </form>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <form action={addLessonAction.bind(null, module.id, course.id)}>
+              <Button type="submit" variant="outline" size="sm" className="border-dashed">
+                <PlusIcon />
+                Nova aula
+              </Button>
+            </form>
+            <ButtonLink
+              href={`/admin/cursos/${course.id}/modulos/${module.id}/quiz`}
+              variant={module.quizQuestions ? 'secondary' : 'outline'}
+              size="sm"
+              className={module.quizQuestions ? undefined : 'border-dashed'}
+            >
+              <ListChecksIcon />
+              {module.quizQuestions
+                ? `Quiz · ${module.quizQuestions} ${module.quizQuestions === 1 ? 'pergunta' : 'perguntas'}`
+                : 'Criar quiz'}
+            </ButtonLink>
+          </div>
         </section>
       ))}
 

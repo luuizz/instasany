@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { requireUser } from '@/server/auth/session'
 import { getLessonPlayer } from '@/server/services/learning'
+import { passedQuizModules } from '@/server/services/quiz'
 import { toggleLessonAction } from '../../../../actions'
 
 type PageProps = { params: Promise<{ slug: string; aula: string }> }
@@ -23,8 +24,22 @@ export default async function LessonPage({ params }: PageProps) {
   if (!player) notFound()
 
   const { course, lesson, completed, previousId, nextId } = player
+  const passedQuizzes = await passedQuizModules(
+    profile.id,
+    course.modules.map((module) => module.id),
+  )
   const isDone = completed.includes(lesson.id)
-  const target = { slug, lessonId: lesson.id, nextId }
+  const lessonModule = course.modules.find((module) => module.lessons.some((item) => item.id === lesson.id))
+  // Última aula de um módulo com quiz ainda não aprovado: o próximo passo é o quiz
+  const quizNext =
+    lessonModule &&
+    lessonModule.quizQuestions > 0 &&
+    lessonModule.lessons.at(-1)?.id === lesson.id &&
+    !passedQuizzes.includes(lessonModule.id)
+      ? `/aluno/cursos/${slug}/quiz/${lessonModule.id}`
+      : null
+  const nextHref = quizNext ?? (nextId ? `/aluno/cursos/${slug}/aulas/${nextId}` : null)
+  const target = { slug, lessonId: lesson.id, nextHref }
   const paragraphs = lesson.content.split(/\n\s*\n/).filter(Boolean)
   const lessonHref = (id: number) => `/aluno/cursos/${slug}/aulas/${id}`
 
@@ -54,7 +69,9 @@ export default async function LessonPage({ params }: PageProps) {
                 <CheckIcon className="size-5" /> Concluída · desmarcar
               </Button>
             ) : (
-              <SubmitButton>{nextId ? 'Concluir e ir para a próxima' : 'Concluir aula'}</SubmitButton>
+              <SubmitButton>
+                {quizNext ? 'Concluir e fazer o quiz' : nextId ? 'Concluir e ir para a próxima' : 'Concluir aula'}
+              </SubmitButton>
             )}
           </form>
           <div className="ml-auto flex gap-4 text-sm font-semibold">
@@ -72,7 +89,7 @@ export default async function LessonPage({ params }: PageProps) {
         </div>
       </article>
       <aside>
-        <LessonSidebar course={course} currentId={lesson.id} completed={completed} />
+        <LessonSidebar course={course} currentId={lesson.id} completed={completed} passedQuizzes={passedQuizzes} />
       </aside>
     </Container>
   )

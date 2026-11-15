@@ -37,7 +37,7 @@ export async function enroll(profileId: string, courseId: number) {
   return created.length > 0
 }
 
-async function completedLessonIds(profileId: string, lessonIds: number[]) {
+export async function completedLessonIds(profileId: string, lessonIds: number[]) {
   if (!lessonIds.length) return new Set<number>()
   const rows = await db()
     .select({ lessonId: lessonProgress.lessonId })

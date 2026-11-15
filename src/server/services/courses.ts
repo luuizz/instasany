@@ -1,9 +1,9 @@
 import 'server-only'
-import { asc, eq, inArray } from 'drizzle-orm'
+import { asc, count, eq, inArray } from 'drizzle-orm'
 import { unstable_cache } from 'next/cache'
 import type { CourseLevel, CourseOutline, CourseSummary, ModuleItem } from '@/types/lms'
 import { db, isDatabaseConfigured } from '../db/client'
-import { courseModules, courses, lessons, type CourseRow } from '../db/schema'
+import { courseModules, courses, lessons, quizQuestions, quizzes, type CourseRow } from '../db/schema'
 
 export const COURSES_TAG = 'courses'
 
@@ -35,6 +35,20 @@ async function loadOutlines(courseRows: CourseRow[]): Promise<CourseOutline[]> {
         .orderBy(asc(lessons.sortOrder), asc(lessons.id))
     : []
 
+  const quizRows = moduleRows.length
+    ? await db()
+        .select({ moduleId: quizzes.moduleId, questions: count(quizQuestions.id) })
+        .from(quizzes)
+        .leftJoin(quizQuestions, eq(quizQuestions.quizId, quizzes.id))
+        .where(
+          inArray(
+            quizzes.moduleId,
+            moduleRows.map((module) => module.id),
+          ),
+        )
+        .groupBy(quizzes.moduleId)
+    : []
+
   return courseRows.map((course) => {
     const modules: ModuleItem[] = moduleRows
       .filter((module) => module.courseId === course.id)
@@ -49,6 +63,7 @@ async function loadOutlines(courseRows: CourseRow[]): Promise<CourseOutline[]> {
             durationMinutes,
             hasVideo: Boolean(videoUrl),
           })),
+        quizQuestions: Number(quizRows.find((quiz) => quiz.moduleId === module.id)?.questions ?? 0),
       }))
     const all = modules.flatMap((module) => module.lessons)
     return {

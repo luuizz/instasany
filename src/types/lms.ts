@@ -3,7 +3,8 @@ import type { COURSE_LEVELS } from '@/lib/validation/lms'
 export type CourseLevel = (typeof COURSE_LEVELS)[number]
 
 export type LessonItem = { id: number; title: string; durationMinutes: number; hasVideo: boolean }
-export type ModuleItem = { id: number; title: string; lessons: LessonItem[] }
+// quizQuestions = 0 quando o módulo não tem quiz
+export type ModuleItem = { id: number; title: string; lessons: LessonItem[]; quizQuestions: number }
 
 export type CourseSummary = {
   id: number
@@ -28,3 +29,26 @@ export type StudentCourse = CourseSummary & {
 }
 
 export type LessonAttachment = { id: number; title: string; url: string; sizeBytes: number; contentType: string }
+
+export type QuizQuestionInput = { prompt: string; options: string[]; correctIndex: number; explanation: string }
+export type QuizDraft = { passPercent: number; questions: QuizQuestionInput[] }
+
+// Quiz como o aluno vê: sem a resposta certa
+export type StudentQuiz = {
+  id: number
+  moduleId: number
+  moduleTitle: string
+  moduleNumber: number
+  passPercent: number
+  questions: { id: number; prompt: string; options: string[] }[]
+  best: { score: number; total: number; passed: boolean } | null
+}
+
+export type QuizResult = {
+  score: number
+  total: number
+  percent: number
+  passed: boolean
+  passPercent: number
+  review: { prompt: string; options: string[]; chosen: number; correct: number; explanation: string }[]
+}

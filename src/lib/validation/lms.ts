@@ -56,3 +56,46 @@ export const lessonPositionSchema = z.object({
     .min(0)
     .max(24 * 60 * 60),
 })
+
+export const QUIZ_LIMITS = { questions: 30, minOptions: 2, maxOptions: 5 } as const
+
+const quizQuestionSchema = z
+  .object({
+    prompt: z
+      .string()
+      .trim()
+      .min(3, 'Escreva o enunciado de cada pergunta.')
+      .max(300, 'O enunciado pode ter até 300 caracteres.'),
+    options: z
+      .array(
+        z
+          .string()
+          .trim()
+          .min(1, 'Preencha todas as alternativas.')
+          .max(200, 'Cada alternativa pode ter até 200 caracteres.'),
+      )
+      .min(QUIZ_LIMITS.minOptions, `Cada pergunta precisa de pelo menos ${QUIZ_LIMITS.minOptions} alternativas.`)
+      .max(QUIZ_LIMITS.maxOptions, `Cada pergunta pode ter até ${QUIZ_LIMITS.maxOptions} alternativas.`),
+    correctIndex: z.number().int().min(0),
+    explanation: z.string().trim().max(500, 'A explicação pode ter até 500 caracteres.').default(''),
+  })
+  .refine((question) => question.correctIndex < question.options.length, {
+    message: 'Marque a alternativa certa de cada pergunta.',
+  })
+
+export const quizSchema = z.object({
+  passPercent: z
+    .number()
+    .int()
+    .min(50, 'A nota mínima vai de 50% a 100%.')
+    .max(100, 'A nota mínima vai de 50% a 100%.'),
+  questions: z
+    .array(quizQuestionSchema)
+    .min(1, 'Adicione pelo menos uma pergunta.')
+    .max(QUIZ_LIMITS.questions, `O quiz pode ter até ${QUIZ_LIMITS.questions} perguntas.`),
+})
+
+export const quizAnswersSchema = z.object({
+  quizId: z.number().int().positive(),
+  answers: z.array(z.number().int().min(-1)).max(QUIZ_LIMITS.questions),
+})

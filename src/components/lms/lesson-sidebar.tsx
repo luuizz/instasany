@@ -1,14 +1,22 @@
 import Link from 'next/link'
 import { ProgressBar } from '@/components/courses/progress-bar'
-import { CheckIcon } from 'lucide-react'
+import { CheckIcon, ListChecksIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { CourseOutline } from '@/types/lms'
 
-type LessonSidebarProps = { course: CourseOutline; currentId: number; completed: number[] }
+type LessonSidebarProps = {
+  course: CourseOutline
+  completed: number[]
+  // Módulos com quiz aprovado; currentQuiz = módulo do quiz aberto
+  passedQuizzes?: number[]
+  currentId?: number
+  currentQuiz?: number
+}
 
 // Lista de módulos e aulas ao lado do player, com o que já foi concluído
-export function LessonSidebar({ course, currentId, completed }: LessonSidebarProps) {
+export function LessonSidebar({ course, currentId, completed, passedQuizzes = [], currentQuiz }: LessonSidebarProps) {
   const done = new Set(completed)
+  const passed = new Set(passedQuizzes)
 
   return (
     <nav
@@ -60,6 +68,29 @@ export function LessonSidebar({ course, currentId, completed }: LessonSidebarPro
                 </li>
               )
             })}
+            {module.quizQuestions > 0 && (
+              <li>
+                <Link
+                  href={`/aluno/cursos/${course.slug}/quiz/${module.id}`}
+                  aria-current={currentQuiz === module.id ? 'page' : undefined}
+                  className={cn(
+                    'flex items-start gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition',
+                    currentQuiz === module.id ? 'bg-pine text-paper' : 'text-pine hover:bg-ink/5',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full',
+                      passed.has(module.id) ? 'bg-sage text-paper' : 'text-current',
+                    )}
+                  >
+                    {passed.has(module.id) ? <CheckIcon className="size-3" /> : <ListChecksIcon className="size-4" />}
+                  </span>
+                  <span className="flex-1">Quiz do módulo</span>
+                  <span className="sr-only">{passed.has(module.id) ? 'Aprovado' : 'Pendente'}</span>
+                </Link>
+              </li>
+            )}
           </ol>
         </div>
       ))}

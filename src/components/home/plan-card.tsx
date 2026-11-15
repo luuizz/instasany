@@ -1,5 +1,5 @@
 import { ButtonLink } from '@/components/ui/button'
-import { CheckIcon } from '@/components/ui/icons'
+import { CheckIcon } from 'lucide-react'
 import { formatPrice } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import type { Plan } from '@/types/home'

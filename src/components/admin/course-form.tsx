@@ -1,8 +1,12 @@
 'use client'
 
 import type { FormState } from '@/app/(admin)/admin/cursos/actions'
-import { Field, Input, Textarea } from '@/components/ui/field'
-import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { LabeledField } from '@/components/ui/form-field'
+import { Field, FieldContent, FieldDescription, FieldLabel } from '@/components/ui/field'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { useFormAction } from '@/hooks/use-form-action'
 import { COURSE_LEVELS } from '@/lib/validation/lms'
@@ -22,24 +26,34 @@ export function CourseForm({ course, save, uploadsEnabled }: CourseFormProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5">
       <FormStatus state={state} />
-      <Field label="Nome do curso">
+      <LabeledField label="Nome do curso">
         <Input name="title" defaultValue={course?.title} required maxLength={80} />
-      </Field>
-      <Field label="Endereço" hint="Aparece em /cursos/endereco. Deixe vazio para gerar a partir do nome.">
+      </LabeledField>
+      <LabeledField label="Endereço" hint="Aparece em /cursos/endereco. Deixe vazio para gerar a partir do nome.">
         <Input name="slug" defaultValue={course?.slug} maxLength={60} placeholder="instagram-do-zero" />
-      </Field>
-      <Field label="Resumo" hint="Uma frase, mostrada no catálogo.">
+      </LabeledField>
+      <LabeledField label="Resumo" hint="Uma frase, mostrada no catálogo.">
         <Input name="summary" defaultValue={course?.summary} required maxLength={160} />
-      </Field>
-      <Field label="Descrição">
+      </LabeledField>
+      <LabeledField label="Descrição">
         <Textarea name="description" defaultValue={course?.description} rows={5} maxLength={2000} />
-      </Field>
+      </LabeledField>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Nível">
+        <Field className="gap-2">
+          <FieldLabel htmlFor="curso-nivel" className="font-semibold">
+            Nível
+          </FieldLabel>
           <Select name="level" defaultValue={course?.level ?? COURSE_LEVELS[0]}>
-            {COURSE_LEVELS.map((level) => (
-              <option key={level}>{level}</option>
-            ))}
+            <SelectTrigger id="curso-nivel">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {COURSE_LEVELS.map((level) => (
+                <SelectItem key={level} value={level}>
+                  {level}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </Field>
       </div>
@@ -51,10 +65,15 @@ export function CourseForm({ course, save, uploadsEnabled }: CourseFormProps) {
         uploadsEnabled={uploadsEnabled}
         hint="Opcional. Proporção 16:9."
       />
-      <label className="flex items-center gap-3 text-sm font-semibold">
-        <input type="checkbox" name="published" defaultChecked={course?.published} className="size-5 accent-pine" />
-        Publicado (aparece no catálogo e aceita matrículas)
-      </label>
+      <Field orientation="horizontal" className="items-center gap-4 rounded-3xl border border-border bg-card p-4">
+        <Switch id="curso-publicado" name="published" defaultChecked={course?.published} />
+        <FieldContent>
+          <FieldLabel htmlFor="curso-publicado" className="font-semibold">
+            Publicado
+          </FieldLabel>
+          <FieldDescription className="text-xs">Aparece no catálogo e aceita matrículas.</FieldDescription>
+        </FieldContent>
+      </Field>
       <SubmitButton size="default" pending={pending} pendingLabel="Salvando…" className="self-start">
         {course ? 'Salvar curso' : 'Criar curso'}
       </SubmitButton>

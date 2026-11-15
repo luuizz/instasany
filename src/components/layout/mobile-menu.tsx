@@ -1,108 +1,66 @@
 'use client'
 
+import { LayoutDashboardIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { mainNav } from '@/config/site'
-import { cn } from '@/lib/utils'
 import { AccountLink } from './header-account'
 import { useHeaderAccount } from './header-account-context'
 
+const linkClass = 'rounded-full px-4 py-3 text-paper/70 transition hover:bg-pine-line hover:text-paper'
+
+// Menu do site no celular: gaveta lateral (Sheet do shadcn) com navegação e conta
 export function MobileMenu() {
   const [open, setOpen] = useState(false)
   const account = useHeaderAccount()
-
-  useEffect(() => {
-    if (!open) return
-    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && setOpen(false)
-    document.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [open])
-
   const close = () => setOpen(false)
 
   return (
     <div className="lg:hidden">
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label="Abrir menu"
-        aria-expanded={open}
-        aria-controls="menu-mobile"
-        className="-mr-3 cursor-pointer p-3"
-      >
-        <Image src="/icons/menu.svg" alt="" width={24} height={24} />
-      </button>
-
-      <div
-        onClick={close}
-        aria-hidden
-        className={cn(
-          'fixed inset-0 bg-ink/60 transition-opacity',
-          open ? 'opacity-100' : 'pointer-events-none opacity-0',
-        )}
-      />
-      <aside
-        id="menu-mobile"
-        aria-label="Menu"
-        inert={!open}
-        className={cn(
-          'fixed inset-y-0 right-0 flex w-72 max-w-[85vw] flex-col gap-8 bg-pine p-6 transition-transform duration-300',
-          open ? 'translate-x-0' : 'translate-x-full',
-        )}
-      >
-        <button
-          type="button"
-          onClick={close}
-          aria-label="Fechar menu"
-          className="cursor-pointer self-end p-1 text-3xl leading-none text-paper"
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon" aria-label="Abrir menu" className="-mr-2 hover:bg-pine-line">
+            <Image src="/icons/menu.svg" alt="" width={24} height={24} />
+          </Button>
+        </SheetTrigger>
+        <SheetContent
+          id="menu-mobile"
+          className="w-72 gap-6 border-pine-line bg-pine p-6 pt-14 text-paper [&>button]:text-paper"
         >
-          ×
-        </button>
-        <nav aria-label="Principal" className="flex flex-col gap-1">
-          {mainNav.map((item) => (
-            <a
-              key={item.href}
-              href={`/${item.href}`}
-              onClick={close}
-              className="rounded-full px-4 py-3 text-paper/70 hover:bg-pine-line hover:text-paper"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <Link
-          href="/cursos"
-          onClick={close}
-          className="rounded-full px-4 py-3 text-paper/70 hover:bg-pine-line hover:text-paper"
-        >
-          Cursos
-        </Link>
-        <div className="mt-auto flex flex-col gap-2" onClick={close}>
-          {account === 'loading' ? null : account ? (
-            <>
-              {account.isAdmin && (
-                <Link
-                  href="/admin"
-                  className="rounded-full px-4 py-3 text-paper/70 hover:bg-pine-line hover:text-paper"
-                >
-                  Painel
-                </Link>
-              )}
-              <AccountLink firstName={account.firstName} className="self-start" />
-            </>
-          ) : (
-            <Link href="/entrar" className="flex items-center gap-2 px-4 font-medium text-paper">
-              <Image src="/icons/user.svg" alt="" width={24} height={24} />
-              Fazer login
+          <SheetTitle className="sr-only">Menu</SheetTitle>
+          <nav aria-label="Principal" className="flex flex-col gap-1">
+            {mainNav.map((item) => (
+              <a key={item.href} href={`/${item.href}`} onClick={close} className={linkClass}>
+                {item.label}
+              </a>
+            ))}
+            <Link href="/cursos" onClick={close} className={linkClass}>
+              Cursos
             </Link>
-          )}
-        </div>
-      </aside>
+          </nav>
+          <div className="mt-auto flex flex-col gap-2" onClick={close}>
+            {account === 'loading' ? null : account ? (
+              <>
+                {account.isAdmin && (
+                  <Link href="/admin" className={`${linkClass} flex items-center gap-2`}>
+                    <LayoutDashboardIcon className="size-4" />
+                    Painel
+                  </Link>
+                )}
+                <AccountLink firstName={account.firstName} className="self-start" />
+              </>
+            ) : (
+              <Link href="/entrar" className="flex items-center gap-2 px-4 font-medium text-paper">
+                <Image src="/icons/user.svg" alt="" width={24} height={24} />
+                Fazer login
+              </Link>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

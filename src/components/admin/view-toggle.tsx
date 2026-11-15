@@ -3,29 +3,31 @@
 import { LayoutGridIcon, ListIcon } from 'lucide-react'
 import { useOptimistic, useTransition } from 'react'
 import { setAdminViewAction } from '@/app/(admin)/admin/actions'
-import type { AdminView } from '@/lib/admin-view'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { parseAdminView, type AdminView } from '@/lib/admin-view'
 import { cn } from '@/lib/utils'
 
-const options = [
-  { value: 'grade', label: 'Grade', Icon: LayoutGridIcon },
-  { value: 'lista', label: 'Lista', Icon: ListIcon },
-] as const
-
-// Alterna lista/grade com um indicador que desliza; a escolha fica num cookie e vale para todo o painel
+// ToggleGroup do shadcn com um indicador que desliza; a escolha fica num cookie e vale para todo o painel
 export function ViewToggle({ view }: { view: AdminView }) {
   const [current, setCurrent] = useOptimistic(view)
   const [, startTransition] = useTransition()
 
-  const choose = (value: AdminView) => {
-    if (value === current) return
+  const choose = (value: string) => {
+    if (!value || value === current) return
     startTransition(async () => {
-      setCurrent(value)
+      setCurrent(parseAdminView(value))
       await setAdminViewAction(value)
     })
   }
 
   return (
-    <div role="group" aria-label="Visualização" className="relative grid grid-cols-2 rounded-full bg-muted p-1">
+    <ToggleGroup
+      type="single"
+      value={current}
+      onValueChange={choose}
+      aria-label="Visualização"
+      className="relative grid grid-cols-2 rounded-full bg-muted p-1"
+    >
       <span
         aria-hidden
         className={cn(
@@ -33,21 +35,20 @@ export function ViewToggle({ view }: { view: AdminView }) {
           current === 'lista' && 'translate-x-full',
         )}
       />
-      {options.map(({ value, label, Icon }) => (
-        <button
-          key={value}
-          type="button"
-          onClick={() => choose(value)}
-          aria-pressed={current === value}
-          className={cn(
-            'relative z-10 flex cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-200',
-            current === value ? 'text-pine' : 'text-muted-foreground hover:text-ink',
-          )}
-        >
-          <Icon className="size-4" />
-          {label}
-        </button>
-      ))}
-    </div>
+      <ToggleGroupItem
+        value="grade"
+        className="relative z-10 h-9 cursor-pointer gap-2 rounded-full! px-4 font-semibold text-muted-foreground hover:bg-transparent hover:text-ink data-[state=on]:bg-transparent data-[state=on]:text-pine"
+      >
+        <LayoutGridIcon />
+        Grade
+      </ToggleGroupItem>
+      <ToggleGroupItem
+        value="lista"
+        className="relative z-10 h-9 cursor-pointer gap-2 rounded-full! px-4 font-semibold text-muted-foreground hover:bg-transparent hover:text-ink data-[state=on]:bg-transparent data-[state=on]:text-pine"
+      >
+        <ListIcon />
+        Lista
+      </ToggleGroupItem>
+    </ToggleGroup>
   )
 }

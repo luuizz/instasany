@@ -28,7 +28,10 @@ export default async function SectionEditorPage({ params }: PageProps) {
       <PageHeader
         title={section.title}
         description={`${section.description} ${updatedAt ? `Última alteração em ${dateFormat.format(updatedAt)}.` : 'Usando o conteúdo padrão.'}`}
-        back={{ href: '/admin/conteudo', label: 'Conteúdo do site' }}
+        breadcrumbs={[
+          { href: '/admin', label: 'Painel' },
+          { href: '/admin/conteudo', label: 'Conteúdo do site' },
+        ]}
       />
       <div>
         <SectionForm

@@ -1,7 +1,8 @@
 'use client'
 
 import type { AuthFormState } from '@/app/(auth)/actions'
-import { Field, FormMessage, Input } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { FormMessage, LabeledField } from '@/components/ui/form-field'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { useFormAction } from '@/hooks/use-form-action'
 
@@ -22,14 +23,14 @@ export function AuthForm({ mode, action, back }: AuthFormProps) {
       {back && <input type="hidden" name="volta" value={back} />}
       <FormMessage>{state?.ok === false ? state.error : null}</FormMessage>
       {signUp && (
-        <Field label="Nome">
+        <LabeledField label="Nome">
           <Input name="name" autoComplete="name" required maxLength={80} />
-        </Field>
+        </LabeledField>
       )}
-      <Field label="E-mail">
+      <LabeledField label="E-mail">
         <Input name="email" type="email" autoComplete="email" required />
-      </Field>
-      <Field label="Senha" hint={signUp ? 'Pelo menos 8 caracteres.' : undefined}>
+      </LabeledField>
+      <LabeledField label="Senha" hint={signUp ? 'Pelo menos 8 caracteres.' : undefined}>
         <Input
           name="password"
           type="password"
@@ -37,7 +38,7 @@ export function AuthForm({ mode, action, back }: AuthFormProps) {
           required
           minLength={signUp ? 8 : undefined}
         />
-      </Field>
+      </LabeledField>
       <SubmitButton pending={pending} pendingLabel={signUp ? 'Criando conta…' : 'Entrando…'}>
         {signUp ? 'Criar conta' : 'Entrar'}
       </SubmitButton>

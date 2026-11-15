@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ProgressBar } from '@/components/courses/progress-bar'
-import { CheckIcon } from '@/components/ui/icons'
+import { CheckIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { CourseOutline } from '@/types/lms'
 

@@ -35,7 +35,7 @@ export const changePasswordSchema = z
   })
   .refine(samePassword, mismatch)
 
-export const profileSchema = z.object({ name })
+export const profileSchema = z.object({ name, emailReminders: z.boolean() })
 
 // Só caminhos internos, para não virar redirecionamento aberto
 export function safeBack(value: unknown) {

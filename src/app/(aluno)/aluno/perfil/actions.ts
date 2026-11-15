@@ -6,14 +6,18 @@ import { changePasswordSchema, profileSchema } from '@/lib/validation/auth'
 import { authErrorMessage } from '@/server/auth/errors'
 import { getNeonAuth } from '@/server/auth/neon-auth'
 import { requireUser } from '@/server/auth/session'
-import { updateProfileName } from '@/server/services/profile'
+import { updateProfile } from '@/server/services/profile'
 
 const firstIssue = (issues: { message: string }[]) => issues[0]?.message ?? 'Confira os dados.'
 
-// O nome fica no perfil da plataforma e também no Neon Auth, para os dois não divergirem
+// O nome fica no perfil da plataforma e também no Neon Auth, para os dois não divergirem;
+// a preferência de lembretes só existe aqui
 export async function updateProfileAction(_state: ActionResult | null, formData: FormData): Promise<ActionResult> {
   const profile = await requireUser('/aluno/perfil')
-  const parsed = profileSchema.safeParse(Object.fromEntries(formData))
+  const parsed = profileSchema.safeParse({
+    name: formData.get('name') ?? '',
+    emailReminders: formData.has('emailReminders'),
+  })
   if (!parsed.success) return fail(firstIssue(parsed.error.issues))
 
   const auth = getNeonAuth()
@@ -21,7 +25,7 @@ export async function updateProfileAction(_state: ActionResult | null, formData:
     const { error } = await auth.updateUser({ name: parsed.data.name })
     if (error) return fail(authErrorMessage(error, 'Não foi possível salvar o nome. Tente de novo.'))
   }
-  await updateProfileName(profile.id, parsed.data.name)
+  await updateProfile(profile.id, parsed.data)
   revalidatePath('/aluno', 'layout')
   return ok(undefined)
 }

@@ -3,6 +3,9 @@ import { eq } from 'drizzle-orm'
 import { db } from '../db/client'
 import { profiles } from '../db/schema'
 
-export async function updateProfileName(profileId: string, name: string) {
-  await db().update(profiles).set({ name, updatedAt: new Date() }).where(eq(profiles.id, profileId))
+export async function updateProfile(profileId: string, changes: { name: string; emailReminders: boolean }) {
+  await db()
+    .update(profiles)
+    .set({ ...changes, updatedAt: new Date() })
+    .where(eq(profiles.id, profileId))
 }

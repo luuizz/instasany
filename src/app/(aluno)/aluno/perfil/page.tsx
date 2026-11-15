@@ -26,7 +26,7 @@ export default async function ProfilePage() {
             <CardDescription>Como você aparece na Instasany.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ProfileForm name={profile.name} email={profile.email} />
+            <ProfileForm name={profile.name} email={profile.email} emailReminders={profile.emailReminders} />
           </CardContent>
         </Card>
         <Card className="rounded-3xl shadow-none">

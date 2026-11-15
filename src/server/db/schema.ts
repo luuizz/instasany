@@ -145,6 +145,55 @@ export const lessonAttachments = pgTable(
   (table) => [index('lesson_attachments_lesson_idx').on(table.lessonId, table.sortOrder)],
 )
 
+// ---- Avaliação ---------------------------------------------------------------
+
+// Um quiz por módulo; quem acerta passPercent% das perguntas é aprovado
+export const quizzes = pgTable('quizzes', {
+  id: serial('id').primaryKey(),
+  moduleId: integer('module_id')
+    .notNull()
+    .unique()
+    .references(() => courseModules.id, { onDelete: 'cascade' }),
+  passPercent: integer('pass_percent').notNull().default(70),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+// Pergunta de múltipla escolha; options é a lista de alternativas, correctIndex a certa
+export const quizQuestions = pgTable(
+  'quiz_questions',
+  {
+    id: serial('id').primaryKey(),
+    quizId: integer('quiz_id')
+      .notNull()
+      .references(() => quizzes.id, { onDelete: 'cascade' }),
+    prompt: text('prompt').notNull(),
+    options: jsonb('options').$type<string[]>().notNull(),
+    correctIndex: integer('correct_index').notNull(),
+    explanation: text('explanation').notNull().default(''),
+    sortOrder: integer('sort_order').notNull().default(0),
+  },
+  (table) => [index('quiz_questions_quiz_idx').on(table.quizId, table.sortOrder)],
+)
+
+export const quizAttempts = pgTable(
+  'quiz_attempts',
+  {
+    id: serial('id').primaryKey(),
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    quizId: integer('quiz_id')
+      .notNull()
+      .references(() => quizzes.id, { onDelete: 'cascade' }),
+    score: integer('score').notNull(),
+    total: integer('total').notNull(),
+    passed: boolean('passed').notNull(),
+    answers: jsonb('answers').$type<number[]>().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index('quiz_attempts_profile_idx').on(table.profileId, table.quizId)],
+)
+
 export type CourseRow = typeof courses.$inferSelect
 export type CourseModuleRow = typeof courseModules.$inferSelect
 export type LessonRow = typeof lessons.$inferSelect

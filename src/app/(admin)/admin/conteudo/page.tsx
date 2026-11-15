@@ -1,3 +1,4 @@
+import { requireAdmin } from '@/server/auth/session'
 import { PageHeader } from '@/components/admin/page-header'
 import { SectionCollection } from '@/components/admin/section-collection'
 import { ViewToggle } from '@/components/admin/view-toggle'
@@ -8,6 +9,7 @@ import { getSectionUpdates } from '@/server/services/site-content'
 export const metadata = { title: 'Conteúdo do site' }
 
 export default async function AdminContentPage() {
+  await requireAdmin('/admin/conteudo')
   const [view, updates] = await Promise.all([getAdminView(), getSectionUpdates()])
   const sections = cmsSections.map(({ key, title, description }) => ({
     key,

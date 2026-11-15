@@ -1,5 +1,6 @@
 'use server'
 
+import { homeFor } from '@/lib/roles'
 import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { fail, type ActionResult } from '@/lib/result'
@@ -18,7 +19,7 @@ type AuthUser = { id: string; email: string; name?: string | null }
 // Admin vai para o painel, aluno para a área do aluno, salvo se veio de uma página protegida
 async function destinationFor(user: AuthUser, back: string | null) {
   const profile = await ensureProfile({ id: user.id, email: user.email, name: user.name ?? '' })
-  return back ?? (profile.role === 'admin' ? '/admin' : '/aluno')
+  return back ?? homeFor(profile.role)
 }
 
 export async function signIn(_state: AuthFormState, formData: FormData): Promise<AuthFormState> {

@@ -5,6 +5,7 @@ import { StudentsFilters, studentsHref } from '@/components/admin/students/stude
 import { StudentsTable } from '@/components/admin/students/students-table'
 import { ButtonLink } from '@/components/ui/button'
 import { countLabel } from '@/lib/duration'
+import { ROLES } from '@/lib/roles'
 import { requireAdmin } from '@/server/auth/session'
 import { listStudents } from '@/server/services/students'
 import type { RoleFilter } from '@/types/students'
@@ -14,7 +15,7 @@ export const metadata: Metadata = { title: 'Alunos' }
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> }
 
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value) ?? ''
-const parseRole = (value: string): RoleFilter => (value === 'student' || value === 'admin' ? value : 'all')
+const parseRole = (value: string): RoleFilter => ROLES.find((role) => role === value) ?? 'all'
 
 export default async function StudentsPage({ searchParams }: PageProps) {
   await requireAdmin('/admin/alunos')

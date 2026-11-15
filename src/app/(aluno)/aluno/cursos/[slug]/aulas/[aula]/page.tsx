@@ -1,3 +1,4 @@
+import { isStaff } from '@/lib/roles'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -106,7 +107,7 @@ export default async function LessonPage({ params }: PageProps) {
           </div>
         </div>
         {!player.lockedUntil && (
-          <LessonQuestions threads={threads} slug={slug} lessonId={lesson.id} isStaff={profile.role === 'admin'} />
+          <LessonQuestions threads={threads} slug={slug} lessonId={lesson.id} isStaff={isStaff(profile.role)} />
         )}
       </article>
       <CourseAside

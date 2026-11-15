@@ -1,3 +1,4 @@
+import { isStaff } from '@/lib/roles'
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
 import { isMediaKind, MEDIA_RULES } from '@/lib/media'
 import { getCurrentProfile } from '@/server/auth/session'
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
       request,
       onBeforeGenerateToken: async (pathname, clientPayload) => {
         const profile = await getCurrentProfile()
-        if (profile?.role !== 'admin') throw new Error('Só administradores podem enviar arquivos.')
+        if (!profile || !isStaff(profile.role)) throw new Error('Só a equipe pode enviar arquivos.')
         if (!isMediaKind(clientPayload)) throw new Error('Tipo de arquivo inválido.')
         const rules = MEDIA_RULES[clientPayload]
         if (!pathname.startsWith(`${rules.folder}/`)) throw new Error('Pasta inválida.')

@@ -1,3 +1,4 @@
+import { requireAdmin } from '@/server/auth/session'
 import type { Metadata } from 'next'
 import { CourseForm } from '@/components/admin/course-form'
 import { PageHeader } from '@/components/admin/page-header'
@@ -6,7 +7,8 @@ import { saveCourseAction } from '../actions'
 
 export const metadata: Metadata = { title: 'Novo curso' }
 
-export default function NewCoursePage() {
+export default async function NewCoursePage() {
+  await requireAdmin('/admin/cursos/novo')
   return (
     <div className="max-w-3xl">
       <PageHeader

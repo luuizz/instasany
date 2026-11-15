@@ -11,6 +11,7 @@ import { ButtonLink } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { countLabel, formatDuration } from '@/lib/duration'
 import { isStorageConfigured } from '@/server/integrations/storage'
+import { requireStaff } from '@/server/auth/session'
 import { getCourseById } from '@/server/services/courses'
 import { deleteCourseAction, saveCourseAction } from '../actions'
 
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function EditCoursePage({ params }: PageProps) {
-  const course = await loadCourse(params)
+  const [course, profile] = await Promise.all([loadCourse(params), requireStaff()])
   if (!course) notFound()
   const firstLesson = course.modules.flatMap((module) => module.lessons)[0]
 
@@ -64,26 +65,35 @@ export default async function EditCoursePage({ params }: PageProps) {
                 Ver como aluno
               </ButtonLink>
             )}
-            <ActionsMenu
-              links={
-                course.published
-                  ? [
-                      {
-                        href: `/cursos/${course.slug}`,
-                        label: 'Abrir página do curso',
-                        icon: <ExternalLinkIcon />,
-                        external: true,
-                      },
-                    ]
-                  : []
-              }
-              danger={{
-                label: 'Excluir curso',
-                title: `Excluir o curso "${course.title}"?`,
-                description: 'Módulos, aulas, matrículas e progresso dos alunos também saem. Não dá para desfazer.',
-                run: deleteCourseAction.bind(null, course.id),
-              }}
-            />
+            {profile.role === 'admin' ? (
+              <ActionsMenu
+                links={
+                  course.published
+                    ? [
+                        {
+                          href: `/cursos/${course.slug}`,
+                          label: 'Abrir página do curso',
+                          icon: <ExternalLinkIcon />,
+                          external: true,
+                        },
+                      ]
+                    : []
+                }
+                danger={{
+                  label: 'Excluir curso',
+                  title: `Excluir o curso "${course.title}"?`,
+                  description: 'Módulos, aulas, matrículas e progresso dos alunos também saem. Não dá para desfazer.',
+                  run: deleteCourseAction.bind(null, course.id),
+                }}
+              />
+            ) : (
+              course.published && (
+                <ButtonLink href={`/cursos/${course.slug}`} variant="ghost" size="default">
+                  <ExternalLinkIcon />
+                  Página do curso
+                </ButtonLink>
+              )
+            )}
           </>
         }
       />

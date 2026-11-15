@@ -1,16 +1,15 @@
-import { ShieldIcon } from 'lucide-react'
+import { GraduationCapIcon, ShieldIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import type { Role } from '@/types/students'
+import { ROLE_LABELS, type Role } from '@/lib/roles'
 
-export const ROLE_LABELS: Record<Role, string> = { student: 'Aluno', admin: 'Admin' }
+export { ROLE_LABELS }
 
 export function RoleBadge({ role }: { role: Role }) {
-  return role === 'admin' ? (
-    <Badge variant="live" className="gap-1">
-      <ShieldIcon className="size-3" />
-      {ROLE_LABELS.admin}
+  if (role === 'student') return <Badge variant="muted">{ROLE_LABELS.student}</Badge>
+  return (
+    <Badge variant={role === 'admin' ? 'live' : 'outline'} className="gap-1">
+      {role === 'admin' ? <ShieldIcon className="size-3" /> : <GraduationCapIcon className="size-3" />}
+      {ROLE_LABELS[role]}
     </Badge>
-  ) : (
-    <Badge variant="muted">{ROLE_LABELS.student}</Badge>
   )
 }

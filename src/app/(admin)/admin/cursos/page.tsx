@@ -1,3 +1,4 @@
+import { requireStaff } from '@/server/auth/session'
 import type { Metadata } from 'next'
 import { CourseCollection } from '@/components/admin/course-collection'
 import { PageHeader } from '@/components/admin/page-header'
@@ -11,7 +12,9 @@ import { createDemoCoursesAction } from './actions'
 export const metadata: Metadata = { title: 'Cursos' }
 
 export default async function AdminCoursesPage() {
-  const [courses, view] = await Promise.all([listAllCourses(), getAdminView()])
+  const [profile, courses, view] = await Promise.all([requireStaff('/admin/cursos'), listAllCourses(), getAdminView()])
+  // Criar curso é do admin; o instrutor edita os que existem
+  const isAdmin = profile.role === 'admin'
   const published = courses.filter((course) => course.published).length
 
   return (
@@ -26,10 +29,12 @@ export default async function AdminCoursesPage() {
         actions={
           <>
             {courses.length > 0 && <ViewToggle view={view} />}
-            <ButtonLink href="/admin/cursos/novo" size="default">
-              <PlusIcon />
-              Novo curso
-            </ButtonLink>
+            {isAdmin && (
+              <ButtonLink href="/admin/cursos/novo" size="default">
+                <PlusIcon />
+                Novo curso
+              </ButtonLink>
+            )}
           </>
         }
       />
@@ -37,14 +42,18 @@ export default async function AdminCoursesPage() {
       {courses.length === 0 ? (
         <div className="flex flex-col items-start gap-4 rounded-3xl border border-dashed border-ink/20 p-8">
           <p className="text-ink/70">
-            Nenhum curso ainda. Crie o primeiro ou comece com dois cursos de exemplo, já publicados.
+            {isAdmin
+              ? 'Nenhum curso ainda. Crie o primeiro ou comece com dois cursos de exemplo, já publicados.'
+              : 'Nenhum curso ainda. Quando a administração criar um curso, ele aparece aqui para você editar.'}
           </p>
-          <form action={createDemoCoursesAction}>
-            <Button type="submit" variant="dark">
-              <SparklesIcon />
-              Criar cursos de exemplo
-            </Button>
-          </form>
+          {isAdmin && (
+            <form action={createDemoCoursesAction}>
+              <Button type="submit" variant="dark">
+                <SparklesIcon />
+                Criar cursos de exemplo
+              </Button>
+            </form>
+          )}
         </div>
       ) : (
         <CourseCollection courses={courses} view={view} />

@@ -1,4 +1,5 @@
 import 'server-only'
+import { isStaff, type Role } from '@/lib/roles'
 import { and, asc, desc, eq, inArray } from 'drizzle-orm'
 import type { QuizDraft, QuizResult, StudentQuiz } from '@/types/lms'
 import { db } from '../db/client'
@@ -7,7 +8,7 @@ import { getCourseBySlug } from './courses'
 import { isReleased } from '@/lib/release'
 import { enrollmentDate, isEnrolled } from './learning'
 
-type Viewer = { id: string; role: 'student' | 'admin' }
+type Viewer = { id: string; role: Role }
 
 async function quizOfModule(moduleId: number) {
   const [quiz] = await db().select().from(quizzes).where(eq(quizzes.moduleId, moduleId)).limit(1)
@@ -70,8 +71,8 @@ async function bestAttempt(profileId: string, quizId: number) {
 export async function getStudentQuiz(viewer: Viewer, slug: string, moduleId: number): Promise<StudentQuiz | null> {
   const course = await getCourseBySlug(slug)
   if (!course) return null
-  const enrolledAt = viewer.role === 'admin' ? null : await enrollmentDate(viewer.id, course.id)
-  if (viewer.role !== 'admin' && (!course.published || !enrolledAt)) return null
+  const enrolledAt = isStaff(viewer.role) ? null : await enrollmentDate(viewer.id, course.id)
+  if (!isStaff(viewer.role) && (!course.published || !enrolledAt)) return null
   const moduleIndex = course.modules.findIndex((module) => module.id === moduleId)
   const courseModule = course.modules[moduleIndex]
   // O quiz só abre quando todas as aulas do módulo já foram liberadas
@@ -100,7 +101,7 @@ export async function submitQuiz(viewer: Viewer, quizId: number, answers: number
     .where(eq(quizzes.id, quizId))
     .limit(1)
   if (!row) return null
-  if (viewer.role !== 'admin' && !(await isEnrolled(viewer.id, row.courseId))) return null
+  if (!isStaff(viewer.role) && !(await isEnrolled(viewer.id, row.courseId))) return null
   const questions = await questionsOf(quizId)
   if (!questions.length) return null
 

@@ -4,7 +4,7 @@ import { revalidatePath, updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { fail, ok, type ActionResult } from '@/lib/result'
 import { quizSchema } from '@/lib/validation/lms'
-import { requireAdmin } from '@/server/auth/session'
+import { requireStaff } from '@/server/auth/session'
 import { COURSES_TAG } from '@/server/services/courses'
 import { deleteQuiz, saveQuiz } from '@/server/services/quiz'
 
@@ -29,7 +29,7 @@ export async function saveQuizAction(
   _state: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> {
-  await requireAdmin()
+  await requireStaff()
   const parsed = quizSchema.safeParse(parseJson(formData.get('quiz')))
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? 'Confira as perguntas.')
   await saveQuiz(moduleId, parsed.data)
@@ -38,7 +38,7 @@ export async function saveQuizAction(
 }
 
 export async function deleteQuizAction(moduleId: number, courseId: number) {
-  await requireAdmin()
+  await requireStaff()
   await deleteQuiz(moduleId)
   refresh(courseId)
   redirect(`/admin/cursos/${courseId}`)

@@ -14,7 +14,7 @@ import {
   uniqueIndex,
 } from 'drizzle-orm/pg-core'
 
-export const roleEnum = pgEnum('role', ['student', 'admin'])
+export const roleEnum = pgEnum('role', ['student', 'instructor', 'admin'])
 
 // Perfil da plataforma. O id é o do usuário no Neon Auth (a senha e a sessão ficam lá).
 export const profiles = pgTable('profiles', {

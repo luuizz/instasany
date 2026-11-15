@@ -1,13 +1,14 @@
 import 'server-only'
 import { eq } from 'drizzle-orm'
 import { isTrackedPath, type SERVER_EVENT_TYPES } from '@/lib/analytics'
+import { isStaff } from '@/lib/roles'
 import type { ClientEvent } from '@/lib/validation/analytics'
 import type { Profile } from '../auth/session'
 import { db } from '../db/client'
 import { analyticsEvents, courseModules, lessons } from '../db/schema'
 
-// Uso da equipe não entra nos números
-const counts = (profile: Profile | null) => profile?.role !== 'admin'
+// Uso da equipe (instrutor e admin) não entra nos números
+const counts = (profile: Profile | null) => !profile || !isStaff(profile.role)
 
 async function courseOfLesson(lessonId: number) {
   const [row] = await db()

@@ -1,4 +1,5 @@
 import 'server-only'
+import type { Role } from '@/lib/roles'
 import { randomBytes } from 'node:crypto'
 import { and, eq } from 'drizzle-orm'
 import type { Certificate, CourseCompletion, CourseOutline } from '@/types/lms'
@@ -42,7 +43,7 @@ export async function certificateCodeFor(profileId: string, courseId: number) {
   return row?.code ?? null
 }
 
-type Student = { id: string; name: string; email: string; role: 'student' | 'admin' }
+type Student = { id: string; name: string; email: string; role: Role }
 
 // Emite (ou devolve o que já existe) quando o curso está concluído; null se ainda não está
 export async function issueCertificate(student: Student, slug: string) {

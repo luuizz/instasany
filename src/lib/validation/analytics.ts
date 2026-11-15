@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { MAX_WATCH_SECONDS } from '@/lib/analytics'
+import { ROLES } from '@/lib/roles'
 
 const visitorId = z.uuid()
 
@@ -19,4 +20,4 @@ export const clientEventSchema = z.discriminatedUnion('type', [
 
 export type ClientEvent = z.output<typeof clientEventSchema>
 
-export const roleSchema = z.object({ role: z.enum(['student', 'admin'], 'Escolha um papel válido.') })
+export const roleSchema = z.object({ role: z.enum(ROLES, 'Escolha um papel válido.') })

@@ -1,5 +1,6 @@
 'use server'
 
+import { isStaff } from '@/lib/roles'
 import { firstNameOf } from '@/lib/account'
 import { clientEventSchema } from '@/lib/validation/analytics'
 import { getCurrentProfile } from '@/server/auth/session'
@@ -13,7 +14,7 @@ export async function getHeaderAccountAction(): Promise<HeaderAccount | null> {
     if (!profile) return null
     return {
       firstName: firstNameOf(profile.name, profile.email),
-      isAdmin: profile.role === 'admin',
+      isAdmin: isStaff(profile.role),
     }
   } catch (error) {
     console.error('[cabeçalho] não foi possível ler a sessão:', error)

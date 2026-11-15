@@ -6,7 +6,7 @@ import { after } from 'next/server'
 import { fail, ok, type ActionResult } from '@/lib/result'
 import { slugify } from '@/lib/slug'
 import { attachmentSchema, courseSchema, lessonSchema, moduleSchema } from '@/lib/validation/lms'
-import { requireAdmin } from '@/server/auth/session'
+import { requireAdmin, requireStaff } from '@/server/auth/session'
 import * as admin from '@/server/services/course-admin'
 import { addAttachment, removeAttachment } from '@/server/services/attachments'
 import { COURSES_TAG, getCourseById } from '@/server/services/courses'
@@ -34,7 +34,8 @@ export async function saveCourseAction(
   _state: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  await requireAdmin()
+  // Criar curso é do admin; editar, da equipe toda
+  await (courseId === null ? requireAdmin() : requireStaff())
   const title = String(formData.get('title') ?? '')
   const parsed = courseSchema.safeParse({
     title,
@@ -82,7 +83,7 @@ export async function createDemoCoursesAction() {
 // ---- módulos ----
 
 export async function addModuleAction(courseId: number, _state: FormState, formData: FormData): Promise<FormState> {
-  await requireAdmin()
+  await requireStaff()
   const parsed = moduleSchema.safeParse({ title: formData.get('title') ?? '' })
   if (!parsed.success) return fail(firstError(parsed.error.issues))
   await admin.addModule(courseId, parsed.data.title)
@@ -96,7 +97,7 @@ export async function renameModuleAction(
   _state: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  await requireAdmin()
+  await requireStaff()
   const parsed = moduleSchema.safeParse({ title: formData.get('title') ?? '' })
   if (!parsed.success) return fail(firstError(parsed.error.issues))
   await admin.renameModule(moduleId, parsed.data.title)
@@ -105,7 +106,7 @@ export async function renameModuleAction(
 }
 
 export async function deleteModuleAction(moduleId: number, courseId: number) {
-  await requireAdmin()
+  await requireStaff()
   const files = await admin.moduleFileUrls(moduleId)
   await admin.deleteModule(moduleId)
   cleanUp(files)
@@ -113,7 +114,7 @@ export async function deleteModuleAction(moduleId: number, courseId: number) {
 }
 
 export async function moveModuleAction(moduleId: number, courseId: number, direction: 'up' | 'down') {
-  await requireAdmin()
+  await requireStaff()
   await admin.moveModule(moduleId, direction)
   refresh(courseId)
 }
@@ -121,7 +122,7 @@ export async function moveModuleAction(moduleId: number, courseId: number, direc
 // ---- aulas ----
 
 export async function addLessonAction(moduleId: number, courseId: number) {
-  await requireAdmin()
+  await requireStaff()
   const id = await admin.addLesson(moduleId)
   refresh(courseId)
   redirect(`/admin/cursos/${courseId}/aulas/${id}`)
@@ -133,7 +134,7 @@ export async function saveLessonAction(
   _state: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  await requireAdmin()
+  await requireStaff()
   const parsed = lessonSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) return fail(firstError(parsed.error.issues))
   const previous = await admin.getLesson(lessonId)
@@ -144,7 +145,7 @@ export async function saveLessonAction(
 }
 
 export async function deleteLessonAction(lessonId: number, courseId: number) {
-  await requireAdmin()
+  await requireStaff()
   const files = await admin.lessonFileUrls(lessonId)
   await admin.deleteLesson(lessonId)
   cleanUp(files)
@@ -153,7 +154,7 @@ export async function deleteLessonAction(lessonId: number, courseId: number) {
 }
 
 export async function moveLessonAction(lessonId: number, courseId: number, direction: 'up' | 'down') {
-  await requireAdmin()
+  await requireStaff()
   await admin.moveLesson(lessonId, direction)
   refresh(courseId)
 }
@@ -170,7 +171,7 @@ export async function addAttachmentAction(
   courseId: number,
   input: unknown,
 ): Promise<ActionResult<LessonAttachment>> {
-  await requireAdmin()
+  await requireStaff()
   const parsed = attachmentSchema.safeParse(input)
   if (!parsed.success) return fail(firstError(parsed.error.issues))
   const created = await addAttachment(lessonId, parsed.data)
@@ -180,7 +181,7 @@ export async function addAttachmentAction(
 }
 
 export async function removeAttachmentAction(lessonId: number, courseId: number, attachmentId: number) {
-  await requireAdmin()
+  await requireStaff()
   const url = await removeAttachment(lessonId, attachmentId)
   if (url) cleanUp([url])
   refreshLesson(lessonId, courseId)

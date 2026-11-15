@@ -2,6 +2,7 @@
 
 import { ChevronsUpDownIcon, ExternalLinkIcon, GraduationCapIcon, LogOutIcon, UserRoundIcon } from 'lucide-react'
 import Link from 'next/link'
+import { ROLE_LABELS, type Role } from '@/lib/roles'
 import { signOut } from '@/app/(auth)/actions'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 // Conta no rodapé do menu do painel: atalhos e sair num dropdown do shadcn
-export function AccountMenu({ userName, email }: { userName: string; email: string }) {
+export function AccountMenu({ userName, email, role }: { userName: string; email: string; role: Role }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-pine-line/60 p-3 text-left text-sm transition outline-none hover:bg-pine-line focus-visible:ring-4 focus-visible:ring-lime/30 data-[state=open]:bg-pine-line">
@@ -33,7 +34,7 @@ export function AccountMenu({ userName, email }: { userName: string; email: stri
         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-2xl p-1.5"
       >
         <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-          Conectado como admin
+          Conectado como {ROLE_LABELS[role].toLowerCase()}
         </DropdownMenuLabel>
         <DropdownMenuItem asChild className="cursor-pointer rounded-xl">
           <Link href="/aluno">

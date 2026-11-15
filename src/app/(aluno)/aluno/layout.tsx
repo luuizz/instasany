@@ -1,3 +1,4 @@
+import { isStaff } from '@/lib/roles'
 import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/layout/site-header'
 import { firstNameOf } from '@/lib/account'
@@ -12,7 +13,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
       <SiteHeader
         account={{
           firstName: firstNameOf(profile.name, profile.email),
-          isAdmin: profile.role === 'admin',
+          isAdmin: isStaff(profile.role),
         }}
       />
       <main className="min-h-[calc(100svh-var(--spacing-header))] bg-paper">{children}</main>

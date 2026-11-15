@@ -1,4 +1,5 @@
 import 'server-only'
+import { isStaff } from '@/lib/roles'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { connection } from 'next/server'
@@ -63,6 +64,13 @@ export async function requireUser(back = '/aluno') {
 
 export async function requireAdmin(back = '/admin') {
   const profile = await requireUser(back)
-  if (profile.role !== 'admin') redirect('/aluno')
+  if (profile.role !== 'admin') redirect(profile.role === 'instructor' ? '/admin/cursos' : '/aluno')
+  return profile
+}
+
+// Instrutor ou admin: editar o conteúdo dos cursos
+export async function requireStaff(back = '/admin/cursos') {
+  const profile = await requireUser(back)
+  if (!isStaff(profile.role)) redirect('/aluno')
   return profile
 }

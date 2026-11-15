@@ -1,4 +1,5 @@
 import 'server-only'
+import { isStaff, type Role } from '@/lib/roles'
 import { and, asc, desc, eq, inArray, isNull } from 'drizzle-orm'
 import { firstNameOf, initialsOf } from '@/lib/account'
 import type { AdminQuestion, QuestionMessage, QuestionThread } from '@/types/lms'
@@ -7,7 +8,7 @@ import { courseModules, courses, lessonQuestions, lessons, profiles } from '../d
 import { getLesson } from './course-admin'
 import { isEnrolled } from './learning'
 
-type Viewer = { id: string; role: 'student' | 'admin' }
+type Viewer = { id: string; role: Role }
 
 const messageColumns = {
   id: lessonQuestions.id,
@@ -28,7 +29,7 @@ type MessageRow = {
   createdAt: Date
   name: string
   email: string
-  role: 'student' | 'admin'
+  role: Role
 }
 
 const toMessage = (row: MessageRow, viewerId: string): QuestionMessage => ({
@@ -38,7 +39,7 @@ const toMessage = (row: MessageRow, viewerId: string): QuestionMessage => ({
   author: {
     name: firstNameOf(row.name, row.email),
     initials: initialsOf(row.name || row.email),
-    isStaff: row.role === 'admin',
+    isStaff: isStaff(row.role),
     isMine: row.profileId === viewerId,
   },
 })
@@ -71,7 +72,7 @@ export async function listThreads(lessonId: number, viewerId: string): Promise<Q
 async function canParticipate(viewer: Viewer, lessonId: number) {
   const lesson = await getLesson(lessonId)
   if (!lesson) return false
-  return viewer.role === 'admin' || isEnrolled(viewer.id, lesson.courseId)
+  return isStaff(viewer.role) || isEnrolled(viewer.id, lesson.courseId)
 }
 
 export async function askQuestion(viewer: Viewer, lessonId: number, body: string) {
@@ -131,7 +132,7 @@ export async function listQuestionsForAdmin(viewerId: string, onlyPending: boole
       lessonTitle: root.lessonTitle,
       courseTitle: root.courseTitle,
       courseSlug: root.courseSlug,
-      answered: root.role === 'admin' || own.some((reply) => reply.role === 'admin'),
+      answered: isStaff(root.role) || own.some((reply) => isStaff(reply.role)),
     }
   })
   const sorted = [...threads.filter((thread) => !thread.answered), ...threads.filter((thread) => thread.answered)]

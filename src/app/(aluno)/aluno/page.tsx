@@ -1,3 +1,4 @@
+import { isStaff } from '@/lib/roles'
 import { AwardIcon } from 'lucide-react'
 import Link from 'next/link'
 import { SignOutButton } from '@/components/auth/sign-out-button'
@@ -28,7 +29,7 @@ export default async function StudentHomePage() {
           <h1 className="mt-2 text-4xl font-semibold text-ink">Olá, {firstName}!</h1>
         </div>
         <div className="flex items-center gap-6 text-sm">
-          {profile.role === 'admin' && (
+          {isStaff(profile.role) && (
             <Link href="/admin" className="font-semibold text-pine underline-offset-4 hover:underline">
               Ir para o painel
             </Link>

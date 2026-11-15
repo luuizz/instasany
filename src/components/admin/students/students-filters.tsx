@@ -8,6 +8,7 @@ import type { RoleFilter } from '@/types/students'
 const roles: { value: RoleFilter; label: string }[] = [
   { value: 'all', label: 'Todos' },
   { value: 'student', label: 'Alunos' },
+  { value: 'instructor', label: 'Instrutores' },
   { value: 'admin', label: 'Admins' },
 ]
 

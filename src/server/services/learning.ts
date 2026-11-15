@@ -1,4 +1,5 @@
 import 'server-only'
+import { isStaff, type Role } from '@/lib/roles'
 import { isReleased, releaseDate } from '@/lib/release'
 import { and, eq, inArray } from 'drizzle-orm'
 import type { CourseOutline, Lesson, LessonAttachment, LessonItem, StudentCourse } from '@/types/lms'
@@ -97,15 +98,15 @@ export type LessonPlayer = {
 
 // Tudo o que a tela da aula precisa; null se a aula não é do curso ou a pessoa não tem acesso
 export async function getLessonPlayer(
-  profile: { id: string; role: 'student' | 'admin' },
+  profile: { id: string; role: Role },
   slug: string,
   lessonId: number,
 ): Promise<LessonPlayer | null> {
   const course = await getCourseBySlug(slug)
   if (!course) return null
   // Admin assiste qualquer curso, até rascunho, para revisar
-  const enrolledAt = profile.role === 'admin' ? null : await enrollmentDate(profile.id, course.id)
-  if (profile.role !== 'admin' && (!course.published || !enrolledAt)) return null
+  const enrolledAt = isStaff(profile.role) ? null : await enrollmentDate(profile.id, course.id)
+  if (!isStaff(profile.role) && (!course.published || !enrolledAt)) return null
 
   const items = allLessons(course)
   const position = items.findIndex((lesson) => lesson.id === lessonId)
@@ -151,14 +152,10 @@ export async function firstPendingLesson(profileId: string, course: CourseOutlin
 }
 
 // Só marca aula de curso em que a pessoa está matriculada (admin pode em qualquer um)
-export async function setLessonCompleted(
-  profile: { id: string; role: 'student' | 'admin' },
-  lessonId: number,
-  completed: boolean,
-) {
+export async function setLessonCompleted(profile: { id: string; role: Role }, lessonId: number, completed: boolean) {
   const lesson = await getLesson(lessonId)
   if (!lesson) return false
-  if (profile.role !== 'admin') {
+  if (!isStaff(profile.role)) {
     const enrolledAt = await enrollmentDate(profile.id, lesson.courseId)
     if (!enrolledAt || !isReleased(enrolledAt, lesson.releaseAfterDays)) return false
   }
@@ -183,14 +180,10 @@ async function savedPosition(profileId: string, lessonId: number) {
 }
 
 // Guarda onde a pessoa parou no vídeo; só para aula de curso em que está matriculada (ou admin)
-export async function saveLessonPosition(
-  profile: { id: string; role: 'student' | 'admin' },
-  lessonId: number,
-  seconds: number,
-) {
+export async function saveLessonPosition(profile: { id: string; role: Role }, lessonId: number, seconds: number) {
   const lesson = await getLesson(lessonId)
   if (!lesson) return false
-  if (profile.role !== 'admin' && !(await isEnrolled(profile.id, lesson.courseId))) return false
+  if (!isStaff(profile.role) && !(await isEnrolled(profile.id, lesson.courseId))) return false
   await db()
     .insert(lessonPositions)
     .values({ profileId: profile.id, lessonId, seconds })

@@ -7,7 +7,7 @@ import { profiles } from '../db/schema'
 
 export const STUDENTS_PAGE_SIZE = 25
 
-const toRole = (value: unknown): Role => (value === 'admin' ? 'admin' : 'student')
+const toRole = (value: unknown): Role => (value === 'admin' || value === 'instructor' ? value : 'student')
 
 // Última coisa que a pessoa fez: evento de uso, aula concluída ou matrícula
 const lastActivity = sql`greatest(

@@ -1,4 +1,6 @@
-export type Role = 'student' | 'admin'
+import type { Role } from '@/lib/roles'
+
+export type { Role }
 export type RoleFilter = Role | 'all'
 
 export type StudentListItem = {

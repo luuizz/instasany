@@ -5,10 +5,12 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { mainNav } from '@/config/site'
 import { cn } from '@/lib/utils'
-import type { HeaderAccount } from './site-header'
+import { AccountLink } from './header-account'
+import { useHeaderAccount } from './header-account-context'
 
-export function MobileMenu({ account }: { account: HeaderAccount }) {
+export function MobileMenu() {
   const [open, setOpen] = useState(false)
+  const account = useHeaderAccount()
 
   useEffect(() => {
     if (!open) return
@@ -80,14 +82,26 @@ export function MobileMenu({ account }: { account: HeaderAccount }) {
         >
           Cursos
         </Link>
-        <Link
-          href={account.href}
-          onClick={close}
-          className="mt-auto flex items-center gap-2 px-4 font-medium text-paper"
-        >
-          <Image src="/icons/user.svg" alt="" width={24} height={24} />
-          {account.label}
-        </Link>
+        <div className="mt-auto flex flex-col gap-2" onClick={close}>
+          {account === 'loading' ? null : account ? (
+            <>
+              {account.isAdmin && (
+                <Link
+                  href="/admin"
+                  className="rounded-full px-4 py-3 text-paper/70 hover:bg-pine-line hover:text-paper"
+                >
+                  Painel
+                </Link>
+              )}
+              <AccountLink firstName={account.firstName} className="self-start" />
+            </>
+          ) : (
+            <Link href="/entrar" className="flex items-center gap-2 px-4 font-medium text-paper">
+              <Image src="/icons/user.svg" alt="" width={24} height={24} />
+              Fazer login
+            </Link>
+          )}
+        </div>
       </aside>
     </div>
   )

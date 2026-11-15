@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import '@fontsource-variable/epilogue'
+import { PageViewTracker } from '@/components/analytics/page-view-tracker'
 import { Toaster } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { site } from '@/config/site'
 import './globals.css'
 
@@ -17,8 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body suppressHydrationWarning>
-        {children}
+        <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
         <Toaster />
+        <PageViewTracker />
       </body>
     </html>
   )

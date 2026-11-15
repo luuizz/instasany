@@ -15,6 +15,62 @@
       "when": 1794672984627,
       "tag": "0001_lms",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794761543588,
+      "tag": "0002_analise",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794764875031,
+      "tag": "0003_aula_retomar_materiais",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794765185646,
+      "tag": "0004_quiz",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794765540735,
+      "tag": "0005_certificado_avaliacao",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794765839411,
+      "tag": "0006_duvidas",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794766240372,
+      "tag": "0007_emails",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794770635537,
+      "tag": "0008_liberacao_gradual",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794774605268,
+      "tag": "0009_papel_instrutor",
+      "breakpoints": true
     }
   ]
 }

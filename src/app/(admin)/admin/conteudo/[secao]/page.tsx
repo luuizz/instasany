@@ -1,3 +1,4 @@
+import { requireAdmin } from '@/server/auth/session'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PageHeader } from '@/components/admin/page-header'
@@ -19,6 +20,7 @@ const dateFormat = new Intl.DateTimeFormat('pt-BR', {
 })
 
 export default async function SectionEditorPage({ params }: PageProps) {
+  await requireAdmin('/admin/conteudo')
   const section = findCmsSection((await params).secao)
   if (!section) notFound()
   const { data, updatedAt } = await getSection(section.key)
@@ -28,7 +30,10 @@ export default async function SectionEditorPage({ params }: PageProps) {
       <PageHeader
         title={section.title}
         description={`${section.description} ${updatedAt ? `Última alteração em ${dateFormat.format(updatedAt)}.` : 'Usando o conteúdo padrão.'}`}
-        back={{ href: '/admin/conteudo', label: 'Conteúdo do site' }}
+        breadcrumbs={[
+          { href: '/admin', label: 'Painel' },
+          { href: '/admin/conteudo', label: 'Conteúdo do site' },
+        ]}
       />
       <div>
         <SectionForm

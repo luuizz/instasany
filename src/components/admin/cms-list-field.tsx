@@ -1,6 +1,10 @@
 'use client'
 
+import { ArrowDownIcon, ArrowUpIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { FieldLegend, FieldSet } from '@/components/ui/field'
 import { listCountName } from '@/lib/cms-form'
 import { getPath } from '@/lib/object-path'
 import type { CmsListField } from '@/types/cms'
@@ -13,9 +17,6 @@ type Item = { id: number; value: unknown }
 let nextId = 0
 const toItems = (value: unknown): Item[] =>
   (Array.isArray(value) ? value : []).map((item) => ({ id: nextId++, value: item }))
-
-const action =
-  'cursor-pointer rounded-full px-3 py-1 text-xs font-semibold hover:bg-ink/5 disabled:cursor-default disabled:opacity-30'
 
 // Lista editável: os campos não são controlados; o id mantém cada item no lugar ao mover ou remover
 export function CmsListFieldEditor({ field, value }: CmsListFieldProps) {
@@ -32,42 +33,52 @@ export function CmsListFieldEditor({ field, value }: CmsListFieldProps) {
   const add = () => setItems((current) => [...current, { id: nextId++, value: field.newItem }])
 
   return (
-    <fieldset className="flex flex-col gap-4">
-      <legend className="mb-3 text-lg font-semibold">{field.label}</legend>
+    <FieldSet className="gap-4">
+      <FieldLegend className="mb-1 text-lg font-semibold">{field.label}</FieldLegend>
       <input type="hidden" name={listCountName(field.path)} value={items.length} />
       {items.map((item, index) => (
-        <div key={item.id} className="flex flex-col gap-4 rounded-3xl border border-ink/10 p-5">
+        <Card
+          key={item.id}
+          className="animate-in gap-4 rounded-3xl p-5 shadow-none duration-300 fade-in slide-in-from-bottom-1"
+        >
           <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-semibold text-ink/60">
+            <span className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+              <span className="flex size-6 items-center justify-center rounded-full bg-secondary text-xs text-pine">
+                {index + 1}
+              </span>
               {field.itemLabel} {index + 1}
             </span>
             <div className="flex gap-1">
-              <button
+              <Button
                 type="button"
-                className={action}
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => move(index, -1)}
                 disabled={index === 0}
                 aria-label={`Subir ${field.itemLabel.toLowerCase()} ${index + 1}`}
               >
-                ↑
-              </button>
-              <button
+                <ArrowUpIcon />
+              </Button>
+              <Button
                 type="button"
-                className={action}
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => move(index, 1)}
                 disabled={index === items.length - 1}
                 aria-label={`Descer ${field.itemLabel.toLowerCase()} ${index + 1}`}
               >
-                ↓
-              </button>
-              <button
+                <ArrowDownIcon />
+              </Button>
+              <Button
                 type="button"
-                className={`${action} text-red-700`}
+                variant="destructive"
+                size="icon-sm"
                 onClick={() => remove(index)}
                 disabled={items.length <= field.min}
+                aria-label={`Remover ${field.itemLabel.toLowerCase()} ${index + 1}`}
               >
-                Remover
-              </button>
+                <Trash2Icon />
+              </Button>
             </div>
           </div>
           {field.fields.map((sub) => (
@@ -78,17 +89,14 @@ export function CmsListFieldEditor({ field, value }: CmsListFieldProps) {
               value={getPath(item.value, sub.path)}
             />
           ))}
-        </div>
+        </Card>
       ))}
       {items.length < field.max && (
-        <button
-          type="button"
-          onClick={add}
-          className="cursor-pointer self-start rounded-full border border-dashed border-ink/30 px-5 py-3 text-sm font-semibold hover:border-sage"
-        >
-          + Adicionar {field.itemLabel.toLowerCase()}
-        </button>
+        <Button type="button" variant="outline" onClick={add} className="self-start border-dashed">
+          <PlusIcon />
+          Adicionar {field.itemLabel.toLowerCase()}
+        </Button>
       )}
-    </fieldset>
+    </FieldSet>
   )
 }

@@ -3,6 +3,7 @@
 import { LayoutDashboardIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { useHeaderAccount } from './header-account-context'
 
@@ -53,12 +54,9 @@ export function AccountLink({ firstName, className }: { firstName: string; class
         className,
       )}
     >
-      <span
-        aria-hidden
-        className="flex size-8 items-center justify-center rounded-full bg-lime text-sm font-bold text-pine"
-      >
-        {firstName[0]?.toUpperCase()}
-      </span>
+      <Avatar aria-hidden className="size-8">
+        <AvatarFallback className="bg-lime text-sm font-bold text-pine">{firstName[0]?.toUpperCase()}</AvatarFallback>
+      </Avatar>
       <span className="truncate">Olá, {firstName}</span>
     </Link>
   )

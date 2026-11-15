@@ -3,7 +3,7 @@ import { and, asc, eq, gt, lt, desc, max } from 'drizzle-orm'
 import type { CourseInput, LessonInput } from '@/lib/validation/lms'
 import type { Lesson } from '@/types/lms'
 import { db } from '../db/client'
-import { courseModules, courses, lessons } from '../db/schema'
+import { courseModules, courses, lessonAttachments, lessons } from '../db/schema'
 
 export class SlugTakenError extends Error {}
 
@@ -145,6 +145,7 @@ export async function getLesson(id: number): Promise<(Lesson & { courseId: numbe
     videoUrl: lesson.videoUrl,
     durationMinutes: lesson.durationMinutes,
     hasVideo: Boolean(lesson.videoUrl),
+    releaseAfterDays: lesson.releaseAfterDays,
     courseId,
   }
 }
@@ -202,10 +203,31 @@ export async function courseFileUrls(courseId: number) {
     .from(lessons)
     .innerJoin(courseModules, eq(courseModules.id, lessons.moduleId))
     .where(eq(courseModules.courseId, courseId))
-  return [course?.coverUrl, ...videos.map((video) => video.url)]
+  const attachments = await db()
+    .select({ url: lessonAttachments.url })
+    .from(lessonAttachments)
+    .innerJoin(lessons, eq(lessons.id, lessonAttachments.lessonId))
+    .innerJoin(courseModules, eq(courseModules.id, lessons.moduleId))
+    .where(eq(courseModules.courseId, courseId))
+  return [course?.coverUrl, ...videos.map((video) => video.url), ...attachments.map((file) => file.url)]
 }
 
 export async function moduleFileUrls(moduleId: number) {
   const videos = await db().select({ url: lessons.videoUrl }).from(lessons).where(eq(lessons.moduleId, moduleId))
-  return videos.map((video) => video.url)
+  const attachments = await db()
+    .select({ url: lessonAttachments.url })
+    .from(lessonAttachments)
+    .innerJoin(lessons, eq(lessons.id, lessonAttachments.lessonId))
+    .where(eq(lessons.moduleId, moduleId))
+  return [...videos.map((video) => video.url), ...attachments.map((file) => file.url)]
+}
+
+// Vídeo e materiais da aula, para apagar do Blob junto com ela
+export async function lessonFileUrls(lessonId: number) {
+  const [lesson] = await db().select({ url: lessons.videoUrl }).from(lessons).where(eq(lessons.id, lessonId))
+  const attachments = await db()
+    .select({ url: lessonAttachments.url })
+    .from(lessonAttachments)
+    .where(eq(lessonAttachments.lessonId, lessonId))
+  return [lesson?.url, ...attachments.map((file) => file.url)]
 }

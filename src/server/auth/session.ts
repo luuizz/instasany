@@ -1,4 +1,5 @@
 import 'server-only'
+import { isStaff } from '@/lib/roles'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { connection } from 'next/server'
@@ -8,7 +9,7 @@ import { profiles, type ProfileRow } from '../db/schema'
 import { getNeonAuth } from './neon-auth'
 
 export type SessionUser = { id: string; email: string; name: string }
-export type Profile = Pick<ProfileRow, 'id' | 'email' | 'name' | 'role'>
+export type Profile = Pick<ProfileRow, 'id' | 'email' | 'name' | 'role' | 'emailReminders'>
 
 // E-mails que viram admin no primeiro acesso (lista separada por vírgula)
 const adminEmails = () =>
@@ -27,7 +28,13 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   return user?.id ? { id: user.id, email: user.email, name: user.name ?? '' } : null
 })
 
-const columns = { id: profiles.id, email: profiles.email, name: profiles.name, role: profiles.role }
+const columns = {
+  id: profiles.id,
+  email: profiles.email,
+  name: profiles.name,
+  role: profiles.role,
+  emailReminders: profiles.emailReminders,
+}
 
 // Perfil do usuário do Neon Auth; a linha é criada no primeiro acesso
 export async function ensureProfile(user: SessionUser): Promise<Profile> {
@@ -57,6 +64,13 @@ export async function requireUser(back = '/aluno') {
 
 export async function requireAdmin(back = '/admin') {
   const profile = await requireUser(back)
-  if (profile.role !== 'admin') redirect('/aluno')
+  if (profile.role !== 'admin') redirect(profile.role === 'instructor' ? '/admin/cursos' : '/aluno')
+  return profile
+}
+
+// Instrutor ou admin: editar o conteúdo dos cursos
+export async function requireStaff(back = '/admin/cursos') {
+  const profile = await requireUser(back)
+  if (!isStaff(profile.role)) redirect('/aluno')
   return profile
 }

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { ButtonLink } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
-import { CheckIcon } from '@/components/ui/icons'
+import { CheckIcon } from 'lucide-react'
 import { RevealOnScroll } from '@/components/ui/reveal-on-scroll'
 import { SectionHeading } from '@/components/ui/section-heading'
 import type { AudienceContent } from '@/types/home'

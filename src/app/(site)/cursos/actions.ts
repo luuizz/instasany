@@ -1,8 +1,11 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { after } from 'next/server'
 import { redirect } from 'next/navigation'
 import { getCurrentProfile } from '@/server/auth/session'
+import { recordServerEvent } from '@/server/services/analytics'
+import { notifyEnrollment } from '@/server/services/notifications'
 import { getPublishedCourse } from '@/server/services/courses'
 import { enroll, firstPendingLesson } from '@/server/services/learning'
 
@@ -13,7 +16,10 @@ export async function enrollAction(slug: string) {
   const course = await getPublishedCourse(slug)
   if (!course) redirect('/cursos')
 
-  await enroll(profile.id, course.id)
+  if (await enroll(profile.id, course.id)) {
+    after(() => recordServerEvent('enrollment', profile, { courseId: course.id }))
+    after(() => notifyEnrollment(profile, course))
+  }
   revalidatePath('/aluno')
   const lessonId = await firstPendingLesson(profile.id, course)
   redirect(lessonId ? `/aluno/cursos/${slug}/aulas/${lessonId}` : '/aluno')

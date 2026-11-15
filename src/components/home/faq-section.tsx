@@ -1,5 +1,5 @@
 import { Container } from '@/components/ui/container'
-import { PlusIcon } from '@/components/ui/icons'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { RevealOnScroll } from '@/components/ui/reveal-on-scroll'
 import { SectionHeading } from '@/components/ui/section-heading'
 import type { FaqContent } from '@/types/home'
@@ -10,23 +10,21 @@ export function FaqSection({ content }: { content: FaqContent }) {
       <Container>
         <RevealOnScroll className="mx-auto max-w-3xl">
           <SectionHeading eyebrow={content.eyebrow} title={content.title} />
-          <div className="mt-12 flex flex-col gap-3">
+          <Accordion type="single" collapsible defaultValue="item-0" className="mt-12 flex flex-col gap-3">
             {content.items.map((item, index) => (
-              <details
+              <AccordionItem
                 key={item.question}
-                name="faq"
-                open={index === 0}
+                value={`item-${index}`}
                 data-reveal-item
-                className="group rounded-3xl bg-paper px-6 shadow-sm"
+                className="rounded-3xl border-none bg-paper px-6 shadow-sm"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-semibold text-ink [&::-webkit-details-marker]:hidden">
+                <AccordionTrigger className="cursor-pointer py-5 text-base font-semibold text-ink hover:no-underline [&>svg]:size-5 [&>svg]:text-sage">
                   {item.question}
-                  <PlusIcon className="size-5 shrink-0 text-sage transition-transform group-open:rotate-45" />
-                </summary>
-                <p className="pb-6 text-ink/70">{item.answer}</p>
-              </details>
+                </AccordionTrigger>
+                <AccordionContent className="pb-6 text-base text-ink/70">{item.answer}</AccordionContent>
+              </AccordionItem>
             ))}
-          </div>
+          </Accordion>
         </RevealOnScroll>
       </Container>
     </section>

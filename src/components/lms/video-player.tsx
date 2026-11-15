@@ -1,18 +1,58 @@
 'use client'
 
-import { ExpandIcon, PauseIcon, PlayIcon, VolumeIcon } from '@/components/ui/icons'
+import {
+  MaximizeIcon,
+  MinimizeIcon,
+  PauseIcon,
+  PlayIcon,
+  RotateCcwIcon,
+  Volume2Icon,
+  VolumeXIcon,
+  XIcon,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Slider } from '@/components/ui/slider'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { useVideoControls } from './use-video-controls'
+import { useResumePosition } from './use-resume-position'
+import { useWatchTracking } from './use-watch-tracking'
 
 const clock = (seconds: number) => {
   const total = Math.floor(seconds)
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
 }
 
-const control = 'flex size-9 cursor-pointer items-center justify-center rounded-full text-paper hover:bg-paper/15'
+type PlayerButtonProps = { label: string; onClick: () => void; className?: string; children: React.ReactNode }
+
+// Botão do player (Button do shadcn) com dica ao passar o mouse
+function PlayerButton({ label, onClick, className, children }: PlayerButtonProps) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={onClick}
+          aria-label={label}
+          className={cn(
+            "text-paper hover:bg-paper/15 hover:text-paper [&_svg:not([class*='size-'])]:size-5",
+            className,
+          )}
+        >
+          {children}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
+  )
+}
 
 // Player próprio, nas cores da marca, sobre o <video> nativo (sem marca de terceiros)
-export function VideoPlayer({ src, title }: { src: string; title: string }) {
+type VideoPlayerProps = { src: string; title: string; lessonId?: number; startAt?: number }
+
+export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerProps) {
   const {
     video,
     frame,
@@ -29,6 +69,8 @@ export function VideoPlayer({ src, title }: { src: string; title: string }) {
     toggleFullscreen,
     onKeyDown,
   } = useVideoControls()
+  useWatchTracking(video, lessonId)
+  const resume = useResumePosition(video, seek, lessonId, startAt)
 
   return (
     <div
@@ -48,65 +90,82 @@ export function VideoPlayer({ src, title }: { src: string; title: string }) {
         className="size-full cursor-pointer"
       />
 
+      {resume.resumedFrom !== null && (
+        <div
+          role="status"
+          className="absolute top-4 left-4 flex animate-in items-center gap-1 rounded-full bg-ink/80 py-1 pr-1 pl-4 text-sm text-paper backdrop-blur fade-in slide-in-from-top-2"
+        >
+          Continuando de {clock(resume.resumedFrom)}
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={resume.restart}
+            className="h-8 text-lime hover:bg-paper/15 hover:text-lime"
+          >
+            <RotateCcwIcon />
+            Do início
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={resume.dismiss}
+            aria-label="Fechar aviso"
+            className="size-8 text-paper/70 hover:bg-paper/15 hover:text-paper"
+          >
+            <XIcon />
+          </Button>
+        </div>
+      )}
+
       {!playing && (
-        <button
+        <Button
           type="button"
           onClick={toggle}
           aria-label="Reproduzir"
-          className="absolute top-1/2 left-1/2 flex size-20 -translate-1/2 cursor-pointer items-center justify-center rounded-full bg-lime text-pine shadow-xl transition hover:scale-105"
+          className="absolute top-1/2 left-1/2 size-20 -translate-1/2 shadow-xl hover:scale-105 [&_svg:not([class*='size-'])]:size-9"
         >
-          <PlayIcon className="ml-1 size-9" />
-        </button>
+          <PlayIcon className="ml-1" />
+        </Button>
       )}
 
       <div
         className={cn(
-          'absolute inset-x-0 bottom-0 flex flex-col gap-2 bg-gradient-to-t from-ink/90 to-transparent px-4 pt-10 pb-3 transition-opacity',
+          'absolute inset-x-0 bottom-0 flex flex-col gap-3 bg-gradient-to-t from-ink/90 to-transparent px-4 pt-10 pb-3 transition-opacity duration-300',
           playing && 'opacity-0 group-focus-within:opacity-100 group-hover:opacity-100',
         )}
       >
-        <input
-          type="range"
+        <Slider
           min={0}
-          max={duration || 0}
+          max={duration || 1}
           step={0.1}
-          value={time}
-          onChange={(event) => seek(Number(event.target.value))}
+          value={[time]}
+          onValueChange={([value]) => seek(value ?? 0)}
           aria-label="Posição do vídeo"
           aria-valuetext={`${clock(time)} de ${clock(duration)}`}
-          className="h-1.5 w-full cursor-pointer accent-lime"
+          className="cursor-pointer [&_[data-slot=slider-range]]:bg-lime [&_[data-slot=slider-thumb]]:border-lime [&_[data-slot=slider-track]]:bg-paper/25"
         />
         <div className="flex items-center gap-1 text-sm text-paper">
-          <button type="button" onClick={toggle} className={control} aria-label={playing ? 'Pausar' : 'Reproduzir'}>
-            {playing ? <PauseIcon className="size-5" /> : <PlayIcon className="size-5" />}
-          </button>
-          <button
-            type="button"
-            onClick={toggleMute}
-            className={control}
-            aria-label={muted ? 'Ativar som' : 'Tirar som'}
-          >
-            <VolumeIcon muted={muted} className="size-5" />
-          </button>
+          <PlayerButton label={playing ? 'Pausar' : 'Reproduzir'} onClick={toggle}>
+            {playing ? <PauseIcon /> : <PlayIcon />}
+          </PlayerButton>
+          <PlayerButton label={muted ? 'Ativar som' : 'Tirar som'} onClick={toggleMute}>
+            {muted ? <VolumeXIcon /> : <Volume2Icon />}
+          </PlayerButton>
           <span className="ml-2 tabular-nums">
             {clock(time)} / {clock(duration)}
           </span>
-          <button
-            type="button"
+          <PlayerButton
+            label={`Velocidade ${speed}x`}
             onClick={cycleSpeed}
-            className="ml-auto cursor-pointer rounded-full px-3 py-1 font-semibold hover:bg-paper/15"
-            aria-label={`Velocidade ${speed}x`}
+            className="ml-auto w-auto px-3 font-semibold"
           >
             {speed}x
-          </button>
-          <button
-            type="button"
-            onClick={toggleFullscreen}
-            className={control}
-            aria-label={fullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
-          >
-            <ExpandIcon exit={fullscreen} className="size-5" />
-          </button>
+          </PlayerButton>
+          <PlayerButton label={fullscreen ? 'Sair da tela cheia' : 'Tela cheia'} onClick={toggleFullscreen}>
+            {fullscreen ? <MinimizeIcon /> : <MaximizeIcon />}
+          </PlayerButton>
         </div>
       </div>
     </div>

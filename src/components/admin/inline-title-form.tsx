@@ -1,7 +1,8 @@
 'use client'
 
 import type { FormState } from '@/app/(admin)/admin/cursos/actions'
-import { FormMessage, Input } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { FormMessage } from '@/components/ui/form-field'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { useFormAction } from '@/hooks/use-form-action'
 

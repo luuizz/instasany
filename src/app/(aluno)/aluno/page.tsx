@@ -1,3 +1,5 @@
+import { isStaff } from '@/lib/roles'
+import { AwardIcon } from 'lucide-react'
 import Link from 'next/link'
 import { SignOutButton } from '@/components/auth/sign-out-button'
 import { CourseCard } from '@/components/courses/course-card'
@@ -5,11 +7,16 @@ import { ProgressBar } from '@/components/courses/progress-bar'
 import { Container } from '@/components/ui/container'
 import { requireUser } from '@/server/auth/session'
 import { listPublishedCourses } from '@/server/services/courses'
+import { certificateCodesByCourse } from '@/server/services/certificates'
 import { listStudentCourses } from '@/server/services/learning'
 
 export default async function StudentHomePage() {
   const profile = await requireUser()
-  const [mine, catalog] = await Promise.all([listStudentCourses(profile.id), listPublishedCourses()])
+  const [mine, catalog, certificates] = await Promise.all([
+    listStudentCourses(profile.id),
+    listPublishedCourses(),
+    certificateCodesByCourse(profile.id),
+  ])
   const enrolledIds = new Set(mine.map((course) => course.id))
   const others = catalog.filter((course) => !enrolledIds.has(course.id))
   const firstName = profile.name.split(' ')[0] || 'aluno'
@@ -22,11 +29,14 @@ export default async function StudentHomePage() {
           <h1 className="mt-2 text-4xl font-semibold text-ink">Olá, {firstName}!</h1>
         </div>
         <div className="flex items-center gap-6 text-sm">
-          {profile.role === 'admin' && (
+          {isStaff(profile.role) && (
             <Link href="/admin" className="font-semibold text-pine underline-offset-4 hover:underline">
               Ir para o painel
             </Link>
           )}
+          <Link href="/aluno/perfil" className="font-semibold text-pine underline-offset-4 hover:underline">
+            Meu perfil
+          </Link>
           <SignOutButton className="text-ink/60" />
         </div>
       </header>
@@ -40,7 +50,20 @@ export default async function StudentHomePage() {
                 <CourseCard
                   course={course}
                   href={`/aluno/cursos/${course.slug}`}
-                  footer={<ProgressBar done={course.completedCount} total={course.lessonCount} />}
+                  footer={
+                    <div className="flex flex-col gap-3">
+                      <ProgressBar done={course.completedCount} total={course.lessonCount} />
+                      {certificates.has(course.id) && (
+                        <Link
+                          href={`/certificado/${certificates.get(course.id)}`}
+                          className="flex items-center gap-2 text-sm font-semibold text-pine hover:underline"
+                        >
+                          <AwardIcon className="size-4 text-sage" />
+                          Ver certificado
+                        </Link>
+                      )}
+                    </div>
+                  }
                 />
               </li>
             ))}

@@ -1,7 +1,9 @@
 'use client'
 
 import type { FormState } from '@/app/(admin)/admin/cursos/actions'
-import { Field, Input, Textarea } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { LabeledField } from '@/components/ui/form-field'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { useFormAction } from '@/hooks/use-form-action'
 import type { Lesson } from '@/types/lms'
@@ -23,10 +25,10 @@ export function LessonForm({ lesson, save, uploadsEnabled }: LessonFormProps) {
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:gap-10">
         <div className="flex flex-col gap-5">
           <div className="grid grid-cols-[minmax(0,1fr)_9rem] gap-4">
-            <Field label="Título">
+            <LabeledField label="Título">
               <Input name="title" defaultValue={lesson.title} required maxLength={100} />
-            </Field>
-            <Field label="Duração (min)">
+            </LabeledField>
+            <LabeledField label="Duração (min)">
               <Input
                 name="durationMinutes"
                 type="number"
@@ -35,11 +37,25 @@ export function LessonForm({ lesson, save, uploadsEnabled }: LessonFormProps) {
                 defaultValue={lesson.durationMinutes}
                 required
               />
-            </Field>
+            </LabeledField>
           </div>
-          <Field label="Texto da aula" hint="Deixe uma linha em branco entre os parágrafos.">
+          <LabeledField
+            label="Liberar após (dias)"
+            hint="Dias depois da matrícula para a aula abrir. 0 = abre junto com a matrícula."
+            className="max-w-xs"
+          >
+            <Input
+              name="releaseAfterDays"
+              type="number"
+              min={0}
+              max={365}
+              defaultValue={lesson.releaseAfterDays}
+              required
+            />
+          </LabeledField>
+          <LabeledField label="Texto da aula" hint="Deixe uma linha em branco entre os parágrafos.">
             <Textarea name="content" defaultValue={lesson.content} rows={14} maxLength={20000} />
-          </Field>
+          </LabeledField>
         </div>
         <MediaField
           name="videoUrl"

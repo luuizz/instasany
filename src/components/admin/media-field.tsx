@@ -2,8 +2,9 @@
 
 import { FileVideoIcon, ImageIcon, RefreshCwIcon, Trash2Icon, UploadCloudIcon, XIcon } from 'lucide-react'
 import { useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { FormMessage, Input } from '@/components/ui/field'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { FormMessage } from '@/components/ui/form-field'
 import { Progress } from '@/components/ui/progress'
 import { fileNameFromUrl, formatBytes, MEDIA_LABELS, MEDIA_RULES, type MediaKind } from '@/lib/media'
 import { cn } from '@/lib/utils'
@@ -88,7 +89,12 @@ export function MediaField({ name, label, kind, defaultValue, uploadsEnabled, hi
               {lastFile?.name ?? fileNameFromUrl(url)}
             </span>
             {lastFile && <span className="text-xs text-muted-foreground">{formatBytes(lastFile.size)}</span>}
-            <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-semibold transition focus-within:ring-4 focus-within:ring-ring/30 hover:bg-accent">
+            <label
+              className={cn(
+                buttonVariants({ variant: 'ghost', size: 'sm' }),
+                'focus-within:ring-4 focus-within:ring-ring/30',
+              )}
+            >
               <RefreshCwIcon className="size-4" />
               Trocar
               {fileInput}

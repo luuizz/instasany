@@ -1,3 +1,4 @@
+import { isStaff } from '@/lib/roles'
 import { redirect } from 'next/navigation'
 import { requireUser } from '@/server/auth/session'
 import { getCourseBySlug } from '@/server/services/courses'
@@ -10,7 +11,7 @@ export default async function StudentCoursePage({ params }: PageProps) {
   const { slug } = await params
   const profile = await requireUser(`/aluno/cursos/${slug}`)
   const course = await getCourseBySlug(slug)
-  if (!course || (profile.role !== 'admin' && !(await isEnrolled(profile.id, course.id)))) redirect(`/cursos/${slug}`)
+  if (!course || (!isStaff(profile.role) && !(await isEnrolled(profile.id, course.id)))) redirect(`/cursos/${slug}`)
   const lessonId = await firstPendingLesson(profile.id, course)
   redirect(lessonId ? `/aluno/cursos/${slug}/aulas/${lessonId}` : `/cursos/${slug}`)
 }

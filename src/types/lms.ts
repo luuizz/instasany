@@ -2,8 +2,15 @@ import type { COURSE_LEVELS } from '@/lib/validation/lms'
 
 export type CourseLevel = (typeof COURSE_LEVELS)[number]
 
-export type LessonItem = { id: number; title: string; durationMinutes: number; hasVideo: boolean }
-export type ModuleItem = { id: number; title: string; lessons: LessonItem[] }
+export type LessonItem = {
+  id: number
+  title: string
+  durationMinutes: number
+  hasVideo: boolean
+  releaseAfterDays: number
+}
+// quizQuestions = 0 quando o módulo não tem quiz
+export type ModuleItem = { id: number; title: string; lessons: LessonItem[]; quizQuestions: number }
 
 export type CourseSummary = {
   id: number
@@ -25,4 +32,66 @@ export type StudentCourse = CourseSummary & {
   completedCount: number
   // Primeira aula ainda não concluída (ou a primeira, se todas foram)
   nextLessonId: number | null
+}
+
+export type LessonAttachment = { id: number; title: string; url: string; sizeBytes: number; contentType: string }
+
+export type QuizQuestionInput = { prompt: string; options: string[]; correctIndex: number; explanation: string }
+export type QuizDraft = { passPercent: number; questions: QuizQuestionInput[] }
+
+// Quiz como o aluno vê: sem a resposta certa
+export type StudentQuiz = {
+  id: number
+  moduleId: number
+  moduleTitle: string
+  moduleNumber: number
+  passPercent: number
+  questions: { id: number; prompt: string; options: string[] }[]
+  best: { score: number; total: number; passed: boolean } | null
+}
+
+export type QuizResult = {
+  score: number
+  total: number
+  percent: number
+  passed: boolean
+  passPercent: number
+  review: { prompt: string; options: string[]; chosen: number; correct: number; explanation: string }[]
+}
+
+export type CourseCompletion = {
+  lessonsDone: number
+  lessonsTotal: number
+  quizzesPassed: number
+  quizzesTotal: number
+  complete: boolean
+}
+
+export type Certificate = {
+  code: string
+  studentName: string
+  courseTitle: string
+  courseSlug: string | null
+  totalMinutes: number
+  issuedAt: Date
+}
+
+export type CourseReview = { name: string; rating: number; comment: string; updatedAt: Date }
+export type ReviewSummary = { average: number; count: number; latest: CourseReview[] }
+
+export type QuestionMessage = {
+  id: number
+  body: string
+  createdAt: Date
+  author: { name: string; initials: string; isStaff: boolean; isMine: boolean }
+}
+export type QuestionThread = QuestionMessage & { replies: QuestionMessage[] }
+
+// Dúvida na fila do painel, com onde foi feita e se a equipe já respondeu
+export type AdminQuestion = QuestionThread & {
+  lessonId: number
+  lessonTitle: string
+  courseTitle: string
+  courseSlug: string
+  answered: boolean
 }

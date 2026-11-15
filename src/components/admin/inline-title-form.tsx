@@ -35,7 +35,7 @@ export function InlineTitleForm({ action, label, submitLabel, defaultValue, rese
           required
           maxLength={80}
         />
-        <SubmitButton pending={pending} className="shrink-0 px-5 py-3 text-sm">
+        <SubmitButton size="default" pending={pending} className="shrink-0">
           {submitLabel}
         </SubmitButton>
       </div>

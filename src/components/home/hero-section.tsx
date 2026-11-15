@@ -26,7 +26,7 @@ export function HeroSection({ content }: HeroSectionProps) {
             {content.title}
           </h1>
           <div className="flex flex-col-reverse items-center justify-center gap-6 sm:flex-row sm:gap-10">
-            <ButtonLink href={content.waitlistHref} variant="ghost">
+            <ButtonLink href={content.waitlistHref} variant="onDark" className="h-auto px-0">
               <Image src="/icons/file.svg" alt="" width={24} height={25} />
               {content.waitlistLabel}
             </ButtonLink>

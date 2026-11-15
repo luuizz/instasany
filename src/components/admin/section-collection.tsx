@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ChevronRightIcon } from '@/components/ui/icons'
+import { ChevronRightIcon } from 'lucide-react'
 import type { CmsSection } from '@/config/cms'
 import type { AdminView } from '@/lib/admin-view'
 import { StatusBadge } from './status-badge'
@@ -20,12 +20,16 @@ const status = (section: SectionItem) =>
 export function SectionCollection({ sections, view }: SectionCollectionProps) {
   if (view === 'grade') {
     return (
-      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {sections.map((section, index) => (
-          <li key={section.key}>
+          <li
+            key={section.key}
+            style={{ animationDelay: `${index * 40}ms` }}
+            className="animate-in duration-500 fill-mode-both fade-in slide-in-from-bottom-3"
+          >
             <Link
               href={`/admin/conteudo/${section.key}`}
-              className="group flex h-full flex-col gap-3 rounded-3xl border border-ink/10 p-6 transition hover:border-sage hover:shadow-xl"
+              className="group flex h-full flex-col gap-3 rounded-3xl border border-border bg-card p-6 transition duration-300 hover:-translate-y-1 hover:border-sage hover:shadow-xl"
             >
               <span className="flex items-center justify-between">
                 <span className="flex size-10 items-center justify-center rounded-full bg-pine text-sm font-bold text-lime">
@@ -47,7 +51,7 @@ export function SectionCollection({ sections, view }: SectionCollectionProps) {
   }
 
   return (
-    <ul className="divide-y divide-ink/10 overflow-hidden rounded-3xl border border-ink/10">
+    <ul className="animate-in divide-y divide-ink/10 overflow-hidden rounded-3xl border border-border bg-card duration-500 fade-in slide-in-from-bottom-2">
       {sections.map((section, index) => (
         <li key={section.key}>
           <Link

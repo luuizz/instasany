@@ -1,20 +1,14 @@
-import { cn } from '@/lib/utils'
+import { Button } from './button'
+import { Spinner } from './spinner'
 
-type SubmitButtonProps = React.ComponentProps<'button'> & { pending?: boolean; pendingLabel?: string }
+type SubmitButtonProps = React.ComponentProps<typeof Button> & { pending?: boolean; pendingLabel?: string }
 
-export function SubmitButton({ children, pending = false, pendingLabel, className, ...props }: SubmitButtonProps) {
+// Botão de envio com indicador de carregamento enquanto a Server Action roda
+export function SubmitButton({ children, pending = false, pendingLabel, size = 'lg', ...props }: SubmitButtonProps) {
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      aria-busy={pending}
-      className={cn(
-        'inline-flex cursor-pointer items-center justify-center rounded-full bg-lime px-6 py-4 font-bold text-pine transition hover:brightness-95 disabled:cursor-wait disabled:opacity-70',
-        className,
-      )}
-      {...props}
-    >
+    <Button type="submit" size={size} disabled={pending} aria-busy={pending} {...props}>
+      {pending && <Spinner />}
       {pending ? (pendingLabel ?? 'Enviando…') : children}
-    </button>
+    </Button>
   )
 }

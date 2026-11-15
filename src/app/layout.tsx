@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import '@fontsource-variable/epilogue'
+import { Toaster } from '@/components/ui/sonner'
 import { site } from '@/config/site'
 import './globals.css'
 
@@ -15,7 +16,10 @@ export const viewport: Viewport = { themeColor: '#1d3531' }
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {children}
+        <Toaster />
+      </body>
     </html>
   )
 }

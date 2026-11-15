@@ -1,11 +1,13 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
 import { fail, type ActionResult } from '@/lib/result'
 import { safeBack, signInSchema, signUpSchema } from '@/lib/validation/auth'
 import { authErrorMessage } from '@/server/auth/errors'
 import { getNeonAuth } from '@/server/auth/neon-auth'
 import { ensureProfile } from '@/server/auth/session'
+import { notifyWelcome } from '@/server/services/notifications'
 
 export type AuthFormState = ActionResult<{ message: string }> | null
 
@@ -38,6 +40,7 @@ export async function signUp(_state: AuthFormState, formData: FormData): Promise
 
   const { data, error } = await auth.signUp.email(parsed.data)
   if (error || !data?.user) return fail(authErrorMessage(error, 'Não foi possível criar a conta. Tente de novo.'))
+  after(() => notifyWelcome({ name: parsed.data.name, email: parsed.data.email }))
   // Com confirmação de e-mail ligada no Neon Auth, a conta nasce sem sessão
   if (!data.token) {
     return { ok: true, data: { message: 'Conta criada! Confirme seu e-mail pelo link que enviamos e depois entre.' } }

@@ -1,9 +1,11 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { after } from 'next/server'
 import { fail, ok, type ActionResult } from '@/lib/result'
 import { questionMessageSchema } from '@/lib/validation/lms'
 import { requireUser } from '@/server/auth/session'
+import { notifyAnswer } from '@/server/services/notifications'
 import { askQuestion, deleteQuestionMessage, replyToQuestion } from '@/server/services/questions'
 
 const lessonPath = (slug: string, lessonId: number) => `/aluno/cursos/${slug}/aulas/${lessonId}`
@@ -39,6 +41,7 @@ export async function replyQuestionAction(
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? 'Confira a mensagem.')
   if (!(await replyToQuestion(profile, questionId, parsed.data.body)))
     return fail('Não foi possível responder esta dúvida.')
+  after(() => notifyAnswer(questionId, profile, slug, parsed.data.body))
   refresh(slug, lessonId)
   return ok(undefined)
 }

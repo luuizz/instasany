@@ -20,6 +20,10 @@ const sections = [
     text: 'Os dados ficam no banco da própria plataforma. Não usamos Google Analytics, pixels de anúncio nem cookies de terceiros.',
   },
   {
+    title: 'E-mails',
+    text: 'Enviamos e-mails só sobre a sua conta e os seus cursos: boas-vindas, confirmação de matrícula, aviso quando sua dúvida é respondida e um lembrete se você passar uma semana sem abrir um curso que começou. O lembrete pode ser desligado em Meu perfil.',
+  },
+  {
     title: 'Como não ser contado',
     text: 'Se o seu navegador estiver com "não rastrear" (Do Not Track) ou Global Privacy Control ligados, nada é registrado sobre a navegação. Apagar os dados do site no navegador também gera um novo número aleatório.',
   },

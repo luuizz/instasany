@@ -22,6 +22,8 @@ export const profiles = pgTable('profiles', {
   email: text('email').notNull().unique(),
   name: text('name').notNull().default(''),
   role: roleEnum('role').notNull().default('student'),
+  // Lembretes por e-mail quando a pessoa para de estudar; desligável no perfil
+  emailReminders: boolean('email_reminders').notNull().default(true),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
@@ -258,6 +260,19 @@ export const lessonQuestions = pgTable(
     index('lesson_questions_lesson_idx').on(table.lessonId, table.createdAt),
     index('lesson_questions_parent_idx').on(table.parentId),
   ],
+)
+
+// E-mails enviados pela plataforma (evita repetir lembrete e ajuda a conferir envios)
+export const emailLog = pgTable(
+  'email_log',
+  {
+    id: serial('id').primaryKey(),
+    profileId: text('profile_id').references(() => profiles.id, { onDelete: 'cascade' }),
+    kind: text('kind').notNull(),
+    courseId: integer('course_id').references(() => courses.id, { onDelete: 'set null' }),
+    sentAt: timestamp('sent_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index('email_log_profile_idx').on(table.profileId, table.kind, table.sentAt)],
 )
 
 export type CourseRow = typeof courses.$inferSelect

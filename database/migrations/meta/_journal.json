@@ -36,6 +36,13 @@
       "when": 1794765185646,
       "tag": "0004_quiz",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794765540735,
+      "tag": "0005_certificado_avaliacao",
+      "breakpoints": true
     }
   ]
 }

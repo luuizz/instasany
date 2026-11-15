@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { CourseCover } from '@/components/courses/course-cover'
+import { CourseReviews } from '@/components/courses/course-reviews'
+import { StarRating } from '@/components/ui/star-rating'
 import { CourseSyllabus } from '@/components/courses/course-syllabus'
 import { Container } from '@/components/ui/container'
 import { SubmitButton } from '@/components/ui/submit-button'
@@ -9,6 +11,7 @@ import { countLabel, formatDuration } from '@/lib/duration'
 import { getCurrentProfile } from '@/server/auth/session'
 import { getPublishedCourse } from '@/server/services/courses'
 import { isEnrolled } from '@/server/services/learning'
+import { getReviewSummary } from '@/server/services/reviews'
 import { enrollAction } from '../actions'
 
 type PageProps = { params: Promise<{ slug: string }> }
@@ -22,7 +25,10 @@ export default async function CoursePage({ params }: PageProps) {
   const course = await getPublishedCourse((await params).slug)
   if (!course) notFound()
   const profile = await getCurrentProfile().catch(() => null)
-  const enrolled = profile ? await isEnrolled(profile.id, course.id) : false
+  const [enrolled, reviews] = await Promise.all([
+    profile ? isEnrolled(profile.id, course.id) : false,
+    getReviewSummary(course.id),
+  ])
   const paragraphs = course.description.split(/\n\s*\n/).filter(Boolean)
 
   return (
@@ -39,6 +45,12 @@ export default async function CoursePage({ params }: PageProps) {
               {course.level} · {countLabel(course.modules.length, 'módulo', 'módulos')} ·{' '}
               {countLabel(course.lessonCount, 'aula', 'aulas')} · {formatDuration(course.totalMinutes)}
             </p>
+            {reviews.count > 0 && (
+              <a href="#avaliacoes" className="flex items-center gap-2 text-sm text-paper/80 hover:text-lime">
+                <StarRating value={reviews.average} className="text-paper" />
+                {reviews.average.toFixed(1).replace('.', ',')} · {countLabel(reviews.count, 'avaliação', 'avaliações')}
+              </a>
+            )}
             <div className="pt-2">
               {enrolled ? (
                 <Link
@@ -72,6 +84,11 @@ export default async function CoursePage({ params }: PageProps) {
           <CourseSyllabus modules={course.modules} />
         </div>
       </Container>
+      {reviews.count > 0 && (
+        <Container className="pb-16 lg:pb-24">
+          <CourseReviews summary={reviews} />
+        </Container>
+      )}
     </>
   )
 }

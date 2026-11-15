@@ -31,6 +31,15 @@ export function StudentCourses({ courses }: { courses: StudentCourseProgress[] }
               {course.enrolledAt && `Matrícula em ${formatDate(course.enrolledAt)}`}
               {course.lastCompletedAt && ` · última aula concluída ${formatRelative(course.lastCompletedAt)}`}
             </p>
+            {course.certificateCode && (
+              <Link
+                href={`/certificado/${course.certificateCode}`}
+                target="_blank"
+                className="mt-2 inline-block text-xs font-semibold text-pine hover:underline"
+              >
+                Certificado {course.certificateCode}
+              </Link>
+            )}
           </li>
         )
       })}

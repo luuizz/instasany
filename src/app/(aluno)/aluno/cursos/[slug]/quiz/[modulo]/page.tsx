@@ -1,7 +1,7 @@
 import { CheckCircle2Icon } from 'lucide-react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { LessonSidebar } from '@/components/lms/lesson-sidebar'
+import { CourseAside } from '@/components/lms/course-aside'
 import { QuizRunner } from '@/components/lms/quiz/quiz-runner'
 import { Container } from '@/components/ui/container'
 import { requireUser } from '@/server/auth/session'
@@ -56,14 +56,13 @@ export default async function StudentQuizPage({ params }: PageProps) {
         </header>
         <QuizRunner quiz={quiz} next={next} />
       </article>
-      <aside>
-        <LessonSidebar
-          course={course}
-          completed={[...completed]}
-          passedQuizzes={passedQuizzes}
-          currentQuiz={quiz.moduleId}
-        />
-      </aside>
+      <CourseAside
+        course={course}
+        profileId={profile.id}
+        completed={[...completed]}
+        passedQuizzes={passedQuizzes}
+        currentQuiz={quiz.moduleId}
+      />
     </Container>
   )
 }

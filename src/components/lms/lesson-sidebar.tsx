@@ -19,10 +19,7 @@ export function LessonSidebar({ course, currentId, completed, passedQuizzes = []
   const passed = new Set(passedQuizzes)
 
   return (
-    <nav
-      aria-label="Aulas do curso"
-      className="flex flex-col gap-6 rounded-3xl border border-ink/10 p-5 lg:sticky lg:top-6"
-    >
+    <nav aria-label="Aulas do curso" className="flex flex-col gap-6 rounded-3xl border border-ink/10 p-5">
       <div className="flex flex-col gap-3">
         <Link href={`/cursos/${course.slug}`} className="font-semibold text-ink hover:underline">
           {course.title}

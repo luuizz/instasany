@@ -30,7 +30,7 @@ export default async function LessonPage({ params }: PageProps) {
   return (
     <Container className="grid gap-8 py-8 lg:grid-cols-[1fr_22rem] lg:py-12">
       <article className="flex min-w-0 flex-col gap-6">
-        {lesson.videoUrl ? <VideoPlayer src={lesson.videoUrl} title={lesson.title} /> : null}
+        {lesson.videoUrl ? <VideoPlayer src={lesson.videoUrl} title={lesson.title} lessonId={lesson.id} /> : null}
         <header className="flex flex-col gap-2">
           <p className="text-sm font-medium text-sage">{lesson.durationMinutes} min</p>
           <h1 className="text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>

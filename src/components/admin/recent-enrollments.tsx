@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { initialsOf } from '@/lib/account'
 import type { RecentEnrollment } from '@/server/services/dashboard'
 
 const when = new Intl.DateTimeFormat('pt-BR', {
@@ -8,14 +9,6 @@ const when = new Intl.DateTimeFormat('pt-BR', {
   minute: '2-digit',
   timeZone: 'America/Sao_Paulo',
 })
-
-const initials = (name: string) =>
-  name
-    .split(/[\s@.]+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('')
 
 export function RecentEnrollments({ enrollments }: { enrollments: RecentEnrollment[] }) {
   return (
@@ -36,7 +29,7 @@ export function RecentEnrollments({ enrollments }: { enrollments: RecentEnrollme
             <li key={`${enrollment.studentEmail}-${enrollment.courseTitle}`} className="flex items-center gap-4 py-3">
               <Avatar aria-hidden className="size-10">
                 <AvatarFallback className="bg-secondary text-sm font-bold text-pine">
-                  {initials(enrollment.studentName)}
+                  {initialsOf(enrollment.studentName)}
                 </AvatarFallback>
               </Avatar>
               <span className="min-w-0 flex-1">

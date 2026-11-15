@@ -19,7 +19,8 @@ export async function isEnrolled(profileId: string, courseId: number) {
   return Boolean(row)
 }
 
-// Matrícula gratuita (projeto fictício, sem pagamento); repetir não faz nada
+// Matrícula gratuita (projeto fictício, sem pagamento); repetir não faz nada.
+// Devolve true quando a matrícula é nova.
 export async function enroll(profileId: string, courseId: number) {
   const [course] = await db()
     .select({ published: courses.published })
@@ -27,7 +28,12 @@ export async function enroll(profileId: string, courseId: number) {
     .where(eq(courses.id, courseId))
     .limit(1)
   if (!course?.published) throw new NotPublishedError()
-  await db().insert(enrollments).values({ profileId, courseId }).onConflictDoNothing()
+  const created = await db()
+    .insert(enrollments)
+    .values({ profileId, courseId })
+    .onConflictDoNothing()
+    .returning({ courseId: enrollments.courseId })
+  return created.length > 0
 }
 
 async function completedLessonIds(profileId: string, lessonIds: number[]) {

@@ -6,6 +6,7 @@ import { Slider } from '@/components/ui/slider'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { useVideoControls } from './use-video-controls'
+import { useWatchTracking } from './use-watch-tracking'
 
 const clock = (seconds: number) => {
   const total = Math.floor(seconds)
@@ -39,7 +40,7 @@ function PlayerButton({ label, onClick, className, children }: PlayerButtonProps
 }
 
 // Player próprio, nas cores da marca, sobre o <video> nativo (sem marca de terceiros)
-export function VideoPlayer({ src, title }: { src: string; title: string }) {
+export function VideoPlayer({ src, title, lessonId }: { src: string; title: string; lessonId?: number }) {
   const {
     video,
     frame,
@@ -56,6 +57,7 @@ export function VideoPlayer({ src, title }: { src: string; title: string }) {
     toggleFullscreen,
     onKeyDown,
   } = useVideoControls()
+  useWatchTracking(video, lessonId)
 
   return (
     <div

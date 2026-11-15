@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 // Destaca no menu a seção que está na tela
 export function SiteNav() {
-  const [active, setActive] = useState<string>(mainNav[0].href)
+  const [active, setActive] = useState<string | null>(null)
 
   useEffect(() => {
     const sections = mainNav

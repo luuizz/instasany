@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
 import { AdminShell } from '@/components/admin/admin-shell'
-import { cmsSections } from '@/config/cms'
 import { requireAdmin } from '@/server/auth/session'
 
 export const metadata: Metadata = { title: { default: 'Painel', template: '%s | Painel' }, robots: { index: false } }
 
 const nav = [
-  { href: '/admin', label: 'Visão geral' },
-  ...cmsSections.map((section) => ({ href: `/admin/conteudo/${section.key}`, label: section.title })),
+  { href: '/admin/cursos', label: 'Cursos' },
+  { href: '/admin', label: 'Conteúdo do site' },
   { href: '/', label: 'Ver o site' },
 ]
 

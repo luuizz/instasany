@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 import { findCmsSection, type CmsField } from '@/config/cms'
 import { readCmsForm } from '@/lib/cms-form'
 import { fail, ok, type ActionResult } from '@/lib/result'
@@ -23,7 +23,7 @@ function issueMessage(fields: CmsField[], issue: Issue) {
 }
 
 function refreshSite() {
-  revalidateTag(SITE_CONTENT_TAG, 'max')
+  updateTag(SITE_CONTENT_TAG)
   revalidatePath('/')
 }
 

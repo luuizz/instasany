@@ -29,19 +29,25 @@ src/
     (site)/       site institucional (layout com cabeçalho)
     (auth)/       entrar e cadastro, com as Server Actions de login em actions.ts
     (admin)/      painel /admin (CMS); só admin, conferido no layout
-    (aluno)/      área do aluno /aluno (LMS)
+    (site)/cursos catálogo público e página do curso, com a matrícula (actions.ts)
+    (aluno)/      área do aluno /aluno: meus cursos e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
+    (admin)/admin/cursos  cursos, módulos e aulas (actions.ts)
     api/auth/     endpoints do Neon Auth no domínio do site
+    api/uploads/  token de upload direto do navegador para o Vercel Blob (só admin)
   proxy.ts        exige login em /admin e /aluno
   components/
     ui/           primitivos sem regra de negócio (container, button)
     layout/       cabeçalho, menu, rodapé
     home/         seções da home; hero e vitrine têm hook use-*-animation.ts, as demais usam ui/reveal-on-scroll (data-reveal-item)
     admin/ auth/  telas do painel e do login
+    courses/      card, capa, ementa e progresso (catálogo e área do aluno)
+    lms/          player de vídeo próprio e lista de aulas
   hooks/          hooks de cliente reaproveitados (use-form-action)
   config/         identidade, navegação e seções editáveis do CMS (cms.ts)
   data/           conteúdo padrão do site, usado enquanto a seção não é salva no painel
   lib/            utilitários que rodam nos dois lados; validation/ tem os schemas Zod
-  server/         só servidor (import 'server-only'): db/ (Drizzle), auth/ (sessão), services/ (regras)
+  server/         só servidor (import 'server-only'): db/ (Drizzle), auth/ (sessão), services/ (regras),
+                  integrations/ (Vercel Blob)
   types/          tipos compartilhados, derivados dos schemas Zod
 database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration aplicada
 ```
@@ -54,6 +60,10 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - Login 100% no servidor: `auth.signIn.email`/`signUp.email` nas actions de `(auth)`; o usuário vem de `getSessionUser()`, nunca do navegador.
 - Perfil (`profiles`) nasce no primeiro acesso; e-mails de `ADMIN_EMAILS` entram como admin.
 - Conteúdo do site: tabela `site_sections` (uma linha por seção, `data` em jsonb validado pelo schema da seção). Seção nova: schema em `lib/validation/site-content.ts`, padrão em `data/home.ts`, campos em `config/cms.ts` (tipos `text`, `textarea`, `lines` = um item por linha, `number`, `checkbox` e `list` para itens repetidos, lida por `lib/cms-form.ts`).
+- LMS: `courses` → `course_modules` → `lessons`, com `enrollments` e `lesson_progress`. Leitura em `services/courses.ts` (catálogo publicado em cache com a tag `courses`), escrita do painel em `services/course-admin.ts`, matrícula e progresso em `services/learning.ts` (confere matrícula; admin vê tudo, até rascunho).
+- Matrícula é gratuita (projeto fictício). Ordem de módulos e aulas por `sort_order`, trocada com o vizinho.
+- Vídeos e capas: upload direto do navegador para o Vercel Blob (`components/admin/media-field.tsx` + `api/uploads`); limites em `lib/media.ts`. Arquivo trocado ou excluído sai do Blob com `after()`. Sem `BLOB_READ_WRITE_TOKEN` o painel aceita só a URL.
+- Actions que mudam conteúdo público usam `updateTag` (expira o cache na hora) + `revalidatePath`.
 - A home lê o conteúdo por `getHomeContent()`: o cache guarda só as linhas do banco e o encaixe nos padrões é feito a cada leitura, então formato novo nunca depende de cache antigo.
 
 ## Estilo

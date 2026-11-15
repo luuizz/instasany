@@ -24,7 +24,7 @@ export function ShowcaseSection({ content }: ShowcaseSectionProps) {
   const half = Math.ceil(content.cards.length / 2)
 
   return (
-    <section ref={scope} className="w-full px-4 pb-20 sm:px-6">
+    <section ref={scope} className="w-full overflow-x-clip px-4 pb-20 sm:px-6">
       <Image
         data-reveal="phone"
         src="/images/phone.png"

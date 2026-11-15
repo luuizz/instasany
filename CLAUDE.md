@@ -36,7 +36,8 @@ src/
     api/uploads/  token de upload direto do navegador para o Vercel Blob (só admin)
   proxy.ts        exige login em /admin e /aluno
   components/
-    ui/           primitivos sem regra de negócio (container, button)
+    ui/           primitivos sem regra de negócio, no padrão shadcn/ui (button, input, badge, progress,
+                  alert-dialog, sheet, sonner...) mais os da marca (container, field, section-heading)
     layout/       cabeçalho, menu, rodapé
     home/         seções da home; hero e vitrine têm hook use-*-animation.ts, as demais usam ui/reveal-on-scroll (data-reveal-item)
     admin/ auth/  telas do painel e do login
@@ -63,10 +64,17 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - LMS: `courses` → `course_modules` → `lessons`, com `enrollments` e `lesson_progress`. Leitura em `services/courses.ts` (catálogo publicado em cache com a tag `courses`), escrita do painel em `services/course-admin.ts`, matrícula e progresso em `services/learning.ts` (confere matrícula; admin vê tudo, até rascunho).
 - Matrícula é gratuita (projeto fictício). Ordem de módulos e aulas por `sort_order`, trocada com o vizinho.
 - Vídeos e capas: upload direto do navegador para o Vercel Blob (`components/admin/media-field.tsx` + `api/uploads`); limites em `lib/media.ts`. Arquivo trocado ou excluído sai do Blob com `after()`. Sem `BLOB_READ_WRITE_TOKEN` o painel aceita só a URL.
+- Cabeçalho do site: as páginas públicas são estáticas, então o cabeçalho descobre quem está logado no navegador (`layout/header-account-context.tsx` chama a action `getHeaderAccountAction` uma vez por montagem). Visitante vê "Fazer login"; aluno vê o nome; admin vê também "Painel". Na área do aluno o layout passa a conta pronta em `SiteHeader account`.
+- Painel: `/admin` é a visão geral (números de `services/dashboard.ts`), `/admin/cursos` e `/admin/conteudo`. Cada página entra com o `template.tsx` e mostra o `loading.tsx` enquanto carrega.
+- Listas do painel (cursos, seções do site) alternam entre grade e lista (`components/admin/view-toggle.tsx`); a escolha fica no cookie `painel-visualizacao`, lido no servidor por `server/admin-view.ts`.
 - Actions que mudam conteúdo público usam `updateTag` (expira o cache na hora) + `revalidatePath`.
 - A home lê o conteúdo por `getHomeContent()`: o cache guarda só as linhas do banco e o encaixe nos padrões é feito a cada leitura, então formato novo nunca depende de cache antigo.
 
 ## Estilo
+
+- Componentes de interface vêm do shadcn/ui (`components.json`): `npx shadcn@latest add <componente>` cria o arquivo em `components/ui`, que é nosso e pode ser ajustado. Os tokens do shadcn (`primary`, `muted`, `border`, `ring`...) estão em `globals.css` apontando para as cores da marca; ícones com `lucide-react`.
+- Confirmação é `ConfirmDialog`/`ConfirmButton` (`ui/confirm-dialog.tsx`), nunca `window.confirm`. Sucesso de formulário vira toast (`useFormAction(..., 'mensagem')`); erro fica no formulário.
+- Animações de interface com as classes do `tw-animate-css` (`animate-in fade-in slide-in-from-bottom-2`, atraso com `style={{ animationDelay }}` + `fill-mode-both`); `prefers-reduced-motion` desliga todas no `globals.css`.
 
 - Cores e medidas pelos tokens de `src/app/globals.css` (`pine`, `pine-line`, `sage`, `sage-light`, `lime`, `ink`, `paper`; `max-w-grid`, `max-w-hero-*`, `max-w-cards`). Nada de hex no componente.
 - Mobile first; a composição desktop das seções começa em `lg`.

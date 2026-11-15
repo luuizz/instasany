@@ -2,6 +2,10 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react'
 import type { SectionFormState } from '@/app/(admin)/admin/conteudo/actions'
+import { RotateCcwIcon } from 'lucide-react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { FormMessage } from '@/components/ui/field'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { useFormAction } from '@/hooks/use-form-action'
@@ -19,31 +23,33 @@ type SectionFormProps = {
 }
 
 export function SectionForm({ fields, data, save, reset }: SectionFormProps) {
-  const { state, onSubmit, pending } = useFormAction(save, null as SectionFormState)
+  const { state, onSubmit, pending } = useFormAction(
+    save,
+    null as SectionFormState,
+    'Salvo! O site já mostra a nova versão.',
+  )
   const [resetting, startReset] = useTransition()
   // Depois de restaurar, os campos (não controlados) remontam com o conteúdo padrão
   const [current, setCurrent] = useState({ data, version: 0 })
   const top = useRef<HTMLDivElement>(null)
 
-  // O aviso fica no topo de um formulário longo: leva a pessoa até ele
+  // O erro fica no topo de um formulário longo: leva a pessoa até ele
   useEffect(() => {
-    if (state) top.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (state?.ok === false) top.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }, [state])
 
-  const onReset = () => {
-    if (!window.confirm('Voltar esta seção ao conteúdo padrão?')) return
+  const onReset = () =>
     startReset(async () => {
       const result = await reset()
       if (!result.ok) return
       setCurrent((previous) => ({ data: result.data, version: previous.version + 1 }))
+      toast.success('Seção de volta ao conteúdo padrão.')
     })
-  }
 
   return (
     <form key={current.version} onSubmit={onSubmit} className="flex flex-col gap-5">
       <div ref={top} className="flex flex-col gap-3 empty:hidden">
         <FormMessage>{state?.ok === false ? state.error : null}</FormMessage>
-        <FormMessage tone="success">{state?.ok ? 'Salvo! O site já mostra a nova versão.' : null}</FormMessage>
       </div>
       {fields.map((field) =>
         field.kind === 'list' ? (
@@ -53,17 +59,20 @@ export function SectionForm({ fields, data, save, reset }: SectionFormProps) {
         ),
       )}
       <div className="flex flex-wrap items-center gap-4 pt-2">
-        <SubmitButton pending={pending} pendingLabel="Salvando…">
+        <SubmitButton size="default" pending={pending} pendingLabel="Salvando…">
           Salvar alterações
         </SubmitButton>
-        <button
-          type="button"
-          onClick={onReset}
-          disabled={resetting}
-          className="cursor-pointer text-sm font-semibold text-ink/60 underline-offset-4 hover:underline disabled:opacity-50"
+        <ConfirmDialog
+          title="Voltar esta seção ao conteúdo padrão?"
+          description="O que foi salvo no painel para esta seção será descartado."
+          confirmLabel="Restaurar"
+          onConfirm={onReset}
         >
-          {resetting ? 'Restaurando…' : 'Restaurar padrão'}
-        </button>
+          <Button type="button" variant="ghost" disabled={resetting}>
+            <RotateCcwIcon />
+            {resetting ? 'Restaurando…' : 'Restaurar padrão'}
+          </Button>
+        </ConfirmDialog>
       </div>
     </form>
   )

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { LessonForm } from '@/components/admin/lesson-form'
 import { PageHeader } from '@/components/admin/page-header'
 import { isStorageConfigured } from '@/server/integrations/storage'
-import { ConfirmButton } from '@/components/ui/confirm-button'
+import { ConfirmButton } from '@/components/ui/confirm-dialog'
 import { getLesson } from '@/server/services/course-admin'
 import { deleteLessonAction, saveLessonAction } from '../../../actions'
 
@@ -24,14 +24,15 @@ export default async function EditLessonPage({ params }: PageProps) {
   if (!lesson) notFound()
 
   return (
-    <div className="max-w-2xl">
+    <div>
       <PageHeader
         title={lesson.title}
         back={{ href: `/admin/cursos/${lesson.courseId}`, label: 'Voltar ao curso' }}
         actions={
           <form action={deleteLessonAction.bind(null, lesson.id, lesson.courseId)}>
             <ConfirmButton
-              message={`Excluir a aula "${lesson.title}"?`}
+              title={`Excluir a aula "${lesson.title}"?`}
+              description="O vídeo enviado e o progresso dos alunos nesta aula também saem."
               className="text-sm font-semibold text-red-700 hover:underline"
             >
               Excluir aula

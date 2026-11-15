@@ -1,4 +1,4 @@
-import { formatDuration } from '@/lib/duration'
+import { countLabel, formatDuration } from '@/lib/duration'
 import type { ModuleItem } from '@/types/lms'
 
 // Ementa: módulos e aulas, com duração e indicação de vídeo
@@ -13,7 +13,7 @@ export function CourseSyllabus({ modules }: { modules: ModuleItem[] }) {
               <span className="font-semibold text-ink">{module.title}</span>
             </span>
             <span className="text-sm text-ink/50">
-              {module.lessons.length} aulas ·{' '}
+              {countLabel(module.lessons.length, 'aula', 'aulas')} ·{' '}
               {formatDuration(module.lessons.reduce((total, lesson) => total + lesson.durationMinutes, 0))}
             </span>
           </summary>

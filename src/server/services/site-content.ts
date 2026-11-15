@@ -72,3 +72,8 @@ export async function saveSection<K extends SiteSectionKey>(key: K, data: HomeCo
 export async function resetSection(key: SiteSectionKey) {
   await db().delete(siteSections).where(eq(siteSections.key, key))
 }
+
+// Quando cada seção foi salva no painel (sem data = ainda usa o conteúdo padrão)
+export async function getSectionUpdates(): Promise<Partial<Record<SiteSectionKey, Date>>> {
+  return mergeWithDefaults(await readRows()).updatedAt
+}

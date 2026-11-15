@@ -5,6 +5,7 @@ import {
   ExternalLinkIcon,
   GraduationCapIcon,
   LayoutDashboardIcon,
+  MessageCircleQuestionIcon,
   PanelsTopLeftIcon,
   UsersIcon,
 } from 'lucide-react'
@@ -16,6 +17,7 @@ const items = [
   { href: '/admin', label: 'Visão geral', icon: LayoutDashboardIcon, exact: true },
   { href: '/admin/cursos', label: 'Cursos', icon: GraduationCapIcon },
   { href: '/admin/alunos', label: 'Alunos', icon: UsersIcon },
+  { href: '/admin/duvidas', label: 'Dúvidas', icon: MessageCircleQuestionIcon },
   { href: '/admin/analise', label: 'Análise', icon: ChartColumnIcon },
   { href: '/admin/conteudo', label: 'Conteúdo do site', icon: PanelsTopLeftIcon },
 ]

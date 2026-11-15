@@ -43,6 +43,13 @@
       "when": 1794765540735,
       "tag": "0005_certificado_avaliacao",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794765839411,
+      "tag": "0006_duvidas",
+      "breakpoints": true
     }
   ]
 }

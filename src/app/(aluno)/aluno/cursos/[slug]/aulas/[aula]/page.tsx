@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { LessonAttachments } from '@/components/lms/lesson-attachments'
+import { LessonQuestions } from '@/components/questions/lesson-questions'
 import { CourseAside } from '@/components/lms/course-aside'
 import { VideoPlayer } from '@/components/lms/video-player'
 import { Container } from '@/components/ui/container'
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { requireUser } from '@/server/auth/session'
 import { getLessonPlayer } from '@/server/services/learning'
+import { listThreads } from '@/server/services/questions'
 import { passedQuizModules } from '@/server/services/quiz'
 import { toggleLessonAction } from '../../../../actions'
 
@@ -24,10 +26,13 @@ export default async function LessonPage({ params }: PageProps) {
   if (!player) notFound()
 
   const { course, lesson, completed, previousId, nextId } = player
-  const passedQuizzes = await passedQuizModules(
-    profile.id,
-    course.modules.map((module) => module.id),
-  )
+  const [passedQuizzes, threads] = await Promise.all([
+    passedQuizModules(
+      profile.id,
+      course.modules.map((module) => module.id),
+    ),
+    listThreads(lesson.id, profile.id),
+  ])
   const isDone = completed.includes(lesson.id)
   const lessonModule = course.modules.find((module) => module.lessons.some((item) => item.id === lesson.id))
   // Última aula de um módulo com quiz ainda não aprovado: o próximo passo é o quiz
@@ -87,6 +92,7 @@ export default async function LessonPage({ params }: PageProps) {
             )}
           </div>
         </div>
+        <LessonQuestions threads={threads} slug={slug} lessonId={lesson.id} isStaff={profile.role === 'admin'} />
       </article>
       <CourseAside
         course={course}

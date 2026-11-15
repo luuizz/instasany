@@ -72,3 +72,20 @@ export type Certificate = {
 
 export type CourseReview = { name: string; rating: number; comment: string; updatedAt: Date }
 export type ReviewSummary = { average: number; count: number; latest: CourseReview[] }
+
+export type QuestionMessage = {
+  id: number
+  body: string
+  createdAt: Date
+  author: { name: string; initials: string; isStaff: boolean; isMine: boolean }
+}
+export type QuestionThread = QuestionMessage & { replies: QuestionMessage[] }
+
+// Dúvida na fila do painel, com onde foi feita e se a equipe já respondeu
+export type AdminQuestion = QuestionThread & {
+  lessonId: number
+  lessonTitle: string
+  courseTitle: string
+  courseSlug: string
+  answered: boolean
+}

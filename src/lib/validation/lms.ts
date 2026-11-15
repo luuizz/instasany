@@ -104,3 +104,7 @@ export const reviewSchema = z.object({
   rating: z.coerce.number().int().min(1, 'Escolha de 1 a 5 estrelas.').max(5, 'Escolha de 1 a 5 estrelas.'),
   comment: z.string().trim().max(600, 'O comentário pode ter até 600 caracteres.').default(''),
 })
+
+export const questionMessageSchema = z.object({
+  body: z.string().trim().min(2, 'Escreva sua mensagem.').max(2000, 'A mensagem pode ter até 2.000 caracteres.'),
+})

@@ -15,6 +15,9 @@ const byCode: Record<string, string> = {
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: 'Já existe uma conta com este e-mail.',
   PASSWORD_TOO_SHORT: 'A senha é curta demais.',
   EMAIL_NOT_VERIFIED: 'Confirme seu e-mail antes de entrar. Veja sua caixa de entrada.',
+  INVALID_TOKEN: 'Este link expirou ou já foi usado. Peça um novo.',
+  INVALID_PASSWORD: 'A senha atual está incorreta.',
+  CREDENTIAL_ACCOUNT_NOT_FOUND: 'Esta conta não usa senha.',
   INVALID_ORIGIN: 'Este endereço não está autorizado no Neon Auth (domínios confiáveis).',
 }
 

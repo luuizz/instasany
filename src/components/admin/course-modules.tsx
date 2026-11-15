@@ -1,5 +1,6 @@
 import { ArrowDownIcon, ArrowUpIcon, PlayCircleIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   addLessonAction,
   addModuleAction,
@@ -11,9 +12,6 @@ import {
 import { ConfirmButton } from '@/components/ui/confirm-dialog'
 import type { CourseOutline } from '@/types/lms'
 import { InlineTitleForm } from './inline-title-form'
-
-const iconButton =
-  'inline-flex size-8 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-pine disabled:pointer-events-none disabled:opacity-30 [&_svg]:size-4'
 
 function MoveButtons({
   onUp,
@@ -31,14 +29,14 @@ function MoveButtons({
   return (
     <>
       <form action={onUp}>
-        <button type="submit" className={iconButton} disabled={first} aria-label={`Subir ${label}`}>
+        <Button type="submit" variant="ghost" size="icon-sm" disabled={first} aria-label={`Subir ${label}`}>
           <ArrowUpIcon />
-        </button>
+        </Button>
       </form>
       <form action={onDown}>
-        <button type="submit" className={iconButton} disabled={last} aria-label={`Descer ${label}`}>
+        <Button type="submit" variant="ghost" size="icon-sm" disabled={last} aria-label={`Descer ${label}`}>
           <ArrowDownIcon />
-        </button>
+        </Button>
       </form>
     </>
   )
@@ -74,7 +72,8 @@ export function CourseModules({ course }: { course: CourseOutline }) {
                   title={`Remover o módulo "${module.title}"?`}
                   description="Todas as aulas do módulo e o progresso dos alunos nelas também saem."
                   confirmLabel="Remover"
-                  className={`${iconButton} hover:bg-destructive/10 hover:text-destructive`}
+                  variant="destructive"
+                  size="icon-sm"
                   aria-label={`Remover módulo ${module.title}`}
                 >
                   <Trash2Icon />
@@ -121,13 +120,10 @@ export function CourseModules({ course }: { course: CourseOutline }) {
             ))}
           </ol>
           <form action={addLessonAction.bind(null, module.id, course.id)} className="mt-3">
-            <button
-              type="submit"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-dashed border-input px-4 py-2 text-sm font-semibold transition hover:border-sage hover:bg-accent"
-            >
-              <PlusIcon className="size-4" />
+            <Button type="submit" variant="outline" size="sm" className="border-dashed">
+              <PlusIcon />
               Nova aula
-            </button>
+            </Button>
           </form>
         </section>
       ))}

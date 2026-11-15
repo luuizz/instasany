@@ -4,7 +4,8 @@ import { notFound } from 'next/navigation'
 import { LessonSidebar } from '@/components/lms/lesson-sidebar'
 import { VideoPlayer } from '@/components/lms/video-player'
 import { Container } from '@/components/ui/container'
-import { CheckIcon } from '@/components/ui/icons'
+import { CheckIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { requireUser } from '@/server/auth/session'
 import { getLessonPlayer } from '@/server/services/learning'
@@ -45,12 +46,9 @@ export default async function LessonPage({ params }: PageProps) {
         <div className="flex flex-wrap items-center gap-4 border-t border-ink/10 pt-6">
           <form action={toggleLessonAction.bind(null, target, !isDone)}>
             {isDone ? (
-              <button
-                type="submit"
-                className="flex cursor-pointer items-center gap-2 rounded-full bg-sage/15 px-5 py-3 font-semibold text-pine hover:bg-sage/25"
-              >
+              <Button type="submit" variant="secondary" size="lg">
                 <CheckIcon className="size-5" /> Concluída · desmarcar
-              </button>
+              </Button>
             ) : (
               <SubmitButton>{nextId ? 'Concluir e ir para a próxima' : 'Concluir aula'}</SubmitButton>
             )}

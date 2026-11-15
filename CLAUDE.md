@@ -73,6 +73,9 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 ## Estilo
 
 - Componentes de interface vêm do shadcn/ui (`components.json`): `npx shadcn@latest add <componente>` cria o arquivo em `components/ui`, que é nosso e pode ser ajustado. Os tokens do shadcn (`primary`, `muted`, `border`, `ring`...) estão em `globals.css` apontando para as cores da marca; ícones com `lucide-react`.
+- Formulário: campo com rótulo e dica é `LabeledField` e mensagem de erro/sucesso é `FormMessage` (`ui/form-field.tsx`); controles do shadcn (`Input`, `Textarea`, `Select`, `Switch`, `Checkbox`) com `name` para entrar no `FormData`. `ui/field.tsx` é o `Field` do próprio shadcn, usado para layouts horizontais (switch + descrição).
+- Topo das páginas do painel é `PageHeader` (`admin/page-header.tsx`): trilha (`breadcrumbs`), selo de status, ações e, para ação destrutiva, `ActionsMenu` (menu "⋯" com confirmação).
+- Sanfonas são `Accordion` (FAQ, ementa), menus laterais são `Sheet`, dicas de botão são `Tooltip` (o `TooltipProvider` está no layout raiz), iniciais de usuário são `Avatar`.
 - Confirmação é `ConfirmDialog`/`ConfirmButton` (`ui/confirm-dialog.tsx`), nunca `window.confirm`. Sucesso de formulário vira toast (`useFormAction(..., 'mensagem')`); erro fica no formulário.
 - Animações de interface com as classes do `tw-animate-css` (`animate-in fade-in slide-in-from-bottom-2`, atraso com `style={{ animationDelay }}` + `fill-mode-both`); `prefers-reduced-motion` desliga todas no `globals.css`.
 

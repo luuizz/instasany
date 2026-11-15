@@ -9,7 +9,14 @@ export const metadata: Metadata = { title: 'Novo curso' }
 export default function NewCoursePage() {
   return (
     <div className="max-w-3xl">
-      <PageHeader title="Novo curso" back={{ href: '/admin/cursos', label: 'Cursos' }} />
+      <PageHeader
+        title="Novo curso"
+        breadcrumbs={[
+          { href: '/admin', label: 'Painel' },
+          { href: '/admin/cursos', label: 'Cursos' },
+        ]}
+        description="Comece pelos dados do curso; módulos e aulas vêm em seguida."
+      />
       <CourseForm save={saveCourseAction.bind(null, null)} uploadsEnabled={isStorageConfigured()} />
     </div>
   )

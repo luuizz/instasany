@@ -1,15 +1,16 @@
+import { LogOutIcon } from 'lucide-react'
 import { signOut } from '@/app/(auth)/actions'
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
-export function SignOutButton({ className }: { className?: string }) {
+type SignOutButtonProps = { className?: string; withIcon?: boolean }
+
+export function SignOutButton({ className, withIcon }: SignOutButtonProps) {
   return (
     <form action={signOut}>
-      <button
-        type="submit"
-        className={cn('cursor-pointer font-semibold underline-offset-4 hover:underline', className)}
-      >
+      <Button type="submit" variant="link" className={className}>
+        {withIcon && <LogOutIcon />}
         Sair
-      </button>
+      </Button>
     </form>
   )
 }

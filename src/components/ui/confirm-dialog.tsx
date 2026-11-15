@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import { Button } from './button'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -55,7 +56,7 @@ export function ConfirmDialog({
   )
 }
 
-type ConfirmButtonProps = Omit<React.ComponentProps<'button'>, 'type'> & {
+type ConfirmButtonProps = Omit<React.ComponentProps<typeof Button>, 'type'> & {
   title: string
   description?: string
   confirmLabel?: string
@@ -72,7 +73,7 @@ export function ConfirmButton({ title, description, confirmLabel = 'Excluir', ..
       destructive
       onConfirm={() => button.current?.closest('form')?.requestSubmit()}
     >
-      <button ref={button} type="button" {...props} />
+      <Button ref={button} type="button" {...props} />
     </ConfirmDialog>
   )
 }

@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { CourseCollection } from '@/components/admin/course-collection'
 import { PageHeader } from '@/components/admin/page-header'
 import { ViewToggle } from '@/components/admin/view-toggle'
-import { PlusIcon } from 'lucide-react'
-import { ButtonLink } from '@/components/ui/button'
+import { PlusIcon, SparklesIcon } from 'lucide-react'
+import { Button, ButtonLink } from '@/components/ui/button'
 import { getAdminView } from '@/server/admin-view'
 import { listAllCourses } from '@/server/services/courses'
 import { createDemoCoursesAction } from './actions'
@@ -40,12 +40,10 @@ export default async function AdminCoursesPage() {
             Nenhum curso ainda. Crie o primeiro ou comece com dois cursos de exemplo, já publicados.
           </p>
           <form action={createDemoCoursesAction}>
-            <button
-              type="submit"
-              className="cursor-pointer rounded-full bg-pine px-5 py-3 font-semibold text-paper hover:bg-pine-line"
-            >
+            <Button type="submit" variant="dark">
+              <SparklesIcon />
               Criar cursos de exemplo
-            </button>
+            </Button>
           </form>
         </div>
       ) : (

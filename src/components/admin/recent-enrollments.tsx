@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import type { RecentEnrollment } from '@/server/services/dashboard'
 
 const when = new Intl.DateTimeFormat('pt-BR', {
@@ -33,12 +34,11 @@ export function RecentEnrollments({ enrollments }: { enrollments: RecentEnrollme
         <ul className="mt-4 divide-y divide-border">
           {enrollments.map((enrollment) => (
             <li key={`${enrollment.studentEmail}-${enrollment.courseTitle}`} className="flex items-center gap-4 py-3">
-              <span
-                aria-hidden
-                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-bold text-pine"
-              >
-                {initials(enrollment.studentName)}
-              </span>
+              <Avatar aria-hidden className="size-10">
+                <AvatarFallback className="bg-secondary text-sm font-bold text-pine">
+                  {initials(enrollment.studentName)}
+                </AvatarFallback>
+              </Avatar>
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-medium">{enrollment.studentName}</span>
                 <span className="block truncate text-sm text-muted-foreground">{enrollment.courseTitle}</span>

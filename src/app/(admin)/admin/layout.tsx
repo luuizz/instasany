@@ -6,5 +6,9 @@ export const metadata: Metadata = { title: { default: 'Painel', template: '%s | 
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireAdmin()
-  return <AdminShell userName={profile.name || profile.email}>{children}</AdminShell>
+  return (
+    <AdminShell userName={profile.name || profile.email} email={profile.email}>
+      {children}
+    </AdminShell>
+  )
 }

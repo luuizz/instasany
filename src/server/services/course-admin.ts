@@ -145,6 +145,7 @@ export async function getLesson(id: number): Promise<(Lesson & { courseId: numbe
     videoUrl: lesson.videoUrl,
     durationMinutes: lesson.durationMinutes,
     hasVideo: Boolean(lesson.videoUrl),
+    releaseAfterDays: lesson.releaseAfterDays,
     courseId,
   }
 }

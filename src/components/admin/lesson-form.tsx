@@ -39,6 +39,20 @@ export function LessonForm({ lesson, save, uploadsEnabled }: LessonFormProps) {
               />
             </LabeledField>
           </div>
+          <LabeledField
+            label="Liberar após (dias)"
+            hint="Dias depois da matrícula para a aula abrir. 0 = abre junto com a matrícula."
+            className="max-w-xs"
+          >
+            <Input
+              name="releaseAfterDays"
+              type="number"
+              min={0}
+              max={365}
+              defaultValue={lesson.releaseAfterDays}
+              required
+            />
+          </LabeledField>
           <LabeledField label="Texto da aula" hint="Deixe uma linha em branco entre os parágrafos.">
             <Textarea name="content" defaultValue={lesson.content} rows={14} maxLength={20000} />
           </LabeledField>

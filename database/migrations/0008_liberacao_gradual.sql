@@ -1,0 +1,1 @@
+ALTER TABLE "lessons" ADD COLUMN "release_after_days" integer DEFAULT 0 NOT NULL;

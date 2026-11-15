@@ -104,6 +104,7 @@ export function CourseModules({ course }: { course: CourseOutline }) {
                   <span className="min-w-0 flex-1 truncate font-medium group-hover:text-pine">{lesson.title}</span>
                   <span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
                     {lesson.hasVideo && <PlayCircleIcon className="size-3.5 text-sage" aria-label="Com vídeo" />}
+                    {lesson.releaseAfterDays > 0 && <span className="text-sage">dia {lesson.releaseAfterDays} ·</span>}
                     {lesson.durationMinutes} min
                   </span>
                 </Link>

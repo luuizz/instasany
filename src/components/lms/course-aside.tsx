@@ -1,6 +1,7 @@
 import { saveReviewAction } from '@/app/(aluno)/aluno/course-actions'
 import { ReviewForm } from '@/components/courses/review-form'
 import { certificateCodeFor } from '@/server/services/certificates'
+import { enrollmentDate } from '@/server/services/learning'
 import { getMyReview } from '@/server/services/reviews'
 import type { CourseCompletion, CourseOutline } from '@/types/lms'
 import { CourseFinishCard } from './course-finish-card'
@@ -33,9 +34,10 @@ export async function CourseAside({
     quizzesTotal,
     complete: lessonsTotal > 0 && completed.length === lessonsTotal && passedQuizzes.length === quizzesTotal,
   }
-  const [certificateCode, myReview] = await Promise.all([
+  const [certificateCode, myReview, enrolledAt] = await Promise.all([
     certificateCodeFor(profileId, course.id),
     getMyReview(profileId, course.id),
+    enrollmentDate(profileId, course.id),
   ])
 
   return (
@@ -46,6 +48,7 @@ export async function CourseAside({
         passedQuizzes={passedQuizzes}
         currentId={currentId}
         currentQuiz={currentQuiz}
+        enrolledAt={enrolledAt}
       />
       <CourseFinishCard slug={course.slug} completion={completion} certificateCode={certificateCode} />
       {completed.length > 0 && (

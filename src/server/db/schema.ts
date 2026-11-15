@@ -80,6 +80,8 @@ export const lessons = pgTable(
     content: text('content').notNull().default(''),
     videoUrl: text('video_url'),
     durationMinutes: integer('duration_minutes').notNull().default(0),
+    // Dias depois da matrícula para a aula abrir (0 = abre junto com a matrícula)
+    releaseAfterDays: integer('release_after_days').notNull().default(0),
     sortOrder: integer('sort_order').notNull().default(0),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),

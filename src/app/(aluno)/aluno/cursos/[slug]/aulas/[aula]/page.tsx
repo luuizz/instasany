@@ -6,7 +6,8 @@ import { LessonQuestions } from '@/components/questions/lesson-questions'
 import { CourseAside } from '@/components/lms/course-aside'
 import { VideoPlayer } from '@/components/lms/video-player'
 import { Container } from '@/components/ui/container'
-import { CheckIcon } from 'lucide-react'
+import { formatDateTime } from '@/lib/dates'
+import { CheckIcon, LockIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { requireUser } from '@/server/auth/session'
@@ -66,9 +67,21 @@ export default async function LessonPage({ params }: PageProps) {
           </div>
         )}
         <LessonAttachments items={player.attachments} />
+        {player.lockedUntil && (
+          <div role="status" className="flex max-w-3xl items-start gap-4 rounded-3xl bg-muted p-6">
+            <LockIcon className="mt-1 size-5 shrink-0 text-sage" />
+            <div>
+              <p className="font-semibold text-ink">Esta aula abre em {formatDateTime(player.lockedUntil)}</p>
+              <p className="mt-1 text-ink/70">
+                As aulas deste curso são liberadas aos poucos depois da matrícula, para você ter tempo de aplicar cada
+                uma antes da próxima.
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center gap-4 border-t border-ink/10 pt-6">
-          <form action={toggleLessonAction.bind(null, target, !isDone)}>
+          <form action={toggleLessonAction.bind(null, target, !isDone)} hidden={Boolean(player.lockedUntil)}>
             {isDone ? (
               <Button type="submit" variant="secondary" size="lg">
                 <CheckIcon className="size-5" /> Concluída · desmarcar
@@ -92,7 +105,9 @@ export default async function LessonPage({ params }: PageProps) {
             )}
           </div>
         </div>
-        <LessonQuestions threads={threads} slug={slug} lessonId={lesson.id} isStaff={profile.role === 'admin'} />
+        {!player.lockedUntil && (
+          <LessonQuestions threads={threads} slug={slug} lessonId={lesson.id} isStaff={profile.role === 'admin'} />
+        )}
       </article>
       <CourseAside
         course={course}

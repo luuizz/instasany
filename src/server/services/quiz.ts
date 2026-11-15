@@ -4,7 +4,8 @@ import type { QuizDraft, QuizResult, StudentQuiz } from '@/types/lms'
 import { db } from '../db/client'
 import { courseModules, quizAttempts, quizQuestions, quizzes } from '../db/schema'
 import { getCourseBySlug } from './courses'
-import { isEnrolled } from './learning'
+import { isReleased } from '@/lib/release'
+import { enrollmentDate, isEnrolled } from './learning'
 
 type Viewer = { id: string; role: 'student' | 'admin' }
 
@@ -69,9 +70,12 @@ async function bestAttempt(profileId: string, quizId: number) {
 export async function getStudentQuiz(viewer: Viewer, slug: string, moduleId: number): Promise<StudentQuiz | null> {
   const course = await getCourseBySlug(slug)
   if (!course) return null
-  if (viewer.role !== 'admin' && (!course.published || !(await isEnrolled(viewer.id, course.id)))) return null
+  const enrolledAt = viewer.role === 'admin' ? null : await enrollmentDate(viewer.id, course.id)
+  if (viewer.role !== 'admin' && (!course.published || !enrolledAt)) return null
   const moduleIndex = course.modules.findIndex((module) => module.id === moduleId)
   const courseModule = course.modules[moduleIndex]
+  // O quiz só abre quando todas as aulas do módulo já foram liberadas
+  if (courseModule?.lessons.some((lesson) => !isReleased(enrolledAt, lesson.releaseAfterDays))) return null
   const quiz = courseModule ? await quizOfModule(moduleId) : null
   if (!courseModule || !quiz) return null
   const [questions, best] = await Promise.all([questionsOf(quiz.id), bestAttempt(viewer.id, quiz.id)])

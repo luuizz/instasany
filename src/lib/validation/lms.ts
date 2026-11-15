@@ -36,6 +36,11 @@ export const lessonSchema = z.object({
     .int('Use minutos inteiros.')
     .min(0, 'A duração não pode ser negativa.')
     .max(600, 'A duração pode ter até 600 minutos.'),
+  releaseAfterDays: z.coerce
+    .number('Informe em quantos dias a aula abre.')
+    .int('Use dias inteiros.')
+    .min(0, 'Use 0 para abrir junto com a matrícula.')
+    .max(365, 'O prazo pode ter até 365 dias.'),
 })
 
 export type CourseInput = z.output<typeof courseSchema>

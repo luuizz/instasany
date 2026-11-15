@@ -1,0 +1,65 @@
+'use client'
+
+import { LayoutDashboardIcon } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { useHeaderAccount } from './header-account-context'
+
+// Desktop: "Fazer login" para visitantes; nome e atalho do painel para quem está logado
+export function HeaderAccountLinks() {
+  const account = useHeaderAccount()
+
+  if (account === 'loading') {
+    // Ocupa o mesmo espaço para o cabeçalho não pular quando a resposta chega
+    return <span aria-hidden className="h-6 w-28" />
+  }
+
+  if (!account) {
+    return (
+      <Link
+        href="/entrar"
+        className="flex animate-in items-center gap-2 font-medium text-paper duration-300 fade-in hover:text-lime"
+      >
+        <Image src="/icons/user.svg" alt="" width={24} height={24} />
+        Fazer login
+      </Link>
+    )
+  }
+
+  return (
+    <div className="flex animate-in items-center gap-3 duration-300 fade-in">
+      {account.isAdmin && (
+        <Link
+          href="/admin"
+          aria-label="Painel"
+          className="flex items-center gap-2 rounded-full px-3 py-1.5 font-medium whitespace-nowrap text-paper/70 transition hover:bg-pine-line hover:text-paper"
+        >
+          <LayoutDashboardIcon className="size-4" />
+          <span className="hidden xl:inline">Painel</span>
+        </Link>
+      )}
+      <AccountLink firstName={account.firstName} />
+    </div>
+  )
+}
+
+export function AccountLink({ firstName, className }: { firstName: string; className?: string }) {
+  return (
+    <Link
+      href="/aluno"
+      className={cn(
+        'group flex max-w-48 items-center gap-2 rounded-full bg-pine-line py-1 pr-4 pl-1 font-medium whitespace-nowrap text-paper transition hover:bg-pine-ring',
+        className,
+      )}
+    >
+      <span
+        aria-hidden
+        className="flex size-8 items-center justify-center rounded-full bg-lime text-sm font-bold text-pine"
+      >
+        {firstName[0]?.toUpperCase()}
+      </span>
+      <span className="truncate">Olá, {firstName}</span>
+    </Link>
+  )
+}

@@ -24,14 +24,14 @@ export function SiteNav() {
   }, [])
 
   return (
-    <nav aria-label="Principal" className="flex gap-2">
+    <nav aria-label="Principal" className="flex gap-1 xl:gap-2">
       {mainNav.map((item) => (
         <a
           key={item.href}
           href={`/${item.href}`}
           aria-current={active === item.href ? 'location' : undefined}
           className={cn(
-            'rounded-full px-3 py-1 transition',
+            'rounded-full px-3 py-1 whitespace-nowrap transition',
             active === item.href ? 'bg-sage text-paper' : 'text-paper/40 hover:text-paper',
           )}
         >

@@ -5,10 +5,12 @@ import { redirect } from 'next/navigation'
 import { after } from 'next/server'
 import { fail, ok, type ActionResult } from '@/lib/result'
 import { slugify } from '@/lib/slug'
-import { courseSchema, lessonSchema, moduleSchema } from '@/lib/validation/lms'
+import { attachmentSchema, courseSchema, lessonSchema, moduleSchema } from '@/lib/validation/lms'
 import { requireAdmin } from '@/server/auth/session'
 import * as admin from '@/server/services/course-admin'
+import { addAttachment, removeAttachment } from '@/server/services/attachments'
 import { COURSES_TAG, getCourseById } from '@/server/services/courses'
+import type { LessonAttachment } from '@/types/lms'
 import { deleteStoredFiles } from '@/server/integrations/storage'
 
 export type FormState = ActionResult<{ savedAt: string }> | null
@@ -143,9 +145,9 @@ export async function saveLessonAction(
 
 export async function deleteLessonAction(lessonId: number, courseId: number) {
   await requireAdmin()
-  const previous = await admin.getLesson(lessonId)
+  const files = await admin.lessonFileUrls(lessonId)
   await admin.deleteLesson(lessonId)
-  cleanUp([previous?.videoUrl])
+  cleanUp(files)
   refresh(courseId)
   redirect(`/admin/cursos/${courseId}`)
 }
@@ -154,4 +156,32 @@ export async function moveLessonAction(lessonId: number, courseId: number, direc
   await requireAdmin()
   await admin.moveLesson(lessonId, direction)
   refresh(courseId)
+}
+
+// ---- materiais da aula ----
+
+function refreshLesson(lessonId: number, courseId: number) {
+  revalidatePath(`/admin/cursos/${courseId}/aulas/${lessonId}`)
+  revalidatePath('/aluno/cursos', 'layout')
+}
+
+export async function addAttachmentAction(
+  lessonId: number,
+  courseId: number,
+  input: unknown,
+): Promise<ActionResult<LessonAttachment>> {
+  await requireAdmin()
+  const parsed = attachmentSchema.safeParse(input)
+  if (!parsed.success) return fail(firstError(parsed.error.issues))
+  const created = await addAttachment(lessonId, parsed.data)
+  if (!created) return fail('Não foi possível salvar o material.')
+  refreshLesson(lessonId, courseId)
+  return ok(created)
+}
+
+export async function removeAttachmentAction(lessonId: number, courseId: number, attachmentId: number) {
+  await requireAdmin()
+  const url = await removeAttachment(lessonId, attachmentId)
+  if (url) cleanUp([url])
+  refreshLesson(lessonId, courseId)
 }

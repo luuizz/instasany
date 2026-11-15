@@ -26,3 +26,5 @@ export type StudentCourse = CourseSummary & {
   // Primeira aula ainda não concluída (ou a primeira, se todas foram)
   nextLessonId: number | null
 }
+
+export type LessonAttachment = { id: number; title: string; url: string; sizeBytes: number; contentType: string }

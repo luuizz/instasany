@@ -1,8 +1,9 @@
 import 'server-only'
 import { and, eq, inArray } from 'drizzle-orm'
-import type { CourseOutline, Lesson, LessonItem, StudentCourse } from '@/types/lms'
+import type { CourseOutline, Lesson, LessonAttachment, LessonItem, StudentCourse } from '@/types/lms'
 import { db } from '../db/client'
-import { courses, enrollments, lessonProgress } from '../db/schema'
+import { courses, enrollments, lessonPositions, lessonProgress } from '../db/schema'
+import { listAttachments } from './attachments'
 import { getLesson } from './course-admin'
 import { getCourseBySlug, listAllCourses } from './courses'
 
@@ -77,6 +78,9 @@ export type LessonPlayer = {
   completed: number[]
   previousId: number | null
   nextId: number | null
+  attachments: LessonAttachment[]
+  // Segundo do vídeo em que a pessoa parou (0 = do começo)
+  resumeAt: number
 }
 
 // Tudo o que a tela da aula precisa; null se a aula não é do curso ou a pessoa não tem acesso
@@ -95,16 +99,22 @@ export async function getLessonPlayer(
   const lesson = position >= 0 ? await getLesson(lessonId) : null
   if (!lesson) return null
 
-  const done = await completedLessonIds(
-    profile.id,
-    items.map((item) => item.id),
-  )
+  const [done, attachments, resumeAt] = await Promise.all([
+    completedLessonIds(
+      profile.id,
+      items.map((item) => item.id),
+    ),
+    listAttachments(lessonId),
+    savedPosition(profile.id, lessonId),
+  ])
   return {
     course,
     lesson,
     completed: [...done],
     previousId: items[position - 1]?.id ?? null,
     nextId: items[position + 1]?.id ?? null,
+    attachments,
+    resumeAt,
   }
 }
 
@@ -134,5 +144,33 @@ export async function setLessonCompleted(
       .delete(lessonProgress)
       .where(and(eq(lessonProgress.profileId, profileId), eq(lessonProgress.lessonId, lessonId)))
   }
+  return true
+}
+
+async function savedPosition(profileId: string, lessonId: number) {
+  const [row] = await db()
+    .select({ seconds: lessonPositions.seconds })
+    .from(lessonPositions)
+    .where(and(eq(lessonPositions.profileId, profileId), eq(lessonPositions.lessonId, lessonId)))
+    .limit(1)
+  return row?.seconds ?? 0
+}
+
+// Guarda onde a pessoa parou no vídeo; só para aula de curso em que está matriculada (ou admin)
+export async function saveLessonPosition(
+  profile: { id: string; role: 'student' | 'admin' },
+  lessonId: number,
+  seconds: number,
+) {
+  const lesson = await getLesson(lessonId)
+  if (!lesson) return false
+  if (profile.role !== 'admin' && !(await isEnrolled(profile.id, lesson.courseId))) return false
+  await db()
+    .insert(lessonPositions)
+    .values({ profileId: profile.id, lessonId, seconds })
+    .onConflictDoUpdate({
+      target: [lessonPositions.profileId, lessonPositions.lessonId],
+      set: { seconds, updatedAt: new Date() },
+    })
   return true
 }

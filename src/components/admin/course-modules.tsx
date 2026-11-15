@@ -1,3 +1,4 @@
+import { ArrowDownIcon, ArrowUpIcon, PlayCircleIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import Link from 'next/link'
 import {
   addLessonAction,
@@ -7,12 +8,12 @@ import {
   moveModuleAction,
   renameModuleAction,
 } from '@/app/(admin)/admin/cursos/actions'
-import { ConfirmButton } from '@/components/ui/confirm-button'
+import { ConfirmButton } from '@/components/ui/confirm-dialog'
 import type { CourseOutline } from '@/types/lms'
 import { InlineTitleForm } from './inline-title-form'
 
 const iconButton =
-  'cursor-pointer rounded-full px-3 py-1 text-xs font-semibold hover:bg-ink/5 disabled:cursor-default disabled:opacity-30'
+  'inline-flex size-8 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-pine disabled:pointer-events-none disabled:opacity-30 [&_svg]:size-4'
 
 function MoveButtons({
   onUp,
@@ -31,12 +32,12 @@ function MoveButtons({
     <>
       <form action={onUp}>
         <button type="submit" className={iconButton} disabled={first} aria-label={`Subir ${label}`}>
-          ↑
+          <ArrowUpIcon />
         </button>
       </form>
       <form action={onDown}>
         <button type="submit" className={iconButton} disabled={last} aria-label={`Descer ${label}`}>
-          ↓
+          <ArrowDownIcon />
         </button>
       </form>
     </>
@@ -48,9 +49,18 @@ export function CourseModules({ course }: { course: CourseOutline }) {
   return (
     <div className="flex flex-col gap-6">
       {course.modules.map((module, moduleIndex) => (
-        <section key={module.id} className="rounded-3xl border border-ink/10 p-5">
+        <section
+          key={module.id}
+          style={{ animationDelay: `${moduleIndex * 60}ms` }}
+          className="animate-in rounded-3xl border border-border bg-card p-5 duration-500 fill-mode-both fade-in slide-in-from-bottom-2"
+        >
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm font-semibold text-ink/50">Módulo {moduleIndex + 1}</p>
+            <p className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+              <span className="flex size-7 items-center justify-center rounded-full bg-pine text-xs font-bold text-lime">
+                {moduleIndex + 1}
+              </span>
+              Módulo {moduleIndex + 1} · {module.lessons.length} {module.lessons.length === 1 ? 'aula' : 'aulas'}
+            </p>
             <div className="flex items-center">
               <MoveButtons
                 label={`módulo ${module.title}`}
@@ -61,10 +71,13 @@ export function CourseModules({ course }: { course: CourseOutline }) {
               />
               <form action={deleteModuleAction.bind(null, module.id, course.id)}>
                 <ConfirmButton
-                  message={`Remover o módulo "${module.title}" e todas as aulas dele?`}
-                  className={`${iconButton} text-red-700`}
+                  title={`Remover o módulo "${module.title}"?`}
+                  description="Todas as aulas do módulo e o progresso dos alunos nelas também saem."
+                  confirmLabel="Remover"
+                  className={`${iconButton} hover:bg-destructive/10 hover:text-destructive`}
+                  aria-label={`Remover módulo ${module.title}`}
                 >
-                  Remover
+                  <Trash2Icon />
                 </ConfirmButton>
               </form>
             </div>
@@ -78,13 +91,21 @@ export function CourseModules({ course }: { course: CourseOutline }) {
             />
           </div>
 
-          <ol className="mt-4 flex flex-col divide-y divide-ink/10">
+          <ol className="mt-4 flex flex-col gap-1">
             {module.lessons.map((lesson, lessonIndex) => (
-              <li key={lesson.id} className="flex items-center justify-between gap-3 py-3">
-                <Link href={`/admin/cursos/${course.id}/aulas/${lesson.id}`} className="min-w-0 flex-1 hover:underline">
-                  <span className="text-ink/40">{lessonIndex + 1}.</span> {lesson.title}
-                  <span className="ml-2 text-xs text-ink/50">
-                    {lesson.durationMinutes} min{lesson.hasVideo ? ' · vídeo' : ''}
+              <li
+                key={lesson.id}
+                className="group flex items-center justify-between gap-3 rounded-2xl px-3 py-2 transition hover:bg-accent"
+              >
+                <Link
+                  href={`/admin/cursos/${course.id}/aulas/${lesson.id}`}
+                  className="flex min-w-0 flex-1 items-center gap-3"
+                >
+                  <span className="w-5 shrink-0 text-sm text-muted-foreground tabular-nums">{lessonIndex + 1}</span>
+                  <span className="min-w-0 flex-1 truncate font-medium group-hover:text-pine">{lesson.title}</span>
+                  <span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
+                    {lesson.hasVideo && <PlayCircleIcon className="size-3.5 text-sage" aria-label="Com vídeo" />}
+                    {lesson.durationMinutes} min
                   </span>
                 </Link>
                 <div className="flex shrink-0">
@@ -102,15 +123,16 @@ export function CourseModules({ course }: { course: CourseOutline }) {
           <form action={addLessonAction.bind(null, module.id, course.id)} className="mt-3">
             <button
               type="submit"
-              className="cursor-pointer rounded-full border border-dashed border-ink/30 px-4 py-2 text-sm font-semibold hover:border-sage"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-dashed border-input px-4 py-2 text-sm font-semibold transition hover:border-sage hover:bg-accent"
             >
-              + Nova aula
+              <PlusIcon className="size-4" />
+              Nova aula
             </button>
           </form>
         </section>
       ))}
 
-      <div className="rounded-3xl bg-sage-light/10 p-5">
+      <div className="rounded-3xl border border-dashed border-input bg-card p-5">
         <p className="mb-3 text-sm font-semibold">Novo módulo</p>
         <InlineTitleForm
           action={addModuleAction.bind(null, course.id)}

@@ -48,13 +48,7 @@ export function PlanCard({ plan, href }: PlanCardProps) {
           </li>
         ))}
       </ul>
-      <ButtonLink
-        href={href}
-        className={cn(
-          'w-full',
-          !featured && 'bg-transparent text-paper ring-1 ring-sage hover:bg-pine-line hover:brightness-100',
-        )}
-      >
+      <ButtonLink href={href} variant={featured ? 'default' : 'outlineOnDark'} className="w-full">
         {plan.ctaLabel}
       </ButtonLink>
     </article>

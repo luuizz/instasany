@@ -15,37 +15,42 @@ type LessonFormProps = {
 }
 
 export function LessonForm({ lesson, save, uploadsEnabled }: LessonFormProps) {
-  const { state, onSubmit, pending } = useFormAction(save, null as FormState)
+  const { state, onSubmit, pending } = useFormAction(save, null as FormState, 'Aula salva.')
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-5">
-      <FormStatus state={state} success="Aula salva." />
-      <Field label="Título">
-        <Input name="title" defaultValue={lesson.title} required maxLength={100} />
-      </Field>
-      <Field label="Duração (minutos)">
-        <Input
-          name="durationMinutes"
-          type="number"
-          min={0}
-          max={600}
-          defaultValue={lesson.durationMinutes}
-          required
-          className="max-w-40"
+    <form onSubmit={onSubmit} className="flex flex-col gap-6">
+      <FormStatus state={state} />
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:gap-10">
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-[minmax(0,1fr)_9rem] gap-4">
+            <Field label="Título">
+              <Input name="title" defaultValue={lesson.title} required maxLength={100} />
+            </Field>
+            <Field label="Duração (min)">
+              <Input
+                name="durationMinutes"
+                type="number"
+                min={0}
+                max={600}
+                defaultValue={lesson.durationMinutes}
+                required
+              />
+            </Field>
+          </div>
+          <Field label="Texto da aula" hint="Deixe uma linha em branco entre os parágrafos.">
+            <Textarea name="content" defaultValue={lesson.content} rows={14} maxLength={20000} />
+          </Field>
+        </div>
+        <MediaField
+          name="videoUrl"
+          label="Vídeo"
+          kind="video"
+          defaultValue={lesson.videoUrl}
+          uploadsEnabled={uploadsEnabled}
+          hint="Opcional: a aula pode ser só texto. Comprima antes de enviar (720p é suficiente)."
         />
-      </Field>
-      <MediaField
-        name="videoUrl"
-        label="Vídeo"
-        kind="video"
-        defaultValue={lesson.videoUrl}
-        uploadsEnabled={uploadsEnabled}
-        hint="Opcional: a aula pode ser só texto. Comprima antes de enviar (720p é suficiente)."
-      />
-      <Field label="Texto da aula" hint="Deixe uma linha em branco entre os parágrafos.">
-        <Textarea name="content" defaultValue={lesson.content} rows={12} maxLength={20000} />
-      </Field>
-      <SubmitButton pending={pending} pendingLabel="Salvando…" className="self-start">
+      </div>
+      <SubmitButton size="default" pending={pending} pendingLabel="Salvando…" className="self-start">
         Salvar aula
       </SubmitButton>
     </form>

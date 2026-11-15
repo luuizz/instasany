@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { CourseCover } from '@/components/courses/course-cover'
-import { ChevronRightIcon } from '@/components/ui/icons'
+import { ChevronRightIcon } from 'lucide-react'
 import type { AdminView } from '@/lib/admin-view'
 import { countLabel, formatDuration } from '@/lib/duration'
 import type { CourseSummary } from '@/types/lms'
@@ -21,12 +21,16 @@ const status = (course: CourseSummary, onImage = false) => (
 export function CourseCollection({ courses, view }: CourseCollectionProps) {
   if (view === 'grade') {
     return (
-      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {courses.map((course) => (
-          <li key={course.id}>
+      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {courses.map((course, index) => (
+          <li
+            key={course.id}
+            style={{ animationDelay: `${index * 50}ms` }}
+            className="animate-in duration-500 fill-mode-both fade-in slide-in-from-bottom-3"
+          >
             <Link
               href={href(course)}
-              className="group flex h-full flex-col overflow-hidden rounded-3xl border border-ink/10 bg-paper transition hover:border-sage hover:shadow-xl"
+              className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition duration-300 hover:-translate-y-1 hover:border-sage hover:shadow-xl"
             >
               <div className="relative">
                 <CourseCover title={course.title} coverUrl={course.coverUrl} className="rounded-none" />
@@ -49,7 +53,7 @@ export function CourseCollection({ courses, view }: CourseCollectionProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-ink/10">
+    <div className="animate-in overflow-hidden rounded-3xl border border-border bg-card duration-500 fade-in slide-in-from-bottom-2">
       <div className="hidden grid-cols-[minmax(0,1fr)_8rem_6rem_6rem_7rem] gap-4 border-b border-ink/10 bg-ink/3 px-5 py-3 text-xs font-bold tracking-wide text-ink/50 uppercase lg:grid">
         <span>Curso</span>
         <span>Nível</span>

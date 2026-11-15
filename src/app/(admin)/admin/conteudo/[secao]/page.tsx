@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { PageHeader } from '@/components/admin/page-header'
 import { SectionForm } from '@/components/admin/section-form'
 import { findCmsSection } from '@/config/cms'
 import { getSection } from '@/server/services/site-content'
@@ -23,13 +24,13 @@ export default async function SectionEditorPage({ params }: PageProps) {
   const { data, updatedAt } = await getSection(section.key)
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-3xl font-semibold text-ink">{section.title}</h1>
-      <p className="mt-2 text-ink/60">{section.description}</p>
-      <p className="mt-1 text-sm text-ink/50">
-        {updatedAt ? `Última alteração em ${dateFormat.format(updatedAt)}.` : 'Usando o conteúdo padrão.'}
-      </p>
-      <div className="mt-8">
+    <div className="max-w-4xl">
+      <PageHeader
+        title={section.title}
+        description={`${section.description} ${updatedAt ? `Última alteração em ${dateFormat.format(updatedAt)}.` : 'Usando o conteúdo padrão.'}`}
+        back={{ href: '/admin/conteudo', label: 'Conteúdo do site' }}
+      />
+      <div>
         <SectionForm
           fields={section.fields}
           data={data}

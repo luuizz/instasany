@@ -5,7 +5,7 @@ import { CourseForm } from '@/components/admin/course-form'
 import { CourseModules } from '@/components/admin/course-modules'
 import { PageHeader } from '@/components/admin/page-header'
 import { isStorageConfigured } from '@/server/integrations/storage'
-import { ConfirmButton } from '@/components/ui/confirm-button'
+import { ConfirmButton } from '@/components/ui/confirm-dialog'
 import { getCourseById } from '@/server/services/courses'
 import { deleteCourseAction, saveCourseAction } from '../actions'
 
@@ -26,7 +26,7 @@ export default async function EditCoursePage({ params }: PageProps) {
   const firstLesson = course.modules.flatMap((module) => module.lessons)[0]
 
   return (
-    <div className="max-w-5xl">
+    <div>
       <PageHeader
         title={course.title}
         back={{ href: '/admin/cursos', label: 'Cursos' }}
@@ -42,7 +42,8 @@ export default async function EditCoursePage({ params }: PageProps) {
             )}
             <form action={deleteCourseAction.bind(null, course.id)}>
               <ConfirmButton
-                message={`Excluir o curso "${course.title}"? Aulas, matrículas e progresso também saem.`}
+                title={`Excluir o curso "${course.title}"?`}
+                description="Módulos, aulas, matrículas e progresso dos alunos também saem. Não dá para desfazer."
                 className="text-sm font-semibold text-red-700 hover:underline"
               >
                 Excluir curso
@@ -51,7 +52,7 @@ export default async function EditCoursePage({ params }: PageProps) {
           </>
         }
       />
-      <div className="grid gap-10 xl:grid-cols-2">
+      <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <section>
           <h2 className="mb-4 text-lg font-semibold">Dados do curso</h2>
           <CourseForm

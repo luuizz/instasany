@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { CourseCollection } from '@/components/admin/course-collection'
 import { PageHeader } from '@/components/admin/page-header'
 import { ViewToggle } from '@/components/admin/view-toggle'
+import { PlusIcon } from 'lucide-react'
 import { ButtonLink } from '@/components/ui/button'
 import { getAdminView } from '@/server/admin-view'
 import { listAllCourses } from '@/server/services/courses'
@@ -14,7 +15,7 @@ export default async function AdminCoursesPage() {
   const published = courses.filter((course) => course.published).length
 
   return (
-    <div className="max-w-6xl">
+    <div>
       <PageHeader
         title="Cursos"
         description={
@@ -25,7 +26,10 @@ export default async function AdminCoursesPage() {
         actions={
           <>
             {courses.length > 0 && <ViewToggle view={view} />}
-            <ButtonLink href="/admin/cursos/novo">Novo curso</ButtonLink>
+            <ButtonLink href="/admin/cursos/novo" size="default">
+              <PlusIcon />
+              Novo curso
+            </ButtonLink>
           </>
         }
       />

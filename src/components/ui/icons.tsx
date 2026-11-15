@@ -74,33 +74,3 @@ export function ExpandIcon({ exit, ...props }: IconProps & { exit?: boolean }) {
     </svg>
   )
 }
-
-export function GridIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden {...stroke} {...props}>
-      <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
-      <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
-      <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
-      <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
-    </svg>
-  )
-}
-
-export function ListIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden {...stroke} {...props}>
-      <path d="M9 6h11M9 12h11M9 18h11" />
-      <circle cx="4.5" cy="6" r="1" />
-      <circle cx="4.5" cy="12" r="1" />
-      <circle cx="4.5" cy="18" r="1" />
-    </svg>
-  )
-}
-
-export function ChevronRightIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden {...stroke} {...props}>
-      <path d="m9 6 6 6-6 6" />
-    </svg>
-  )
-}

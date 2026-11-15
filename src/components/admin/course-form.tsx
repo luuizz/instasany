@@ -17,11 +17,11 @@ type CourseFormProps = {
 }
 
 export function CourseForm({ course, save, uploadsEnabled }: CourseFormProps) {
-  const { state, onSubmit, pending } = useFormAction(save, null as FormState)
+  const { state, onSubmit, pending } = useFormAction(save, null as FormState, 'Curso salvo.')
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5">
-      <FormStatus state={state} success="Curso salvo." />
+      <FormStatus state={state} />
       <Field label="Nome do curso">
         <Input name="title" defaultValue={course?.title} required maxLength={80} />
       </Field>
@@ -55,7 +55,7 @@ export function CourseForm({ course, save, uploadsEnabled }: CourseFormProps) {
         <input type="checkbox" name="published" defaultChecked={course?.published} className="size-5 accent-pine" />
         Publicado (aparece no catálogo e aceita matrículas)
       </label>
-      <SubmitButton pending={pending} pendingLabel="Salvando…" className="self-start">
+      <SubmitButton size="default" pending={pending} pendingLabel="Salvando…" className="self-start">
         {course ? 'Salvar curso' : 'Criar curso'}
       </SubmitButton>
     </form>

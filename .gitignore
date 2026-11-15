@@ -39,3 +39,4 @@ next-env.d.ts
 # editor
 .idea
 .env
+/e2e/.output/

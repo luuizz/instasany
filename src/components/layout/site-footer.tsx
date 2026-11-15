@@ -68,9 +68,14 @@ export function SiteFooter({ content }: { content: FooterContent }) {
             </div>
           )}
         </div>
-        <p className="mt-16 border-t border-pine-line pt-8 text-paper/40">
-          © {new Date().getFullYear()} {site.name}. Projeto fictício de estudo.
-        </p>
+        <div className="mt-16 flex flex-col gap-2 border-t border-pine-line pt-8 text-paper/40 sm:flex-row sm:justify-between">
+          <p>
+            © {new Date().getFullYear()} {site.name}. Projeto fictício de estudo.
+          </p>
+          <Link href="/privacidade" className="hover:text-paper">
+            Privacidade
+          </Link>
+        </div>
       </Container>
     </footer>
   )

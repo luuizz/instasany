@@ -15,6 +15,13 @@
       "when": 1794672984627,
       "tag": "0001_lms",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794761543588,
+      "tag": "0002_analise",
+      "breakpoints": true
     }
   ]
 }

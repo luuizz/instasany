@@ -1,6 +1,13 @@
 'use client'
 
-import { ExternalLinkIcon, GraduationCapIcon, LayoutDashboardIcon, PanelsTopLeftIcon } from 'lucide-react'
+import {
+  ChartColumnIcon,
+  ExternalLinkIcon,
+  GraduationCapIcon,
+  LayoutDashboardIcon,
+  PanelsTopLeftIcon,
+  UsersIcon,
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -8,6 +15,8 @@ import { cn } from '@/lib/utils'
 const items = [
   { href: '/admin', label: 'Visão geral', icon: LayoutDashboardIcon, exact: true },
   { href: '/admin/cursos', label: 'Cursos', icon: GraduationCapIcon },
+  { href: '/admin/alunos', label: 'Alunos', icon: UsersIcon },
+  { href: '/admin/analise', label: 'Análise', icon: ChartColumnIcon },
   { href: '/admin/conteudo', label: 'Conteúdo do site', icon: PanelsTopLeftIcon },
 ]
 

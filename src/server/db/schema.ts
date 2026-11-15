@@ -1,4 +1,5 @@
 import {
+  bigserial,
   boolean,
   index,
   integer,
@@ -113,3 +114,29 @@ export const lessonProgress = pgTable(
 export type CourseRow = typeof courses.$inferSelect
 export type CourseModuleRow = typeof courseModules.$inferSelect
 export type LessonRow = typeof lessons.$inferSelect
+
+// ---- Análise de uso ---------------------------------------------------------
+
+// Eventos próprios de uso (sem serviço de terceiros). visitor_id é um id aleatório guardado
+// no navegador, sem IP nem user agent; profile_id só existe quando a pessoa está logada.
+export const analyticsEvents = pgTable(
+  'analytics_events',
+  {
+    id: bigserial('id', { mode: 'number' }).primaryKey(),
+    type: text('type').notNull(),
+    visitorId: text('visitor_id'),
+    profileId: text('profile_id').references(() => profiles.id, { onDelete: 'set null' }),
+    path: text('path'),
+    courseId: integer('course_id').references(() => courses.id, { onDelete: 'set null' }),
+    lessonId: integer('lesson_id').references(() => lessons.id, { onDelete: 'set null' }),
+    seconds: integer('seconds').notNull().default(0),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index('analytics_events_created_idx').on(table.createdAt, table.type),
+    index('analytics_events_profile_idx').on(table.profileId, table.createdAt),
+    index('analytics_events_lesson_idx').on(table.lessonId),
+  ],
+)
+
+export type AnalyticsEventRow = typeof analyticsEvents.$inferSelect

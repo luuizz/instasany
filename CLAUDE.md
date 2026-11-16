@@ -28,7 +28,7 @@ Antes de entregar qualquer mudança: `yarn format && yarn lint && yarn typecheck
 src/
   app/
     (site)/       site institucional (layout com cabeçalho)
-    (auth)/       entrar e cadastro, com as Server Actions de login em actions.ts
+    (auth)/       entrar e cadastro (tela dividida com AuthShowcase, abas AuthSwitch), com as Server Actions de login em actions.ts
     (admin)/      painel /admin (CMS); só admin, conferido no layout
     (site)/cursos catálogo público e página do curso, com a matrícula (actions.ts)
     (aluno)/      área do aluno /aluno: dashboard (services/student-dashboard.ts) e a tela da aula (/aluno/cursos/[slug]/aulas/[id])

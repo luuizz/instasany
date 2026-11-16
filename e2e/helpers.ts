@@ -10,17 +10,17 @@ export const uniqueEmail = (prefix: string) => `${prefix}-${Date.now()}@e2e.test
 
 export async function signUp(page: Page, name: string, email: string, password = PASSWORD) {
   await page.goto('/cadastro')
-  await page.getByLabel('Nome').fill(name)
-  await page.getByLabel('E-mail').fill(email)
-  await page.getByLabel('Senha').fill(password)
+  await page.getByLabel('Nome', { exact: true }).fill(name)
+  await page.getByLabel('E-mail', { exact: true }).fill(email)
+  await page.getByLabel('Senha', { exact: true }).fill(password)
   await page.locator('main button[type=submit]').click()
   await expect(page).toHaveURL(/\/(aluno|admin)/)
 }
 
 export async function signIn(page: Page, email: string, password = PASSWORD) {
   await page.goto('/entrar')
-  await page.getByLabel('E-mail').fill(email)
-  await page.getByLabel('Senha').fill(password)
+  await page.getByLabel('E-mail', { exact: true }).fill(email)
+  await page.getByLabel('Senha', { exact: true }).fill(password)
   await page.locator('main button[type=submit]').click()
   await expect(page).toHaveURL(/\/(aluno|admin)/)
 }

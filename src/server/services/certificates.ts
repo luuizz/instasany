@@ -1,8 +1,8 @@
 import 'server-only'
 import type { Role } from '@/lib/roles'
 import { randomBytes } from 'node:crypto'
-import { and, eq } from 'drizzle-orm'
-import type { Certificate, CourseCompletion, CourseOutline } from '@/types/lms'
+import { and, desc, eq } from 'drizzle-orm'
+import type { Certificate, CourseCompletion, CourseOutline, MyCertificate } from '@/types/lms'
 import { db } from '../db/client'
 import { certificates, courses, enrollments } from '../db/schema'
 import { getCourseBySlug } from './courses'
@@ -98,4 +98,20 @@ export async function certificateCodesByCourse(profileId: string) {
     .from(certificates)
     .where(eq(certificates.profileId, profileId))
   return new Map(rows.map((row) => [row.courseId, row.code]))
+}
+
+// Certificados da pessoa, do mais recente para o mais antigo
+export async function listMyCertificates(profileId: string): Promise<MyCertificate[]> {
+  return db()
+    .select({
+      code: certificates.code,
+      courseTitle: certificates.courseTitle,
+      courseSlug: courses.slug,
+      totalMinutes: certificates.totalMinutes,
+      issuedAt: certificates.issuedAt,
+    })
+    .from(certificates)
+    .leftJoin(courses, eq(courses.id, certificates.courseId))
+    .where(eq(certificates.profileId, profileId))
+    .orderBy(desc(certificates.issuedAt))
 }

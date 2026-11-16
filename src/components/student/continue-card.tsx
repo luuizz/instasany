@@ -18,7 +18,7 @@ export function ContinueCard({ course }: { course: DashboardCourse }) {
   return (
     <section
       aria-labelledby="continuar"
-      className="grid animate-in grid-cols-1 overflow-hidden rounded-3xl border border-ink/10 bg-paper shadow-sm duration-500 fade-in slide-in-from-bottom-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]"
+      className="grid animate-in grid-cols-1 overflow-hidden rounded-3xl border border-ink/10 bg-card shadow-sm duration-500 fade-in slide-in-from-bottom-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]"
     >
       <Link href={href} className="group relative block min-h-52 overflow-hidden bg-pine" tabIndex={-1} aria-hidden>
         {course.coverUrl ? (

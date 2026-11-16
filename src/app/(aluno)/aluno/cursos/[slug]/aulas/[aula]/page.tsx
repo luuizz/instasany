@@ -6,7 +6,6 @@ import { LessonAttachments } from '@/components/lms/lesson-attachments'
 import { LessonQuestions } from '@/components/questions/lesson-questions'
 import { CourseAside } from '@/components/lms/course-aside'
 import { VideoPlayer } from '@/components/lms/video-player'
-import { Container } from '@/components/ui/container'
 import { formatDateTime } from '@/lib/dates'
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, LockIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -51,7 +50,7 @@ export default async function LessonPage({ params }: PageProps) {
   const lessonHref = (id: number) => `/aluno/cursos/${slug}/aulas/${id}`
 
   return (
-    <Container className="grid gap-8 py-8 lg:grid-cols-[1fr_22rem] lg:py-12">
+    <div className="mx-auto grid w-full max-w-7xl gap-8 xl:grid-cols-[minmax(0,1fr)_22rem]">
       <article className="flex min-w-0 flex-col gap-6">
         {lesson.videoUrl ? (
           <VideoPlayer src={lesson.videoUrl} title={lesson.title} lessonId={lesson.id} startAt={player.resumeAt} />
@@ -101,7 +100,10 @@ export default async function LessonPage({ params }: PageProps) {
               </Link>
             )}
             {nextId && (
-              <Link href={lessonHref(nextId)} className="flex items-center gap-1.5 text-pine hover:underline">
+              <Link
+                href={lessonHref(nextId)}
+                className="flex items-center gap-1.5 text-pine hover:underline dark:text-lime"
+              >
                 Próxima
                 <ArrowRightIcon className="size-4" />
               </Link>
@@ -119,6 +121,6 @@ export default async function LessonPage({ params }: PageProps) {
         passedQuizzes={passedQuizzes}
         currentId={lesson.id}
       />
-    </Container>
+    </div>
   )
 }

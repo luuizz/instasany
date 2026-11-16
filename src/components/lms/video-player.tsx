@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  KeyboardIcon,
   MaximizeIcon,
   MinimizeIcon,
   PauseIcon,
@@ -10,10 +11,14 @@ import {
   VolumeXIcon,
   XIcon,
 } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { PlayerShortcutsDialog } from './player-shortcuts-dialog'
+import { speedLabel } from './player-speed'
+import { usePlayerShortcuts } from './use-player-shortcuts'
 import { useVideoControls } from './use-video-controls'
 import { useResumePosition } from './use-resume-position'
 import { useWatchTracking } from './use-watch-tracking'
@@ -62,13 +67,26 @@ export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerPr
     muted,
     speed,
     fullscreen,
+    flash,
+    show,
     toggle,
     seek,
     toggleMute,
-    cycleSpeed,
+    changeSpeed,
     toggleFullscreen,
-    onKeyDown,
   } = useVideoControls()
+  const [help, setHelp] = useState(false)
+  usePlayerShortcuts({
+    video,
+    frame,
+    toggle,
+    seek,
+    toggleMute,
+    changeSpeed,
+    toggleFullscreen,
+    show,
+    openHelp: () => setHelp(true),
+  })
   useWatchTracking(video, lessonId)
   const resume = useResumePosition(video, seek, lessonId, startAt)
 
@@ -76,7 +94,6 @@ export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerPr
     <div
       ref={frame}
       tabIndex={0}
-      onKeyDown={onKeyDown}
       aria-label={`Vídeo: ${title}`}
       role="region"
       className="group relative aspect-video overflow-hidden rounded-3xl bg-night outline-none focus-visible:ring-4 focus-visible:ring-lime"
@@ -119,7 +136,17 @@ export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerPr
         </div>
       )}
 
-      {!playing && (
+      {flash && (
+        <span
+          key={flash.id}
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-1/2 -translate-1/2 animate-in rounded-2xl bg-night/75 px-5 py-3 text-2xl font-semibold text-paper tabular-nums backdrop-blur duration-200 zoom-in-90 fade-in"
+        >
+          {flash.text}
+        </span>
+      )}
+
+      {!playing && !flash && (
         <Button
           type="button"
           onClick={toggle}
@@ -157,17 +184,25 @@ export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerPr
             {clock(time)} / {clock(duration)}
           </span>
           <PlayerButton
-            label={`Velocidade ${speed}x`}
-            onClick={cycleSpeed}
-            className="ml-auto w-auto px-3 font-semibold"
+            label="Atalhos do teclado"
+            onClick={() => setHelp(true)}
+            className="ml-auto hidden sm:inline-flex"
           >
-            {speed}x
+            <KeyboardIcon />
+          </PlayerButton>
+          <PlayerButton
+            label={`Velocidade ${speedLabel(speed)}`}
+            onClick={() => changeSpeed(0)}
+            className="w-auto px-3 font-semibold max-sm:ml-auto"
+          >
+            {speedLabel(speed)}
           </PlayerButton>
           <PlayerButton label={fullscreen ? 'Sair da tela cheia' : 'Tela cheia'} onClick={toggleFullscreen}>
             {fullscreen ? <MinimizeIcon /> : <MaximizeIcon />}
           </PlayerButton>
         </div>
       </div>
+      <PlayerShortcutsDialog open={help} onOpenChange={setHelp} />
     </div>
   )
 }

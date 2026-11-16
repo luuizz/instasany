@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { CourseAside } from '@/components/lms/course-aside'
 import { QuizRunner } from '@/components/lms/quiz/quiz-runner'
-import { Container } from '@/components/ui/container'
 import { requireUser } from '@/server/auth/session'
 import { getCourseBySlug } from '@/server/services/courses'
 import { completedLessonIds } from '@/server/services/learning'
@@ -36,7 +35,7 @@ export default async function StudentQuizPage({ params }: PageProps) {
     : { href: '/aluno', label: 'Voltar para meus cursos' }
 
   return (
-    <Container className="grid gap-8 py-8 lg:grid-cols-[1fr_22rem] lg:py-12">
+    <div className="mx-auto grid w-full max-w-7xl gap-8 xl:grid-cols-[minmax(0,1fr)_22rem]">
       <article className="flex min-w-0 flex-col gap-6">
         <header className="flex flex-col gap-2">
           <p className="text-sm font-medium text-sage">
@@ -63,6 +62,6 @@ export default async function StudentQuizPage({ params }: PageProps) {
         passedQuizzes={passedQuizzes}
         currentQuiz={quiz.moduleId}
       />
-    </Container>
+    </div>
   )
 }

@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { ChangePasswordForm } from '@/components/account/change-password-form'
 import { ProfileForm } from '@/components/account/profile-form'
+import { StudentPageHeader } from '@/components/student/student-page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Container } from '@/components/ui/container'
 import { requireUser } from '@/server/auth/session'
 
 export const metadata: Metadata = { title: 'Meu perfil' }
@@ -12,13 +11,12 @@ export default async function ProfilePage() {
   const profile = await requireUser('/aluno/perfil')
 
   return (
-    <Container className="flex flex-col gap-8 py-12 sm:py-16">
-      <header>
-        <Link href="/aluno" className="text-sm font-medium text-sage hover:underline">
-          Área do aluno
-        </Link>
-        <h1 className="mt-2 text-4xl font-semibold text-ink">Meu perfil</h1>
-      </header>
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
+      <StudentPageHeader
+        eyebrow="Área do aluno"
+        title="Meu perfil"
+        description="Seus dados, os lembretes por e-mail e a sua senha."
+      />
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         <Card className="rounded-3xl shadow-none">
           <CardHeader>
@@ -39,6 +37,6 @@ export default async function ProfilePage() {
           </CardContent>
         </Card>
       </div>
-    </Container>
+    </div>
   )
 }

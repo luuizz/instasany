@@ -99,6 +99,8 @@ export type Certificate = {
   issuedAt: Date
 }
 
+export type MyCertificate = Pick<Certificate, 'code' | 'courseTitle' | 'courseSlug' | 'totalMinutes' | 'issuedAt'>
+
 export type CourseReview = { name: string; rating: number; comment: string; updatedAt: Date }
 export type ReviewSummary = { average: number; count: number; latest: CourseReview[] }
 

@@ -113,3 +113,12 @@ export const reviewSchema = z.object({
 export const questionMessageSchema = z.object({
   body: z.string().trim().min(2, 'Escreva sua mensagem.').max(2000, 'A mensagem pode ter até 2.000 caracteres.'),
 })
+
+// Anotação do aluno numa aula; vazia apaga a anotação
+export const NOTE_MAX_LENGTH = 5000
+export const lessonNoteSchema = z.object({
+  lessonId: z.number().int().positive(),
+  content: z
+    .string()
+    .max(NOTE_MAX_LENGTH, `A anotação pode ter até ${NOTE_MAX_LENGTH.toLocaleString('pt-BR')} caracteres.`),
+})

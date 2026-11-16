@@ -1,6 +1,13 @@
 'use client'
 
-import { ChevronsUpDownIcon, ExternalLinkIcon, LayoutDashboardIcon, LogOutIcon, UserRoundIcon } from 'lucide-react'
+import {
+  ChevronsUpDownIcon,
+  ExternalLinkIcon,
+  LayoutDashboardIcon,
+  LogOutIcon,
+  NotebookPenIcon,
+  UserRoundIcon,
+} from 'lucide-react'
 import Link from 'next/link'
 import { signOut } from '@/app/(auth)/actions'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -70,6 +77,12 @@ export function StudentAccountMenu({ name, email, staff, variant, theme }: Stude
           <Link href="/aluno/perfil">
             <UserRoundIcon />
             Meu perfil
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer rounded-xl">
+          <Link href="/aluno/anotacoes">
+            <NotebookPenIcon />
+            Minhas anotações
           </Link>
         </DropdownMenuItem>
         {staff && (

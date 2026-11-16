@@ -8,6 +8,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { site } from '@/config/site'
 import { themeScript, type StudentMenu, type StudentTheme } from '@/lib/student-preferences'
 import { cn } from '@/lib/utils'
+import type { Inbox } from '@/types/notification'
+import { NotificationBell } from './notification-bell'
 import { SidebarContinue, type SidebarCourse } from './sidebar-continue'
 import { StudentAccountMenu } from './student-account-menu'
 import { StudentBottomNav } from './student-bottom-nav'
@@ -23,6 +25,7 @@ type StudentShellProps = {
   current: SidebarCourse | null
   initialTheme: StudentTheme
   initialMenu: StudentMenu
+  inbox: Inbox
   children: React.ReactNode
 }
 
@@ -46,7 +49,7 @@ function Brand({ compact = false }: { compact?: boolean }) {
 // Moldura da área do aluno, com paleta clara própria (o painel é verde-pinho), tema claro/escuro/automático
 // e menu lateral recolhível. No celular: barra no topo e abas embaixo. Nada do cabeçalho do site público.
 export function StudentShell(props: StudentShellProps) {
-  const { name, email, staff, current, initialTheme, initialMenu, children } = props
+  const { name, email, staff, current, initialTheme, initialMenu, inbox, children } = props
   const { theme, setTheme, menu, setMenu } = useStudentPreferences(initialTheme, initialMenu)
   const focus = isFocusRoute(usePathname())
   const compact = menu === 'collapsed' || (menu === 'auto' && focus)
@@ -70,38 +73,46 @@ export function StudentShell(props: StudentShellProps) {
       >
         <div className={cn('flex items-center justify-between gap-2', compact && 'flex-col gap-4')}>
           <Brand compact={compact} />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                onClick={() => setMenu(compact ? 'open' : 'collapsed')}
-                aria-label={compact ? 'Abrir o menu' : 'Recolher o menu'}
-                aria-expanded={!compact}
-                className="flex size-9 items-center justify-center rounded-xl text-ink/65 transition hover:bg-secondary hover:text-ink"
-              >
-                <ToggleIcon className="size-5" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right">{compact ? 'Abrir o menu' : 'Recolher o menu'}</TooltipContent>
-          </Tooltip>
+          <NotificationBell initial={inbox} />
         </div>
         <StudentNav compact={compact} staff={staff} />
         <div className="mt-auto flex flex-col gap-3">
           {!compact && current && <SidebarContinue course={current} />}
-          <ThemeSwitch theme={theme} onChange={setTheme} compact={compact} />
+          <div className={cn('flex items-center gap-2', compact && 'flex-col')}>
+            <div className={cn(!compact && 'flex-1')}>
+              <ThemeSwitch theme={theme} onChange={setTheme} compact={compact} />
+            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => setMenu(compact ? 'open' : 'collapsed')}
+                  aria-label={compact ? 'Abrir o menu' : 'Recolher o menu'}
+                  aria-expanded={!compact}
+                  className="flex size-9 items-center justify-center rounded-xl text-ink/65 transition hover:bg-secondary hover:text-ink"
+                >
+                  <ToggleIcon className="size-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right">{compact ? 'Abrir o menu' : 'Recolher o menu'}</TooltipContent>
+            </Tooltip>
+          </div>
           <StudentAccountMenu name={name} email={email} staff={staff} variant={compact ? 'compact' : 'sidebar'} />
         </div>
       </aside>
 
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card/95 px-4 py-3 backdrop-blur lg:hidden">
         <Brand />
-        <StudentAccountMenu
-          name={name}
-          email={email}
-          staff={staff}
-          variant="avatar"
-          theme={{ value: theme, onChange: setTheme }}
-        />
+        <div className="flex items-center gap-2">
+          <NotificationBell initial={inbox} side="bottom" />
+          <StudentAccountMenu
+            name={name}
+            email={email}
+            staff={staff}
+            variant="avatar"
+            theme={{ value: theme, onChange: setTheme }}
+          />
+        </div>
       </header>
 
       <main className="min-w-0 px-4 pt-6 pb-28 sm:px-8 lg:px-10 lg:py-10 2xl:px-14">{children}</main>

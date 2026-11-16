@@ -2,6 +2,7 @@ import { isStaff } from '@/lib/roles'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { LessonNotes } from '@/components/lms/lesson-notes'
 import { LessonAttachments } from '@/components/lms/lesson-attachments'
 import { LessonQuestions } from '@/components/questions/lesson-questions'
 import { CourseAside } from '@/components/lms/course-aside'
@@ -12,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { requireUser } from '@/server/auth/session'
 import { getLessonPlayer } from '@/server/services/learning'
+import { getNote } from '@/server/services/notes'
 import { listThreads } from '@/server/services/questions'
 import { passedQuizModules } from '@/server/services/quiz'
 import { toggleLessonAction } from '../../../../actions'
@@ -27,12 +29,13 @@ export default async function LessonPage({ params }: PageProps) {
   if (!player) notFound()
 
   const { course, lesson, completed, previousId, nextId } = player
-  const [passedQuizzes, threads] = await Promise.all([
+  const [passedQuizzes, threads, note] = await Promise.all([
     passedQuizModules(
       profile.id,
       course.modules.map((module) => module.id),
     ),
     listThreads(lesson.id, profile.id),
+    getNote(profile.id, lesson.id),
   ])
   const isDone = completed.includes(lesson.id)
   const lessonModule = course.modules.find((module) => module.lessons.some((item) => item.id === lesson.id))
@@ -110,6 +113,14 @@ export default async function LessonPage({ params }: PageProps) {
             )}
           </div>
         </div>
+        {!player.lockedUntil && (
+          <LessonNotes
+            key={lesson.id}
+            lessonId={lesson.id}
+            initial={note?.content ?? ''}
+            savedAt={note?.updatedAt ?? null}
+          />
+        )}
         {!player.lockedUntil && (
           <LessonQuestions threads={threads} slug={slug} lessonId={lesson.id} isStaff={isStaff(profile.role)} />
         )}

@@ -71,6 +71,20 @@
       "when": 1794774605268,
       "tag": "0009_papel_instrutor",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794844409699,
+      "tag": "0010_anotacoes",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794844880260,
+      "tag": "0011_notificacoes",
+      "breakpoints": true
     }
   ]
 }

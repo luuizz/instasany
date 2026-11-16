@@ -17,7 +17,7 @@ export function CourseCard({ course, href, cta = 'Ver curso', footer }: CourseCa
     <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink/10 bg-card transition duration-300 hover:-translate-y-1 hover:border-sage/60 hover:shadow-xl hover:shadow-ink/10">
       <div className="relative">
         <CourseCover title={course.title} coverUrl={course.coverUrl} className="rounded-none" />
-        <span className="absolute top-4 left-4 rounded-full bg-paper/95 px-3 py-1 text-xs font-semibold text-pine shadow-sm dark:text-lime">
+        <span className="absolute top-4 left-4 rounded-full bg-paper/95 px-3 py-1 text-xs font-semibold text-pine shadow-sm">
           {course.level}
         </span>
       </div>
@@ -42,7 +42,7 @@ export function CourseCard({ course, href, cta = 'Ver curso', footer }: CourseCa
           </span>
           {course.rating && (
             <span className="flex items-center gap-1.5">
-              <StarIcon className="size-4 fill-pine text-pine dark:text-lime" />
+              <StarIcon className="size-4 fill-pine text-pine dark:fill-lime dark:text-lime" />
               {course.rating.average.toFixed(1).replace('.', ',')}
               <span className="text-ink/65">({course.rating.count})</span>
             </span>

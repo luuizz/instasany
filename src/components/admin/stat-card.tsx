@@ -17,7 +17,7 @@ export function StatCard({ label, value, detail, icon, featured, index = 0 }: St
     <div
       style={{ animationDelay: `${index * 60}ms` }}
       className={cn(
-        'flex animate-in flex-col gap-4 rounded-3xl p-6 duration-500 fill-mode-both fade-in slide-in-from-bottom-3',
+        'flex animate-in flex-col gap-3 rounded-3xl p-4 duration-500 fill-mode-both fade-in slide-in-from-bottom-3 sm:gap-4 sm:p-6',
         featured ? 'bg-pine text-paper' : 'border border-border bg-card',
       )}
     >
@@ -30,7 +30,7 @@ export function StatCard({ label, value, detail, icon, featured, index = 0 }: St
         {icon}
       </span>
       <div>
-        <p className={cn('text-4xl font-semibold tabular-nums', featured ? 'text-lime' : 'text-ink')}>
+        <p className={cn('text-3xl font-semibold tabular-nums sm:text-4xl', featured ? 'text-lime' : 'text-ink')}>
           {number.format(value)}
         </p>
         <p className={cn('mt-1 text-sm font-medium', featured ? 'text-paper/80' : 'text-ink/70')}>{label}</p>

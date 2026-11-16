@@ -33,7 +33,7 @@ export function LessonSidebar({
   return (
     <nav aria-label="Aulas do curso" className="flex flex-col gap-6 rounded-3xl border border-ink/10 p-5">
       <div className="flex flex-col gap-3">
-        <Link href={`/cursos/${course.slug}`} className="font-semibold text-ink hover:underline">
+        <Link href={`/aluno/explorar/${course.slug}`} className="font-semibold text-ink hover:underline">
           {course.title}
         </Link>
         <ProgressBar done={done.size} total={course.lessonCount} />

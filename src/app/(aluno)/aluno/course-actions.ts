@@ -2,20 +2,31 @@
 
 import { revalidatePath, updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { after } from 'next/server'
 import { fail, ok, type ActionResult } from '@/lib/result'
 import { reviewSchema } from '@/lib/validation/lms'
 import { requireUser } from '@/server/auth/session'
 import { issueCertificate } from '@/server/services/certificates'
+import { pushNotification } from '@/server/services/inbox'
 import { REVIEWS_TAG } from '@/server/services/courses'
 import { saveReview } from '@/server/services/reviews'
 
 // Emite o certificado (ou abre o que já existe) e leva para a página dele
 export async function issueCertificateAction(slug: string) {
   const profile = await requireUser(`/aluno/cursos/${slug}`)
-  const code = await issueCertificate(profile, slug)
-  if (!code) redirect(`/aluno/cursos/${slug}`)
+  const issued = await issueCertificate(profile, slug)
+  if (!issued) redirect(`/aluno/cursos/${slug}`)
+  if (issued.created)
+    after(() =>
+      pushNotification(profile.id, {
+        kind: 'certificate',
+        title: 'Seu certificado está pronto',
+        body: `${issued.courseTitle}. Que tal adicionar ao seu perfil do LinkedIn?`,
+        href: `/certificado/${issued.code}`,
+      }),
+    )
   revalidatePath('/aluno', 'layout')
-  redirect(`/certificado/${code}`)
+  redirect(`/certificado/${issued.code}`)
 }
 
 export async function saveReviewAction(

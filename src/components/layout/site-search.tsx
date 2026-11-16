@@ -64,10 +64,13 @@ export function SiteSearch({ compact = false }: { compact?: boolean }) {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex h-10 items-center gap-2 rounded-full bg-paper/10 pr-2 pl-3.5 text-sm text-paper/75 transition hover:bg-paper/15 hover:text-paper focus-visible:ring-4 focus-visible:ring-lime/30 focus-visible:outline-none"
+          aria-label="Buscar cursos"
+          className="flex h-10 items-center gap-2 rounded-full bg-paper/10 pr-2 pl-3.5 text-sm whitespace-nowrap text-paper/75 transition hover:bg-paper/15 hover:text-paper focus-visible:ring-4 focus-visible:ring-lime/30 focus-visible:outline-none"
         >
           <SearchIcon className="size-4" />
-          <span className="hidden xl:inline">Buscar cursos</span>
+          <span aria-hidden className="hidden xl:inline xl:in-data-scrolled:hidden">
+            Buscar cursos
+          </span>
           <kbd className="rounded-md bg-paper/10 px-2 py-0.5 font-sans text-xs text-paper/60">/</kbd>
         </button>
       )}

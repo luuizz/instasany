@@ -1,10 +1,12 @@
 'use client'
 
+import { ClipboardListIcon, HeartIcon, MessageCircleIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useRef } from 'react'
 import { ButtonLink } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import type { HeroContent } from '@/types/home'
+import { FloatingBadge } from './floating-badge'
 import { useHeroAnimation } from './use-hero-animation'
 
 type HeroSectionProps = { content: HeroContent }
@@ -27,7 +29,7 @@ export function HeroSection({ content }: HeroSectionProps) {
           </h1>
           <div className="flex flex-col-reverse items-center justify-center gap-6 sm:flex-row sm:gap-10">
             <ButtonLink href={content.waitlistHref} variant="onDark" className="h-auto px-0">
-              <Image src="/icons/file.svg" alt="" width={24} height={25} />
+              <ClipboardListIcon className="size-6 text-sage-light" />
               {content.waitlistLabel}
             </ButtonLink>
             <ButtonLink href={content.ctaHref}>{content.ctaLabel}</ButtonLink>
@@ -35,8 +37,8 @@ export function HeroSection({ content }: HeroSectionProps) {
         </div>
 
         <div aria-hidden className="relative mt-4 hidden h-28 w-full max-w-hero-hands lg:block">
-          <Image src="/icons/hand.svg" alt="" width={59} height={59} className="absolute bottom-0 left-0" />
-          <Image src="/icons/hand-02.svg" alt="" width={63} height={63} className="absolute top-0 right-0" />
+          <FloatingBadge icon={HeartIcon} className="bottom-0 left-0 -rotate-12" />
+          <FloatingBadge icon={MessageCircleIcon} className="top-0 right-0 rotate-12" />
         </div>
 
         <div aria-hidden className="absolute -bottom-44 hidden w-full max-w-hero-phones justify-between lg:flex">

@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -38,8 +39,9 @@ export default async function CertificatePage({ params }: PageProps) {
     <div className="min-h-svh bg-muted px-4 py-10 print:min-h-0 print:bg-transparent print:p-0">
       <div className="mx-auto mb-6 flex max-w-5xl flex-wrap items-center justify-between gap-3 print:hidden">
         {isOwner ? (
-          <Link href="/aluno" className="text-sm font-semibold text-pine hover:underline">
-            ← Área do aluno
+          <Link href="/aluno" className="flex items-center gap-2 text-sm font-semibold text-pine hover:underline">
+            <ArrowLeftIcon className="size-4" />
+            Área do aluno
           </Link>
         ) : (
           <Link href="/cursos" className="text-sm font-semibold text-pine hover:underline">

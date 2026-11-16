@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* O site não tem tema escuro: sem isto, as variantes dark: do shadcn seguiriam o modo escuro do sistema */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Identidade da Instasany: verde-pinho com destaque em lima */
 @theme {
   --font-sans: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;

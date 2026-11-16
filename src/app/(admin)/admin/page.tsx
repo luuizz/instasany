@@ -8,12 +8,21 @@ import {
 } from 'lucide-react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { AttentionList } from '@/components/admin/overview/attention-list'
+import { CompletionsChart } from '@/components/admin/overview/completions-chart'
+import { CourseHealthList } from '@/components/admin/overview/course-health'
 import { PageHeader } from '@/components/admin/page-header'
 import { RecentEnrollments } from '@/components/admin/recent-enrollments'
 import { StatCard } from '@/components/admin/stat-card'
 import { countLabel } from '@/lib/duration'
 import { requireAdmin } from '@/server/auth/session'
-import { getDashboardStats, listRecentEnrollments } from '@/server/services/dashboard'
+import {
+  dailyCompletions,
+  getAttention,
+  getDashboardStats,
+  listCourseHealth,
+  listRecentEnrollments,
+} from '@/server/services/dashboard'
 
 export const metadata: Metadata = { title: 'Visão geral' }
 
@@ -33,14 +42,21 @@ const shortcuts = [
 ]
 
 export default async function AdminDashboardPage() {
-  const [profile, stats, recent] = await Promise.all([requireAdmin(), getDashboardStats(), listRecentEnrollments()])
+  const [profile, stats, recent, attention, daily, courses] = await Promise.all([
+    requireAdmin(),
+    getDashboardStats(),
+    listRecentEnrollments(),
+    getAttention(),
+    dailyCompletions(),
+    listCourseHealth(),
+  ])
   const firstName = profile.name.split(' ')[0] || 'admin'
 
   return (
     <>
       <PageHeader title={`Olá, ${firstName}!`} description="Como está a Instasany hoje." />
 
-      <section aria-label="Números" className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section aria-label="Números" className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <StatCard
           featured
           index={0}
@@ -72,29 +88,36 @@ export default async function AdminDashboardPage() {
         />
       </section>
 
-      <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <RecentEnrollments enrollments={recent} />
-        <section aria-labelledby="atalhos" className="flex flex-col gap-4">
-          <h2 id="atalhos" className="text-lg font-semibold">
-            Atalhos
-          </h2>
-          {shortcuts.map((shortcut, index) => (
-            <Link
-              key={shortcut.href}
-              href={shortcut.href}
-              style={{ animationDelay: `${200 + index * 60}ms` }}
-              className="group flex animate-in items-center gap-4 rounded-3xl border border-border p-5 transition duration-500 fill-mode-both fade-in slide-in-from-bottom-3 hover:-translate-y-0.5 hover:border-sage hover:shadow-lg"
-            >
-              <span className="flex size-11 items-center justify-center rounded-2xl bg-secondary text-pine transition group-hover:bg-lime [&_svg]:size-5">
-                {shortcut.icon}
-              </span>
-              <span>
-                <span className="block font-semibold">{shortcut.label}</span>
-                <span className="block text-sm text-muted-foreground">{shortcut.detail}</span>
-              </span>
-            </Link>
-          ))}
-        </section>
+      <div className="mt-6 grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div className="flex min-w-0 flex-col gap-6">
+          <CompletionsChart points={daily} />
+          <RecentEnrollments enrollments={recent} />
+        </div>
+        <div className="order-first flex flex-col gap-6 xl:order-none">
+          <AttentionList attention={attention} />
+          <CourseHealthList courses={courses} />
+          <section aria-labelledby="atalhos" className="flex flex-col gap-3">
+            <h2 id="atalhos" className="text-lg font-semibold">
+              Atalhos
+            </h2>
+            {shortcuts.map((shortcut, index) => (
+              <Link
+                key={shortcut.href}
+                href={shortcut.href}
+                style={{ animationDelay: `${200 + index * 60}ms` }}
+                className="group flex animate-in items-center gap-4 rounded-3xl border border-border p-4 transition duration-500 fill-mode-both fade-in slide-in-from-bottom-3 hover:-translate-y-0.5 hover:border-sage hover:shadow-lg"
+              >
+                <span className="flex size-10 items-center justify-center rounded-2xl bg-secondary text-pine transition group-hover:bg-lime [&_svg]:size-5">
+                  {shortcut.icon}
+                </span>
+                <span>
+                  <span className="block font-semibold">{shortcut.label}</span>
+                  <span className="block text-sm text-muted-foreground">{shortcut.detail}</span>
+                </span>
+              </Link>
+            ))}
+          </section>
+        </div>
       </div>
     </>
   )

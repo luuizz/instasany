@@ -75,6 +75,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* O cabeçalho é fixo: as âncoras param logo abaixo dele */
+    scroll-padding-top: 6.5rem;
   }
 
   * {
@@ -107,4 +109,20 @@
 @page {
   size: A4 landscape;
   margin: 0;
+}
+
+/* Arte das capas sem imagem: brilho lima, grade fina e um anel, nas cores da marca */
+@utility cover-art {
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 30%,
+      color-mix(in oklab, var(--color-lime) 18%, transparent) 30.2% 30.6%,
+      transparent 31%
+    ),
+    radial-gradient(60% 80% at 85% 10%, color-mix(in oklab, var(--color-lime) 22%, transparent), transparent 70%),
+    linear-gradient(color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+    linear-gradient(90deg, color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px) 0 0 / 1.5rem
+      1.5rem,
+    linear-gradient(155deg, var(--color-pine), var(--color-ink));
 }

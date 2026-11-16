@@ -99,3 +99,11 @@ export type AdminQuestion = QuestionThread & {
   courseSlug: string
   answered: boolean
 }
+
+// Curso como aparece na listagem pública e na busca do site
+export type CatalogCourse = CourseSummary & {
+  moduleCount: number
+  // Nomes dos módulos e aulas, para a busca achar o curso pelo conteúdo
+  keywords: string[]
+  rating: { average: number; count: number } | null
+}

@@ -33,10 +33,7 @@ export function SiteNav() {
     href.startsWith('/#') ? onHome && section === href : pathname === href || pathname.startsWith(`${href}/`)
 
   return (
-    <nav
-      aria-label="Principal"
-      className="flex items-center gap-0.5 rounded-full border border-pine-line bg-ink/25 p-1"
-    >
+    <nav aria-label="Principal" className="flex items-center gap-0.5">
       {mainNav.map((item) => {
         const active = isActive(item.href)
         return (
@@ -46,7 +43,7 @@ export function SiteNav() {
             aria-current={active ? 'page' : undefined}
             className={cn(
               'rounded-full px-3.5 py-1.5 text-sm font-medium whitespace-nowrap transition xl:px-4',
-              active ? 'bg-lime text-pine' : 'text-paper/70 hover:bg-pine-line hover:text-paper',
+              active ? 'bg-lime text-pine' : 'text-paper/75 hover:bg-paper/10 hover:text-paper',
             )}
           >
             {item.label}

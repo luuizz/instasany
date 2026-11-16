@@ -72,6 +72,7 @@ export async function getCertificate(code: string): Promise<Certificate | null> 
   const [row] = await db()
     .select({
       code: certificates.code,
+      profileId: certificates.profileId,
       studentName: certificates.studentName,
       courseTitle: certificates.courseTitle,
       courseSlug: courses.slug,

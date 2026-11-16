@@ -31,7 +31,7 @@ src/
     (auth)/       entrar e cadastro, com as Server Actions de login em actions.ts
     (admin)/      painel /admin (CMS); só admin, conferido no layout
     (site)/cursos catálogo público e página do curso, com a matrícula (actions.ts)
-    (aluno)/      área do aluno /aluno: meus cursos e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
+    (aluno)/      área do aluno /aluno: dashboard (services/student-dashboard.ts) e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
     (admin)/admin/cursos  cursos, módulos e aulas (actions.ts)
     api/auth/     endpoints do Neon Auth no domínio do site
     api/uploads/  token de upload direto do navegador para o Vercel Blob (só admin)
@@ -44,6 +44,7 @@ src/
     admin/ auth/  telas do painel e do login
     courses/      card, capa, ementa e progresso (catálogo e área do aluno)
     lms/          player de vídeo próprio e lista de aulas
+    student/      blocos do dashboard do aluno (continuar, números, semana, certificados)
   hooks/          hooks de cliente reaproveitados (use-form-action)
   config/         identidade, navegação e seções editáveis do CMS (cms.ts)
   data/           conteúdo padrão do site, usado enquanto a seção não é salva no painel

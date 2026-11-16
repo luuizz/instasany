@@ -10,8 +10,10 @@ import { CourseHighlights } from '@/components/courses/page/course-highlights'
 import { CourseIncludes } from '@/components/courses/page/course-includes'
 import { EnrollCard } from '@/components/courses/page/enroll-card'
 import { FaqSection } from '@/components/home/faq-section'
+import { JsonLd } from '@/components/seo/json-ld'
 import { Container } from '@/components/ui/container'
 import { courseFaq } from '@/data/course-faq'
+import { breadcrumbJsonLd, courseJsonLd } from '@/lib/seo/json-ld'
 import { getCurrentProfile } from '@/server/auth/session'
 import { getPublishedCourse, listCatalog } from '@/server/services/courses'
 import { isEnrolled } from '@/server/services/learning'
@@ -21,7 +23,14 @@ type PageProps = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const course = await getPublishedCourse((await params).slug)
-  return course ? { title: course.title, description: course.summary } : {}
+  if (!course) return {}
+  return {
+    title: course.title,
+    description: course.summary,
+    alternates: { canonical: `/cursos/${course.slug}` },
+    openGraph: { type: 'website', title: course.title, description: course.summary, url: `/cursos/${course.slug}` },
+    twitter: { card: 'summary_large_image', title: course.title, description: course.summary },
+  }
 }
 
 export default async function CoursePage({ params }: PageProps) {
@@ -38,6 +47,16 @@ export default async function CoursePage({ params }: PageProps) {
 
   return (
     <>
+      <JsonLd
+        data={[
+          courseJsonLd(course, reviews),
+          breadcrumbJsonLd([
+            { name: 'Início', path: '/' },
+            { name: 'Cursos', path: '/cursos' },
+            { name: course.title, path: `/cursos/${course.slug}` },
+          ]),
+        ]}
+      />
       <CourseHero course={course} reviews={reviews} enrolled={enrolled} />
 
       <Container className="grid gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16 lg:py-24">

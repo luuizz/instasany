@@ -42,7 +42,7 @@ export function StreakCard({ streak }: { streak: StreakInfo }) {
             <span
               className={cn(
                 'flex size-7 items-center justify-center rounded-full text-2xs font-bold',
-                item.active ? 'bg-lime text-pine' : 'bg-paper/10 text-paper/40',
+                item.active ? 'bg-lime text-pine' : 'bg-paper/10 text-paper/65',
                 index === 6 && !item.active && 'ring-2 ring-lime/50',
               )}
             >

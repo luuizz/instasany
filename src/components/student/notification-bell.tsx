@@ -25,7 +25,7 @@ export function NotificationBell({ initial, side = 'right' }: NotificationBellPr
     <DropdownMenu onOpenChange={(open) => open && refresh()}>
       <DropdownMenuTrigger
         aria-label={label}
-        className="relative flex size-9 cursor-pointer items-center justify-center rounded-xl text-ink/60 transition outline-none hover:bg-secondary hover:text-ink focus-visible:ring-4 focus-visible:ring-lime/30 data-[state=open]:bg-secondary"
+        className="relative flex size-9 cursor-pointer items-center justify-center rounded-xl text-ink/65 transition outline-none hover:bg-secondary hover:text-ink focus-visible:ring-4 focus-visible:ring-lime/30 data-[state=open]:bg-secondary"
       >
         <BellIcon className="size-5" />
         {inbox.unread > 0 && (
@@ -51,7 +51,7 @@ export function NotificationBell({ initial, side = 'right' }: NotificationBellPr
         {inbox.items.length === 0 ? (
           <div className="flex flex-col items-center gap-2 px-6 py-10 text-center">
             <BellIcon className="size-8 text-ink/25" />
-            <p className="text-sm text-ink/60">Nada por aqui ainda. Respostas às suas dúvidas aparecem aqui.</p>
+            <p className="text-sm text-ink/65">Nada por aqui ainda. Respostas às suas dúvidas aparecem aqui.</p>
           </div>
         ) : (
           <ul className="max-h-96 overflow-y-auto p-1.5">
@@ -63,7 +63,7 @@ export function NotificationBell({ initial, side = 'right' }: NotificationBellPr
                     <span
                       className={cn(
                         'flex size-9 shrink-0 items-center justify-center rounded-xl',
-                        item.read ? 'bg-secondary text-ink/50' : 'bg-lime text-pine',
+                        item.read ? 'bg-secondary text-ink/65' : 'bg-lime text-pine',
                       )}
                     >
                       <Icon className="size-4" />
@@ -72,8 +72,8 @@ export function NotificationBell({ initial, side = 'right' }: NotificationBellPr
                       <span className={cn('block text-sm', item.read ? 'text-ink/70' : 'font-semibold text-ink')}>
                         {item.title}
                       </span>
-                      {item.body && <span className="line-clamp-2 block text-xs text-ink/55">{item.body}</span>}
-                      <span className="mt-1 block text-2xs text-ink/40">{formatRelative(item.createdAt)}</span>
+                      {item.body && <span className="line-clamp-2 block text-xs text-ink/65">{item.body}</span>}
+                      <span className="mt-1 block text-2xs text-ink/65">{formatRelative(item.createdAt)}</span>
                     </span>
                     {!item.read && (
                       <span aria-label="não lida" className="mt-1.5 size-2 shrink-0 rounded-full bg-sage" />

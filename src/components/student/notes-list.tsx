@@ -25,7 +25,7 @@ export function NotesList({ notes }: { notes: StudentNote[] }) {
   return (
     <div className="flex flex-col gap-8">
       <div className="relative max-w-md">
-        <SearchIcon className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink/40" />
+        <SearchIcon className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink/65" />
         <Input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
@@ -34,7 +34,7 @@ export function NotesList({ notes }: { notes: StudentNote[] }) {
           className="pl-11"
         />
       </div>
-      {courses.length === 0 && <p className="text-ink/60">Nenhuma anotação com “{query}”.</p>}
+      {courses.length === 0 && <p className="text-ink/65">Nenhuma anotação com “{query}”.</p>}
       {courses.map((course) => (
         <section key={course} aria-label={course} className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-ink">{course}</h2>
@@ -45,7 +45,7 @@ export function NotesList({ notes }: { notes: StudentNote[] }) {
                 <li key={note.lessonId} className="flex flex-col gap-3 rounded-3xl bg-card p-5 ring-1 ring-border">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="font-semibold text-ink">{note.lessonTitle}</h3>
-                    <span className="shrink-0 text-xs text-ink/45">{date.format(new Date(note.updatedAt))}</span>
+                    <span className="shrink-0 text-xs text-ink/65">{date.format(new Date(note.updatedAt))}</span>
                   </div>
                   <p className="line-clamp-6 text-sm whitespace-pre-wrap text-ink/70">{note.content}</p>
                   <Link

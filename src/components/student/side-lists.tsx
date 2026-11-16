@@ -25,7 +25,7 @@ export function CertificateList({ courses }: { courses: DashboardCourse[] }) {
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-sm text-ink/60">
+        <p className="mt-3 text-sm text-ink/65">
           Conclua todas as aulas e quizzes de um curso para ganhar o certificado e compartilhar no LinkedIn.
         </p>
       )}
@@ -49,7 +49,7 @@ export function RecentList({ items }: { items: StudentDashboard['recent'] }) {
                 <span className="block truncate text-sm font-medium text-ink group-hover:underline">
                   {item.lessonTitle}
                 </span>
-                <span className="block truncate text-xs text-ink/50">
+                <span className="block truncate text-xs text-ink/65">
                   {item.courseTitle} · {formatRelative(item.completedAt)}
                 </span>
               </span>

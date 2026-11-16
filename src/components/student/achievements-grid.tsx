@@ -35,7 +35,7 @@ export function AchievementsGrid({ achievements }: { achievements: Achievement[]
         <h2 id="conquistas-lista" className="text-2xl font-semibold text-ink">
           Conquistas
         </h2>
-        <p className="text-sm text-ink/55 tabular-nums">
+        <p className="text-sm text-ink/65 tabular-nums">
           {unlocked} de {achievements.length}
         </p>
       </div>
@@ -59,14 +59,14 @@ export function AchievementsGrid({ achievements }: { achievements: Achievement[]
               >
                 <Icon className="size-5" />
                 {!item.unlocked && (
-                  <LockIcon className="absolute -right-1 -bottom-1 size-4 rounded-full bg-card p-0.5 text-ink/40" />
+                  <LockIcon className="absolute -right-1 -bottom-1 size-4 rounded-full bg-card p-0.5 text-ink/65" />
                 )}
               </span>
               <span>
-                <span className={cn('block text-sm font-semibold', item.unlocked ? 'text-ink' : 'text-ink/60')}>
+                <span className={cn('block text-sm font-semibold', item.unlocked ? 'text-ink' : 'text-ink/65')}>
                   {item.title}
                 </span>
-                <span className="block text-xs text-ink/50">{item.description}</span>
+                <span className="block text-xs text-ink/65">{item.description}</span>
               </span>
               {!item.unlocked && item.target > 1 && (
                 <span className="mt-auto flex items-center gap-2">
@@ -76,7 +76,7 @@ export function AchievementsGrid({ achievements }: { achievements: Achievement[]
                       style={{ width: `${(item.progress / item.target) * 100}%` }}
                     />
                   </span>
-                  <span className="text-2xs font-semibold text-ink/50 tabular-nums">
+                  <span className="text-2xs font-semibold text-ink/65 tabular-nums">
                     {item.progress}/{item.target}
                   </span>
                 </span>

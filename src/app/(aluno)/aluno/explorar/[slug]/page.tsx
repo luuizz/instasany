@@ -36,7 +36,7 @@ export default async function ExploreCoursePage({ params }: PageProps) {
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-10">
       <Link
         href="/aluno/explorar"
-        className="flex items-center gap-2 self-start text-sm font-semibold text-ink/60 transition hover:text-ink"
+        className="flex items-center gap-2 self-start text-sm font-semibold text-ink/65 transition hover:text-ink"
       >
         <ArrowLeftIcon className="size-4" />
         Explorar cursos
@@ -62,7 +62,7 @@ export default async function ExploreCoursePage({ params }: PageProps) {
           </ul>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 pt-2">
             <EnrollButton slug={course.slug} enrolled={enrolled} />
-            {!enrolled && <p className="text-sm text-ink/55">Grátis. Você começa pela primeira aula.</p>}
+            {!enrolled && <p className="text-sm text-ink/65">Grátis. Você começa pela primeira aula.</p>}
           </div>
         </div>
         <CourseCover title={course.title} coverUrl={course.coverUrl} />

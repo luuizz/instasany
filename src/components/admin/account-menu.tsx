@@ -24,9 +24,9 @@ export function AccountMenu({ userName, email, role }: { userName: string; email
         </Avatar>
         <span className="min-w-0 flex-1">
           <span className="block truncate font-medium text-paper">{userName}</span>
-          <span className="block truncate text-xs text-paper/50">{email}</span>
+          <span className="block truncate text-xs text-paper/65">{email}</span>
         </span>
-        <ChevronsUpDownIcon className="size-4 text-paper/50" />
+        <ChevronsUpDownIcon className="size-4 text-paper/65" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         side="top"

@@ -20,7 +20,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           description="Tente carregar de novo. Se continuar, volte em alguns minutos."
         >
           <Button onClick={reset}>Tentar de novo</Button>
-          {error.digest && <p className="w-full text-xs text-paper/40">Código do erro: {error.digest}</p>}
+          {error.digest && <p className="w-full text-xs text-paper/65">Código do erro: {error.digest}</p>}
         </ErrorScreen>
       </body>
     </html>

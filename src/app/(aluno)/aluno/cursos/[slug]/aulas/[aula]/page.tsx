@@ -97,7 +97,7 @@ export default async function LessonPage({ params }: PageProps) {
           </form>
           <div className="ml-auto flex gap-4 text-sm font-semibold">
             {previousId && (
-              <Link href={lessonHref(previousId)} className="flex items-center gap-1.5 text-ink/60 hover:text-ink">
+              <Link href={lessonHref(previousId)} className="flex items-center gap-1.5 text-ink/65 hover:text-ink">
                 <ArrowLeftIcon className="size-4" />
                 Anterior
               </Link>

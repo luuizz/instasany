@@ -24,7 +24,7 @@ function NavLink({ href, label, icon: Icon, active = false, compact }: NavLinkPr
       className={cn(
         'group relative flex items-center gap-3 rounded-2xl py-2.5 font-medium transition-all duration-200',
         compact ? 'justify-center px-0' : 'px-4',
-        active ? 'bg-secondary text-ink' : 'text-ink/60 hover:bg-secondary/70 hover:text-ink',
+        active ? 'bg-secondary text-ink' : 'text-ink/65 hover:bg-secondary/70 hover:text-ink',
       )}
     >
       <span

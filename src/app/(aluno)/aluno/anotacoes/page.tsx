@@ -27,7 +27,7 @@ export default async function NotesPage() {
             <NotebookPenIcon className="size-7" />
           </span>
           <h2 className="text-2xl font-semibold text-ink">Nenhuma anotação ainda</h2>
-          <p className="max-w-md text-ink/60">
+          <p className="max-w-md text-ink/65">
             Embaixo de cada aula tem um bloco de notas. O que você escrever lá aparece aqui, salvo sozinho.
           </p>
           <ButtonLink href="/aluno/cursos" size="default">

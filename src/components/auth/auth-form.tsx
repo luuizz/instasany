@@ -67,7 +67,7 @@ export function AuthForm({ mode, action, back }: AuthFormProps) {
         />
       </LabeledField>
       {signUp && (
-        <p className={cn('-mt-2 flex items-center gap-2 text-xs transition', longEnough ? 'text-sage' : 'text-ink/50')}>
+        <p className={cn('-mt-2 flex items-center gap-2 text-xs transition', longEnough ? 'text-sage' : 'text-ink/65')}>
           <span
             className={cn(
               'flex size-4 items-center justify-center rounded-full transition',
@@ -83,7 +83,7 @@ export function AuthForm({ mode, action, back }: AuthFormProps) {
         {signUp ? 'Criar conta grátis' : 'Entrar'}
       </SubmitButton>
       {signUp && (
-        <p className="text-center text-xs text-ink/50">
+        <p className="text-center text-xs text-ink/65">
           Ao criar a conta você concorda com a nossa{' '}
           <Link href="/privacidade" className="underline underline-offset-4 hover:text-pine">
             política de privacidade

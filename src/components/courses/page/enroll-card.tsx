@@ -16,7 +16,7 @@ export function EnrollCard({ course, enrolled }: EnrollCardProps) {
   return (
     <div className="flex flex-col gap-5 rounded-3xl bg-paper p-6 shadow-xl ring-1 shadow-ink/5 ring-ink/10">
       <div>
-        <p className="text-sm text-ink/60">Investimento</p>
+        <p className="text-sm text-ink/65">Investimento</p>
         <p className="text-4xl font-semibold text-ink">Grátis</p>
       </div>
       <ul className="flex flex-col gap-2.5">

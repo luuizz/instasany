@@ -43,7 +43,7 @@ export function ErrorScreen({ code, title, description, icon: Icon, tone = 'inli
         Erro {code}
       </p>
       <h1 className="mt-3 max-w-xl text-4xl font-semibold text-balance sm:text-5xl">{title}</h1>
-      <p className={cn('mt-4 max-w-md text-lg', dark ? 'text-paper/70' : 'text-ink/60')}>{description}</p>
+      <p className={cn('mt-4 max-w-md text-lg', dark ? 'text-paper/70' : 'text-ink/65')}>{description}</p>
       {children && <div className="mt-8 flex flex-wrap items-center justify-center gap-3">{children}</div>}
     </section>
   )

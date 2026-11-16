@@ -30,12 +30,12 @@ export function MockDashboard() {
         <span className="size-2.5 rounded-full bg-ink/15" />
         <span className="size-2.5 rounded-full bg-ink/15" />
         <span className="size-2.5 rounded-full bg-ink/15" />
-        <span className="ml-3 truncate rounded-full bg-secondary px-3 py-1 text-2xs text-ink/50 sm:text-xs">
+        <span className="ml-3 truncate rounded-full bg-secondary px-3 py-1 text-2xs text-ink/65 sm:text-xs">
           instasany.com.br/aluno
         </span>
       </div>
       <div className="flex flex-1">
-        <nav className="hidden flex-col items-center gap-4 bg-pine px-3 py-5 text-paper/50 sm:flex">
+        <nav className="hidden flex-col items-center gap-4 bg-pine px-3 py-5 text-paper/65 sm:flex">
           <HomeIcon className="size-4 text-lime" />
           <BookOpenIcon className="size-4" />
           <AwardIcon className="size-4" />
@@ -49,13 +49,13 @@ export function MockDashboard() {
               <PlayIcon className="ml-0.5 size-5 fill-lime text-lime" />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-2xs text-ink/50 sm:text-xs">Continue de onde parou</span>
+              <span className="block text-2xs text-ink/65 sm:text-xs">Continue de onde parou</span>
               <span className="block truncate text-sm font-semibold">Bio que converte</span>
               <span className="mt-2 flex items-center gap-2">
                 <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-paper">
                   <span data-anim="progress" className="block h-full w-3/5 origin-left rounded-full bg-sage" />
                 </span>
-                <span className="text-2xs font-semibold text-ink/60 tabular-nums">60%</span>
+                <span className="text-2xs font-semibold text-ink/65 tabular-nums">60%</span>
               </span>
             </span>
           </div>
@@ -63,7 +63,7 @@ export function MockDashboard() {
             {tiles.map((tile) => (
               <span key={tile.label} data-anim="tile" className="rounded-xl bg-secondary/60 p-2.5">
                 <span className="block text-lg font-semibold tabular-nums">{tile.value}</span>
-                <span className="block truncate text-2xs text-ink/50">{tile.label}</span>
+                <span className="block truncate text-2xs text-ink/65">{tile.label}</span>
               </span>
             ))}
           </div>
@@ -80,7 +80,7 @@ export function MockDashboard() {
                 <span
                   className={cn(
                     'flex size-5 shrink-0 items-center justify-center rounded-full',
-                    lesson.state === 'done' ? 'bg-pine text-lime' : 'bg-paper text-ink/40 ring-1 ring-ink/10',
+                    lesson.state === 'done' ? 'bg-pine text-lime' : 'bg-paper text-ink/65 ring-1 ring-ink/10',
                   )}
                 >
                   {lesson.state === 'done' && <CheckIcon data-anim="lesson-check" className="size-3" strokeWidth={3} />}
@@ -88,7 +88,7 @@ export function MockDashboard() {
                   {lesson.state === 'next' && <LockIcon className="size-2.5" />}
                 </span>
                 <span className="min-w-0 flex-1 truncate">{lesson.title}</span>
-                <span className="text-2xs text-ink/40">{lesson.minutes} min</span>
+                <span className="text-2xs text-ink/65">{lesson.minutes} min</span>
               </li>
             ))}
           </ol>
@@ -105,7 +105,7 @@ export function MockDashboard() {
                     )}
                     style={{ height: `${(item.count / max) * 100}%` }}
                   />
-                  <span className="text-2xs text-ink/40">{item.day}</span>
+                  <span className="text-2xs text-ink/65">{item.day}</span>
                 </span>
               ))}
             </div>

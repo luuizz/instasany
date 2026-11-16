@@ -105,5 +105,7 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - Cores e medidas pelos tokens de `src/app/globals.css` (`pine`, `pine-line`, `sage`, `sage-light`, `lime`, `ink`, `paper`; `max-w-grid`, `max-w-hero-*`, `max-w-cards`). Nada de hex no componente.
 - Mobile first; a composição desktop das seções começa em `lg`.
 - Animações com `useGSAP` e `gsap.matchMedia`, sempre com o caso `prefers-reduced-motion: reduce`.
+- O que aparece logo ao abrir a página (título do hero, celular da vitrine) entra com animação de CSS (`animate-in`), nunca começando invisível à espera do GSAP, para não atrasar o LCP.
+- Contraste: texto secundário no mínimo `text-ink/65` sobre claro e `text-paper/60` sobre `pine`; `sage` é escuro o bastante para texto (4,5:1 sobre branco e `secondary`).
 - Server Components por padrão; `'use client'` só onde há estado, efeito ou animação.
 - Textos da interface em português do Brasil.

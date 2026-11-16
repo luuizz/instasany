@@ -24,7 +24,7 @@ export function ErrorActions({ error, reset, home }: ErrorActionsProps) {
       <ButtonLink href={home.href} variant="outline">
         {home.label}
       </ButtonLink>
-      {error.digest && <p className="w-full text-xs text-ink/40">Código do erro: {error.digest}</p>}
+      {error.digest && <p className="w-full text-xs text-ink/65">Código do erro: {error.digest}</p>}
     </>
   )
 }

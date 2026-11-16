@@ -15,7 +15,7 @@ export default async function ForgotPasswordPage() {
         description="Informe o e-mail da sua conta e enviaremos um link para criar uma senha nova."
       />
       <ForgotPasswordForm />
-      <p className="mt-8 text-center text-sm text-ink/60">
+      <p className="mt-8 text-center text-sm text-ink/65">
         Lembrou?{' '}
         <Link href="/entrar" className="font-semibold text-pine underline-offset-4 hover:underline">
           Voltar para o login

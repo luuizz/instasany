@@ -29,7 +29,7 @@ export function StudentBottomNav() {
             aria-current={active ? 'page' : undefined}
             className={cn(
               'flex flex-col items-center gap-1 rounded-2xl py-1.5 text-2xs font-medium transition',
-              active ? 'text-pine dark:text-lime' : 'text-ink/50 hover:text-ink',
+              active ? 'text-pine dark:text-lime' : 'text-ink/65 hover:text-ink',
             )}
           >
             <span

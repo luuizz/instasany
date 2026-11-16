@@ -62,7 +62,7 @@ export function LessonNotes({ lessonId, initial, savedAt }: LessonNotesProps) {
         aria-describedby="anotacoes-status"
         className="min-h-32 resize-y"
       />
-      <div id="anotacoes-status" aria-live="polite" className="mt-2 flex justify-between gap-3 text-xs text-ink/50">
+      <div id="anotacoes-status" aria-live="polite" className="mt-2 flex justify-between gap-3 text-xs text-ink/65">
         <Status state={state} />
         <span className={cn('tabular-nums', near && 'text-destructive')}>
           {content.length.toLocaleString('pt-BR')}/{NOTE_MAX_LENGTH.toLocaleString('pt-BR')}

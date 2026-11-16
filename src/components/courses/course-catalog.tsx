@@ -46,7 +46,7 @@ export function CourseCatalog({ courses, hrefBase = '/cursos', enrolledIds = [] 
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="relative w-full lg:max-w-md">
-          <SearchIcon aria-hidden className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink/40" />
+          <SearchIcon aria-hidden className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-ink/65" />
           <Input
             type="search"
             value={query}
@@ -76,14 +76,15 @@ export function CourseCatalog({ courses, hrefBase = '/cursos', enrolledIds = [] 
         </div>
       </div>
 
-      <p aria-live="polite" className="text-sm text-ink/50">
+      <p aria-live="polite" className="text-sm text-ink/65">
         {visible.length === courses.length
           ? `${courses.length} ${courses.length === 1 ? 'curso' : 'cursos'}`
           : `${visible.length} de ${courses.length} cursos`}
       </p>
 
+      <h2 className="sr-only">Cursos encontrados</h2>
       {visible.length ? (
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul aria-label="Cursos encontrados" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((course, index) => (
             <li
               key={course.id}
@@ -108,7 +109,7 @@ export function CourseCatalog({ courses, hrefBase = '/cursos', enrolledIds = [] 
       ) : (
         <div className="flex flex-col items-center gap-3 rounded-3xl border border-dashed border-ink/15 px-6 py-16 text-center">
           <p className="text-lg font-semibold text-ink">Nenhum curso com esse filtro</p>
-          <p className="text-ink/60">Tente outra palavra ou veja todos os níveis.</p>
+          <p className="text-ink/65">Tente outra palavra ou veja todos os níveis.</p>
           <Button type="button" variant="outline" size="default" onClick={clear}>
             <XIcon />
             Limpar filtros

@@ -22,7 +22,7 @@ export function HeroSection({ content }: HeroSectionProps) {
       className="relative overflow-hidden bg-pine bg-hero bg-top bg-no-repeat pt-12 pb-84 sm:pb-100 lg:pt-16 lg:pb-128"
     >
       <Container className="flex flex-col items-center">
-        <div data-reveal="hero-text" className="w-full max-w-hero-text text-center opacity-0">
+        <div className="w-full max-w-hero-text animate-in text-center duration-700 ease-out slide-in-from-bottom-5 fade-in">
           <p className="mb-4 font-medium text-sage sm:text-xl">{content.eyebrow}</p>
           <h1 className="mb-8 text-4xl/tight font-semibold text-balance text-paper sm:text-5xl/tight lg:text-7xl/tight">
             {content.title}

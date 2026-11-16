@@ -89,7 +89,7 @@ export function StudentShell(props: StudentShellProps) {
                   onClick={() => setMenu(compact ? 'open' : 'collapsed')}
                   aria-label={compact ? 'Abrir o menu' : 'Recolher o menu'}
                   aria-expanded={!compact}
-                  className="flex size-9 items-center justify-center rounded-xl text-ink/50 transition hover:bg-secondary hover:text-ink"
+                  className="flex size-9 items-center justify-center rounded-xl text-ink/65 transition hover:bg-secondary hover:text-ink"
                 >
                   <ToggleIcon className="size-5" />
                 </button>

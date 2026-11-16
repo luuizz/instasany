@@ -27,7 +27,7 @@ export function ThemeSwitch({ theme, onChange, compact = false }: ThemeSwitchPro
             type="button"
             onClick={() => onChange(next.id)}
             aria-label={`Tema: ${current.label}. Trocar para ${next.label.toLowerCase()}`}
-            className="mx-auto flex size-10 items-center justify-center rounded-2xl text-ink/60 transition hover:bg-secondary hover:text-ink"
+            className="mx-auto flex size-10 items-center justify-center rounded-2xl text-ink/65 transition hover:bg-secondary hover:text-ink"
           >
             <Icon className="size-5" />
           </button>
@@ -49,7 +49,7 @@ export function ThemeSwitch({ theme, onChange, compact = false }: ThemeSwitchPro
           onClick={() => onChange(id)}
           className={cn(
             'flex items-center justify-center rounded-xl py-2 transition',
-            theme === id ? 'bg-card text-ink shadow-sm' : 'text-ink/55 hover:text-ink',
+            theme === id ? 'bg-card text-ink shadow-sm' : 'text-ink/65 hover:text-ink',
           )}
         >
           <Icon className="size-4" />

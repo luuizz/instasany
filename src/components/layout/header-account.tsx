@@ -27,15 +27,17 @@ export function HeaderAccountLinks() {
   }
 
   return (
-    <div className="flex animate-in items-center gap-3 duration-300 fade-in">
+    <div className="flex animate-in items-center gap-2 duration-300 fade-in">
       {account.isAdmin && (
         <Link
           href="/admin"
           aria-label="Painel"
-          className="flex items-center gap-2 rounded-full px-3 py-1.5 font-medium whitespace-nowrap text-paper/70 transition hover:bg-pine-line hover:text-paper"
+          className="flex h-10 items-center gap-2 rounded-full bg-paper/10 px-3 text-sm font-medium whitespace-nowrap text-paper/75 transition hover:bg-paper/15 hover:text-paper"
         >
           <LayoutDashboardIcon className="size-4" />
-          <span className="hidden xl:inline">Painel</span>
+          <span aria-hidden className="hidden xl:inline xl:in-data-scrolled:hidden">
+            Painel
+          </span>
         </Link>
       )}
       <AccountLink firstName={account.firstName} />

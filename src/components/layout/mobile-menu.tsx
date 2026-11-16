@@ -1,7 +1,6 @@
 'use client'
 
-import { LayoutDashboardIcon } from 'lucide-react'
-import Image from 'next/image'
+import { LayoutDashboardIcon, MenuIcon, UserRoundIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -23,7 +22,7 @@ export function MobileMenu() {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" aria-label="Abrir menu" className="-mr-2 hover:bg-pine-line">
-            <Image src="/icons/menu.svg" alt="" width={24} height={24} />
+            <MenuIcon className="size-6" />
           </Button>
         </SheetTrigger>
         <SheetContent
@@ -51,7 +50,7 @@ export function MobileMenu() {
               </>
             ) : (
               <Link href="/entrar" className="flex items-center gap-2 px-4 font-medium text-paper">
-                <Image src="/icons/user.svg" alt="" width={24} height={24} />
+                <UserRoundIcon className="size-5" />
                 Fazer login
               </Link>
             )}

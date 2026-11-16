@@ -69,6 +69,8 @@ export type CourseCompletion = {
 
 export type Certificate = {
   code: string
+  // Dono do certificado (para mostrar os botões de compartilhar só para ele)
+  profileId: string
   studentName: string
   courseTitle: string
   courseSlug: string | null

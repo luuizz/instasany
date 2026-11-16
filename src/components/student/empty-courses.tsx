@@ -9,10 +9,10 @@ export function EmptyCourses({ title = 'Seu primeiro curso está a um clique' }:
         <CompassIcon className="size-7" />
       </span>
       <h2 className="text-2xl font-semibold text-ink">{title}</h2>
-      <p className="max-w-md text-ink/60">
+      <p className="max-w-md text-ink/65">
         Os cursos são gratuitos. Matricule-se e a sua jornada aparece aqui, com progresso e certificado.
       </p>
-      <ButtonLink href="/cursos" size="default">
+      <ButtonLink href="/aluno/explorar" size="default">
         Explorar cursos
       </ButtonLink>
     </section>

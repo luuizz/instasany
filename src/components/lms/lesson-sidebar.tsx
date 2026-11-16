@@ -33,7 +33,7 @@ export function LessonSidebar({
   return (
     <nav aria-label="Aulas do curso" className="flex flex-col gap-6 rounded-3xl border border-ink/10 p-5">
       <div className="flex flex-col gap-3">
-        <Link href={`/cursos/${course.slug}`} className="font-semibold text-ink hover:underline">
+        <Link href={`/aluno/explorar/${course.slug}`} className="font-semibold text-ink hover:underline">
           {course.title}
         </Link>
         <ProgressBar done={done.size} total={course.lessonCount} />
@@ -73,8 +73,8 @@ export function LessonSidebar({
                         {done.has(lesson.id) ? 'Concluída' : locked ? 'Ainda não liberada' : 'Pendente'}
                       </span>
                     </span>
-                    <span className={cn('flex-1', locked && !current && 'text-ink/40')}>{lesson.title}</span>
-                    <span className={cn('shrink-0 text-xs', current ? 'text-paper/60' : 'text-ink/40')}>
+                    <span className={cn('flex-1', locked && !current && 'text-ink/65')}>{lesson.title}</span>
+                    <span className={cn('shrink-0 text-xs', current ? 'text-paper/60' : 'text-ink/65')}>
                       {locked && enrolledAt
                         ? `abre ${shortDate.format(releaseDate(enrolledAt, lesson.releaseAfterDays))}`
                         : `${lesson.durationMinutes} min`}
@@ -85,7 +85,7 @@ export function LessonSidebar({
             })}
             {module.quizQuestions > 0 &&
               module.lessons.some((lesson) => !isReleased(enrolledAt, lesson.releaseAfterDays)) && (
-                <li className="flex items-start gap-3 px-3 py-2 text-sm text-ink/40">
+                <li className="flex items-start gap-3 px-3 py-2 text-sm text-ink/65">
                   <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center">
                     <LockIcon className="size-3.5" />
                   </span>

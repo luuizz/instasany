@@ -1,16 +1,19 @@
 import { ArrowRightIcon } from 'lucide-react'
 import Link from 'next/link'
 import { CourseCard } from '@/components/courses/course-card'
+import { AchievementsGrid } from '@/components/student/achievements-grid'
 import { ContinueCard } from '@/components/student/continue-card'
 import { EmptyCourses } from '@/components/student/empty-courses'
 import { CertificateList, RecentList } from '@/components/student/side-lists'
 import { StatTiles } from '@/components/student/stat-tiles'
+import { StreakCard } from '@/components/student/streak-card'
 import { StudentCourseCard } from '@/components/student/student-course-card'
 import { StudentPageHeader } from '@/components/student/student-page-header'
 import { WeekActivity } from '@/components/student/week-activity'
 import { firstNameOf } from '@/lib/account'
 import { requireUser } from '@/server/auth/session'
 import { listCatalog } from '@/server/services/courses'
+import { getStudentProgress } from '@/server/services/achievements'
 import { getStudentDashboard } from '@/server/services/student-dashboard'
 
 export const metadata = { title: 'Início' }
@@ -18,7 +21,11 @@ export const metadata = { title: 'Início' }
 // Início da área do aluno: continuar estudando, números, cursos em andamento, semana e certificados
 export default async function StudentHomePage() {
   const profile = await requireUser()
-  const [dashboard, catalog] = await Promise.all([getStudentDashboard(profile.id), listCatalog()])
+  const [dashboard, catalog, progress] = await Promise.all([
+    getStudentDashboard(profile.id),
+    listCatalog(),
+    getStudentProgress(profile.id),
+  ])
   const enrolledIds = new Set(dashboard.courses.map((course) => course.id))
   const others = catalog.filter((course) => !enrolledIds.has(course.id)).slice(0, 3)
   const inProgress = dashboard.courses.filter((course) => course.completedCount < course.lessonCount).slice(0, 2)
@@ -66,9 +73,11 @@ export default async function StudentHomePage() {
               </ul>
             </section>
           )}
+          {dashboard.courses.length > 0 && <AchievementsGrid achievements={progress.achievements} />}
         </div>
 
         <aside className="grid gap-6 sm:grid-cols-2 xl:grid-cols-1">
+          <StreakCard streak={progress.streak} />
           <WeekActivity week={dashboard.week} />
           <CertificateList courses={dashboard.courses} />
           <RecentList items={dashboard.recent} />
@@ -82,7 +91,7 @@ export default async function StudentHomePage() {
               {dashboard.courses.length ? 'Para continuar aprendendo' : 'Cursos disponíveis'}
             </h2>
             <Link
-              href="/cursos"
+              href="/aluno/explorar"
               className="flex items-center gap-1 text-sm font-semibold text-pine hover:underline dark:text-lime"
             >
               Explorar cursos
@@ -92,7 +101,7 @@ export default async function StudentHomePage() {
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {others.map((course) => (
               <li key={course.id}>
-                <CourseCard course={course} href={`/cursos/${course.slug}`} />
+                <CourseCard course={course} href={`/aluno/explorar/${course.slug}`} />
               </li>
             ))}
           </ul>

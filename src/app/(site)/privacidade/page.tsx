@@ -48,7 +48,7 @@ export default function PrivacyPage() {
               <p className="mt-3 text-lg text-ink/70">{section.text}</p>
             </section>
           ))}
-          <p className="text-sm text-ink/50">A Instasany é um projeto fictício de estudo.</p>
+          <p className="text-sm text-ink/65">A Instasany é um projeto fictício de estudo.</p>
         </div>
       </Container>
     </>

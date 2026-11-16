@@ -13,7 +13,7 @@ export function AuthNotice({ icon: Icon, title, children }: AuthNoticeProps) {
         <Icon className="size-7" />
       </span>
       <h2 className="text-2xl font-semibold text-ink">{title}</h2>
-      <div className="text-ink/60">{children}</div>
+      <div className="text-ink/65">{children}</div>
     </div>
   )
 }

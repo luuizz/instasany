@@ -1,9 +1,9 @@
-import { UsersIcon } from 'lucide-react'
+import { DownloadIcon, UsersIcon } from 'lucide-react'
 import type { Metadata } from 'next'
 import { PageHeader } from '@/components/admin/page-header'
 import { StudentsFilters, studentsHref } from '@/components/admin/students/students-filters'
 import { StudentsTable } from '@/components/admin/students/students-table'
-import { ButtonLink } from '@/components/ui/button'
+import { ButtonLink, buttonVariants } from '@/components/ui/button'
 import { countLabel } from '@/lib/duration'
 import { ROLES } from '@/lib/roles'
 import { requireAdmin } from '@/server/auth/session'
@@ -36,6 +36,12 @@ export default async function StudentsPage({ searchParams }: PageProps) {
         breadcrumbs={[{ href: '/admin', label: 'Painel' }]}
         title="Alunos"
         description={`${countLabel(list.total, 'pessoa encontrada', 'pessoas encontradas')}. Clique numa pessoa para ver cursos, progresso e atividade.`}
+        actions={
+          <a href="/admin/alunos/csv" download className={buttonVariants({ variant: 'outline', size: 'default' })}>
+            <DownloadIcon />
+            Baixar todos (CSV)
+          </a>
+        }
       />
       <StudentsFilters query={query} role={role} />
       {list.items.length === 0 ? (

@@ -44,7 +44,7 @@ function Tile({ name, icon: Icon, title, text, className, dark, children }: Tile
         </span>
         <span>
           <span className="block font-semibold">{title}</span>
-          <span className={cn('block text-sm', dark ? 'text-paper/65' : 'text-ink/60')}>{text}</span>
+          <span className={cn('block text-sm', dark ? 'text-paper/65' : 'text-ink/65')}>{text}</span>
         </span>
       </div>
     </article>

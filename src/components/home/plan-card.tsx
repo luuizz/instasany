@@ -25,11 +25,11 @@ export function PlanCard({ plan, href }: PlanCardProps) {
       )}
       <div>
         <h3 className="text-2xl font-semibold">{plan.name}</h3>
-        <p className={cn('mt-2 text-sm', featured ? 'text-ink/60' : 'text-paper/60')}>{plan.description}</p>
+        <p className={cn('mt-2 text-sm', featured ? 'text-ink/65' : 'text-paper/60')}>{plan.description}</p>
       </div>
       <div>
         {plan.compareAt !== null && plan.compareAt > plan.price && (
-          <p className={cn('text-sm line-through', featured ? 'text-ink/50' : 'text-paper/50')}>
+          <p className={cn('text-sm line-through', featured ? 'text-ink/65' : 'text-paper/65')}>
             <span className="sr-only">De </span>
             {formatPrice(plan.compareAt)}
           </p>
@@ -38,7 +38,7 @@ export function PlanCard({ plan, href }: PlanCardProps) {
           <span className="sr-only">por </span>
           {formatPrice(plan.price)}
         </p>
-        <p className={cn('mt-1 text-sm', featured ? 'text-ink/60' : 'text-paper/60')}>{plan.period}</p>
+        <p className={cn('mt-1 text-sm', featured ? 'text-ink/65' : 'text-paper/60')}>{plan.period}</p>
       </div>
       <ul className="flex flex-1 flex-col gap-3">
         {plan.features.map((feature) => (

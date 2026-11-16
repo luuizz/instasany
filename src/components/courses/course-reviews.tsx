@@ -27,7 +27,7 @@ export function CourseReviews({ summary }: { summary: ReviewSummary }) {
             <li key={index} className="flex flex-col gap-3 rounded-3xl border border-ink/10 bg-card p-6">
               <StarRating value={review.rating} starClassName="fill-pine text-pine" />
               <p className="flex-1 text-ink/80">{review.comment}</p>
-              <p className="text-sm text-ink/50">
+              <p className="text-sm text-ink/65">
                 <span className="font-semibold text-ink">{review.name}</span> · {formatDate(review.updatedAt)}
               </p>
             </li>

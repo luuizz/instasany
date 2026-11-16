@@ -30,7 +30,7 @@ export default async function MyCertificatesPage() {
             <AwardIcon className="size-7" />
           </span>
           <h2 className="text-2xl font-semibold text-ink">Seu primeiro certificado vem aí</h2>
-          <p className="max-w-md text-ink/60">
+          <p className="max-w-md text-ink/65">
             Conclua todas as aulas e passe nos quizzes de um curso. O certificado sai na hora, pela lateral da aula.
           </p>
           <ButtonLink href="/aluno/cursos" size="default">
@@ -53,7 +53,7 @@ export default async function MyCertificatesPage() {
                       Certificado de conclusão
                     </span>
                     <span className="mt-2 block font-semibold text-balance text-ink">{certificate.courseTitle}</span>
-                    <span className="mt-3 flex items-center justify-between text-xs text-ink/50">
+                    <span className="mt-3 flex items-center justify-between text-xs text-ink/65">
                       {site.name}
                       <span className="flex items-center gap-1 text-sage">
                         <BadgeCheckIcon className="size-4" />
@@ -65,15 +65,15 @@ export default async function MyCertificatesPage() {
                 <div className="flex flex-1 flex-col gap-4 p-5">
                   <dl className="grid grid-cols-2 gap-3 text-sm">
                     <div>
-                      <dt className="text-ink/50">Emitido em</dt>
+                      <dt className="text-ink/65">Emitido em</dt>
                       <dd className="font-medium text-ink">{formatDate(certificate.issuedAt)}</dd>
                     </div>
                     <div>
-                      <dt className="text-ink/50">Carga horária</dt>
+                      <dt className="text-ink/65">Carga horária</dt>
                       <dd className="font-medium text-ink">{formatDuration(certificate.totalMinutes)}</dd>
                     </div>
                     <div className="col-span-2">
-                      <dt className="text-ink/50">Código</dt>
+                      <dt className="text-ink/65">Código</dt>
                       <dd className="font-mono font-medium tracking-wider text-ink">{certificate.code}</dd>
                     </div>
                   </dl>

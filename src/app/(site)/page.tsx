@@ -1,3 +1,5 @@
+import { JsonLd } from '@/components/seo/json-ld'
+import { organizationJsonLd, websiteJsonLd } from '@/lib/seo/json-ld'
 import { AboutSection } from '@/components/home/about-section'
 import { AudienceSection } from '@/components/home/audience-section'
 import { BenefitsSection } from '@/components/home/benefits-section'
@@ -11,6 +13,7 @@ export default async function HomePage() {
   const content = await getHomeContent()
   return (
     <>
+      <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
       <HeroSection content={content.hero} />
       <ShowcaseSection content={content.showcase} />
       <BenefitsSection content={content.benefits} />

@@ -50,7 +50,7 @@ export async function issueCertificate(student: Student, slug: string) {
   const course = await getCourseBySlug(slug)
   if (!course?.published || !(await isEnrolled(student.id, course.id))) return null
   const existing = await certificateCodeFor(student.id, course.id)
-  if (existing) return existing
+  if (existing) return { code: existing, created: false, courseTitle: course.title }
   if (!(await courseCompletion(student.id, course)).complete) return null
 
   const [created] = await db()
@@ -65,7 +65,9 @@ export async function issueCertificate(student: Student, slug: string) {
     })
     .onConflictDoNothing()
     .returning({ code: certificates.code })
-  return created?.code ?? certificateCodeFor(student.id, course.id)
+  if (created) return { code: created.code, created: true, courseTitle: course.title }
+  const code = await certificateCodeFor(student.id, course.id)
+  return code ? { code, created: false, courseTitle: course.title } : null
 }
 
 export async function getCertificate(code: string): Promise<Certificate | null> {

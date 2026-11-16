@@ -6,9 +6,9 @@ import type { StudentTheme } from '@/lib/student-preferences'
 import { cn } from '@/lib/utils'
 
 export const themeOptions = [
-  { id: 'light', label: 'Claro', short: 'Claro', icon: SunIcon },
-  { id: 'dark', label: 'Escuro', short: 'Escuro', icon: MoonIcon },
-  { id: 'system', label: 'Automático', short: 'Auto', icon: MonitorIcon },
+  { id: 'light', label: 'Claro', icon: SunIcon },
+  { id: 'dark', label: 'Escuro', icon: MoonIcon },
+  { id: 'system', label: 'Automático', icon: MonitorIcon },
 ] as const
 
 type ThemeSwitchProps = { theme: StudentTheme; onChange: (theme: StudentTheme) => void; compact?: boolean }
@@ -27,7 +27,7 @@ export function ThemeSwitch({ theme, onChange, compact = false }: ThemeSwitchPro
             type="button"
             onClick={() => onChange(next.id)}
             aria-label={`Tema: ${current.label}. Trocar para ${next.label.toLowerCase()}`}
-            className="mx-auto flex size-10 items-center justify-center rounded-2xl text-ink/60 transition hover:bg-secondary hover:text-ink"
+            className="mx-auto flex size-10 items-center justify-center rounded-2xl text-ink/65 transition hover:bg-secondary hover:text-ink"
           >
             <Icon className="size-5" />
           </button>
@@ -38,7 +38,7 @@ export function ThemeSwitch({ theme, onChange, compact = false }: ThemeSwitchPro
   }
   return (
     <div role="radiogroup" aria-label="Tema" className="grid grid-cols-3 gap-1 rounded-2xl bg-secondary p-1">
-      {themeOptions.map(({ id, label, short, icon: Icon }) => (
+      {themeOptions.map(({ id, label, icon: Icon }) => (
         <button
           key={id}
           type="button"
@@ -48,12 +48,11 @@ export function ThemeSwitch({ theme, onChange, compact = false }: ThemeSwitchPro
           title={label}
           onClick={() => onChange(id)}
           className={cn(
-            'flex items-center justify-center gap-1.5 rounded-xl py-1.5 text-xs font-medium transition',
-            theme === id ? 'bg-card text-ink shadow-sm' : 'text-ink/55 hover:text-ink',
+            'flex items-center justify-center rounded-xl py-2 transition',
+            theme === id ? 'bg-card text-ink shadow-sm' : 'text-ink/65 hover:text-ink',
           )}
         >
-          <Icon className="size-3.5" />
-          {short}
+          <Icon className="size-4" />
         </button>
       ))}
     </div>

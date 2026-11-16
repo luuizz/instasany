@@ -12,7 +12,7 @@ export function WeekActivity({ week }: { week: StudentDashboard['week'] }) {
         <h2 id="semana" className="font-semibold text-ink">
           Sua semana
         </h2>
-        <p className="text-sm text-ink/50">
+        <p className="text-sm text-ink/65">
           {total} {total === 1 ? 'aula' : 'aulas'}
         </p>
       </div>
@@ -27,7 +27,7 @@ export function WeekActivity({ week }: { week: StudentDashboard['week'] }) {
                 className={today ? 'w-full rounded-t-md bg-pine' : 'w-full rounded-t-md bg-sage/70'}
                 style={{ height: `${Math.max((day.count / max) * 100, day.count ? 8 : 3)}%` }}
               />
-              <span className={today ? 'text-xs font-semibold text-pine dark:text-lime' : 'text-xs text-ink/50'}>
+              <span className={today ? 'text-xs font-semibold text-pine dark:text-lime' : 'text-xs text-ink/65'}>
                 {today ? 'hoje' : label}
               </span>
               <span className="sr-only">

@@ -54,7 +54,7 @@ export default async function CertificatePage({ params }: PageProps) {
       <div className="mx-auto max-w-5xl print:max-w-none">
         <CertificateCard certificate={certificate} verifyUrl={verifyUrl} qrSvg={qrSvg} />
       </div>
-      <p className="mx-auto mt-6 max-w-5xl text-center text-xs text-ink/50 print:hidden">
+      <p className="mx-auto mt-6 max-w-5xl text-center text-xs text-ink/65 print:hidden">
         {site.name} é um projeto fictício de estudo; este certificado não tem validade oficial.
       </p>
     </div>

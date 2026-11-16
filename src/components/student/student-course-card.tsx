@@ -23,7 +23,7 @@ export function StudentCourseCard({ course }: { course: DashboardCourse }) {
               Ver certificado
             </Link>
           ) : (
-            <p className="truncate text-sm text-ink/50">
+            <p className="truncate text-sm text-ink/65">
               {finished
                 ? 'Aulas concluídas: falta emitir o certificado na aula.'
                 : course.nextLessonTitle

@@ -61,7 +61,7 @@ export default async function CoursesPage() {
         {courses.length ? (
           <CourseCatalog courses={courses} />
         ) : (
-          <p className="py-16 text-center text-ink/60">Os cursos estão chegando. Volte em breve!</p>
+          <p className="py-16 text-center text-ink/65">Os cursos estão chegando. Volte em breve!</p>
         )}
       </Container>
 
@@ -79,7 +79,7 @@ export default async function CoursesPage() {
                 <div>
                   <p className="text-xs font-semibold tracking-wider text-sage uppercase">Passo {index + 1}</p>
                   <p className="mt-1 font-semibold text-ink">{title}</p>
-                  <p className="mt-1 text-sm text-ink/60">{text}</p>
+                  <p className="mt-1 text-sm text-ink/65">{text}</p>
                 </div>
               </li>
             ))}

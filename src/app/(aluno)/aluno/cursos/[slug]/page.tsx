@@ -11,7 +11,8 @@ export default async function StudentCoursePage({ params }: PageProps) {
   const { slug } = await params
   const profile = await requireUser(`/aluno/cursos/${slug}`)
   const course = await getCourseBySlug(slug)
-  if (!course || (!isStaff(profile.role) && !(await isEnrolled(profile.id, course.id)))) redirect(`/cursos/${slug}`)
+  if (!course || (!isStaff(profile.role) && !(await isEnrolled(profile.id, course.id))))
+    redirect(`/aluno/explorar/${slug}`)
   const lessonId = await firstPendingLesson(profile.id, course)
-  redirect(lessonId ? `/aluno/cursos/${slug}/aulas/${lessonId}` : `/cursos/${slug}`)
+  redirect(lessonId ? `/aluno/cursos/${slug}/aulas/${lessonId}` : `/aluno/explorar/${slug}`)
 }

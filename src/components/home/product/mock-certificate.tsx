@@ -9,7 +9,7 @@ export function MockCertificate() {
         <div className="rounded-xl p-4 ring-1 ring-pine/15">
           <p className="text-2xs font-semibold tracking-widest text-sage uppercase">Certificado de conclusão</p>
           <p className="mt-2 text-lg font-semibold">Marina Costa</p>
-          <p className="text-xs text-ink/60">Instagram do zero ao primeiro cliente</p>
+          <p className="text-xs text-ink/65">Instagram do zero ao primeiro cliente</p>
           <p data-anim="stamp" className="mt-3 flex items-center gap-1 text-xs font-semibold text-sage">
             <BadgeCheckIcon className="size-4" />
             Verificado

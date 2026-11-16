@@ -4,6 +4,7 @@ import { StudentShell } from '@/components/student/student-shell'
 import { isStaff } from '@/lib/roles'
 import { MENU_COOKIE, parseMenu, parseTheme, THEME_COOKIE } from '@/lib/student-preferences'
 import { requireUser } from '@/server/auth/session'
+import { getInbox } from '@/server/services/inbox'
 import { getStudentDashboard } from '@/server/services/student-dashboard'
 
 export const metadata: Metadata = {
@@ -13,7 +14,11 @@ export const metadata: Metadata = {
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireUser()
-  const [{ current }, jar] = await Promise.all([getStudentDashboard(profile.id), cookies()])
+  const [{ current }, jar, inbox] = await Promise.all([
+    getStudentDashboard(profile.id),
+    cookies(),
+    getInbox(profile.id),
+  ])
   const done = current ? current.completedCount >= current.lessonCount : true
   return (
     <StudentShell
@@ -22,6 +27,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
       staff={isStaff(profile.role)}
       initialTheme={parseTheme(jar.get(THEME_COOKIE)?.value)}
       initialMenu={parseMenu(jar.get(MENU_COOKIE)?.value)}
+      inbox={inbox}
       current={
         current && !done
           ? {

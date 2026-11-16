@@ -76,7 +76,7 @@ export default async function MyCoursesPage({ searchParams }: PageProps) {
               ))}
             </ul>
           ) : (
-            <p className="rounded-3xl bg-card p-10 text-center text-ink/60 ring-1 ring-ink/10">
+            <p className="rounded-3xl bg-card p-10 text-center text-ink/65 ring-1 ring-ink/10">
               {filter === 'concluidos' ? 'Nenhum curso concluído ainda. Falta pouco!' : 'Nenhum curso em andamento.'}
             </p>
           )}

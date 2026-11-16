@@ -26,6 +26,10 @@
   --container-header-compact: 70rem;
 
   --spacing-header: 6rem;
+
+  /* Textos miúdos das prévias ilustrativas */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
 }
 
 /* Tokens semânticos do shadcn/ui (components/ui), apontando para as cores da marca */

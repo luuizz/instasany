@@ -82,7 +82,7 @@ export default async function StudentHomePage() {
               {dashboard.courses.length ? 'Para continuar aprendendo' : 'Cursos disponíveis'}
             </h2>
             <Link
-              href="/cursos"
+              href="/aluno/explorar"
               className="flex items-center gap-1 text-sm font-semibold text-pine hover:underline dark:text-lime"
             >
               Explorar cursos
@@ -92,7 +92,7 @@ export default async function StudentHomePage() {
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {others.map((course) => (
               <li key={course.id}>
-                <CourseCard course={course} href={`/cursos/${course.slug}`} />
+                <CourseCard course={course} href={`/aluno/explorar/${course.slug}`} />
               </li>
             ))}
           </ul>

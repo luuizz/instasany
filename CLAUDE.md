@@ -31,7 +31,7 @@ src/
     (auth)/       entrar e cadastro (tela dividida com AuthShowcase, abas AuthSwitch), com as Server Actions de login em actions.ts
     (admin)/      painel /admin (CMS); só admin, conferido no layout
     (site)/cursos catálogo público e página do curso, com a matrícula (actions.ts)
-    (aluno)/      área do aluno com moldura própria (StudentShell, sem o cabeçalho do site): início (services/student-dashboard.ts), /aluno/cursos, /aluno/certificados, /aluno/perfil e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
+    (aluno)/      área do aluno com moldura própria (StudentShell, sem o cabeçalho do site): início (services/student-dashboard.ts), /aluno/cursos, /aluno/explorar (catálogo e prévia do curso com matrícula, sem sair para o site público), /aluno/certificados, /aluno/perfil e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
     (admin)/admin/cursos  cursos, módulos e aulas (actions.ts)
     api/auth/     endpoints do Neon Auth no domínio do site
     api/uploads/  token de upload direto do navegador para o Vercel Blob (só admin)
@@ -82,6 +82,7 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - Listas do painel (cursos, seções do site) alternam entre grade e lista (`components/admin/view-toggle.tsx`); a escolha fica no cookie `painel-visualizacao`, lido no servidor por `server/admin-view.ts`.
 - Análise de uso própria (sem gtag): tabela `analytics_events`. O navegador envia `page_view`, `video_play` e `video_watch` pela action `trackEventAction` (`components/analytics/track.ts`, com id aleatório no localStorage e respeito a Do Not Track/GPC); `enrollment` e `lesson_complete` são gravados pelo servidor com `after()`. Uso de admin não é gravado. Relatórios em `services/analytics-report.ts` (SQL puro via `db/raw.ts`, dias no fuso de São Paulo). A página `/privacidade` explica o que é medido; evento novo entra nela.
 - Telas de erro: `components/errors/error-screen.tsx` (código ao fundo, ícone, texto e ações). `app/not-found.tsx` é a 404 de endereço inexistente (tela cheia); `(site)`, `(aluno)/aluno` e `(admin)/admin` têm `error.tsx` (com `ErrorActions`: tentar de novo e código do erro) e as duas primeiras também `not-found.tsx`, dentro das próprias molduras; `app/global-error.tsx` cobre erro no layout raiz.
+- SEO: `app/sitemap.ts` (home, catálogo, cursos publicados) e `app/robots.ts` (fora a área do aluno, o painel e o login); dados estruturados de `lib/seo/json-ld.ts` com o componente `seo/json-ld.tsx` (organização e site na home, curso e trilha na página do curso); imagens de prévia em `opengraph-image.tsx` (padrão do site, por curso e por certificado), com as peças comuns em `lib/seo/og.tsx`.
 - Actions que mudam conteúdo público usam `updateTag` (expira o cache na hora) + `revalidatePath`.
 - A home lê o conteúdo por `getHomeContent()`: o cache guarda só as linhas do banco e o encaixe nos padrões é feito a cada leitura, então formato novo nunca depende de cache antigo.
 

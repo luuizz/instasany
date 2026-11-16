@@ -14,7 +14,12 @@ test.describe('site público', () => {
     await expect(page.getByRole('heading', { name: 'O que medimos e por quê' })).toBeVisible()
     const response = await page.goto('/pagina-que-nao-existe')
     expect(response?.status()).toBe(404)
-    await expect(page.getByRole('heading', { name: 'Página não encontrada' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Essa página saiu do feed' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Ver os cursos' })).toBeVisible()
+
+    const course = await page.goto('/cursos/curso-que-nao-existe')
+    expect(course?.status()).toBe(404)
+    await expect(page.getByRole('heading', { name: 'Não achamos essa página' })).toBeVisible()
   })
 
   test('áreas logadas pedem login', async ({ page }) => {

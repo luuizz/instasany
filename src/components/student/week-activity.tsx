@@ -7,7 +7,7 @@ export function WeekActivity({ week }: { week: StudentDashboard['week'] }) {
   const max = Math.max(1, ...week.map((day) => day.count))
   const total = week.reduce((sum, day) => sum + day.count, 0)
   return (
-    <section aria-labelledby="semana" className="rounded-3xl border border-ink/10 bg-paper p-5">
+    <section aria-labelledby="semana" className="rounded-3xl border border-ink/10 bg-card p-5">
       <div className="flex items-baseline justify-between">
         <h2 id="semana" className="font-semibold text-ink">
           Sua semana
@@ -27,7 +27,7 @@ export function WeekActivity({ week }: { week: StudentDashboard['week'] }) {
                 className={today ? 'w-full rounded-t-md bg-pine' : 'w-full rounded-t-md bg-sage/70'}
                 style={{ height: `${Math.max((day.count / max) * 100, day.count ? 8 : 3)}%` }}
               />
-              <span className={today ? 'text-xs font-semibold text-pine' : 'text-xs text-ink/50'}>
+              <span className={today ? 'text-xs font-semibold text-pine dark:text-lime' : 'text-xs text-ink/50'}>
                 {today ? 'hoje' : label}
               </span>
               <span className="sr-only">

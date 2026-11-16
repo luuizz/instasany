@@ -16,7 +16,7 @@ export function QuestionMessage({ message, onDelete, isReply }: QuestionMessageP
         <AvatarFallback
           className={cn(
             'font-bold',
-            author.isStaff ? 'bg-pine text-lime' : 'bg-secondary text-pine',
+            author.isStaff ? 'bg-pine text-lime' : 'bg-secondary text-pine dark:text-lime',
             isReply ? 'text-xs' : 'text-sm',
           )}
         >

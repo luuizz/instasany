@@ -47,7 +47,7 @@ export default async function StudentQuizPage({ params }: PageProps) {
             para passar; dá para refazer quantas vezes quiser.
           </p>
           {quiz.best?.passed && (
-            <p className="mt-2 flex items-center gap-2 text-sm font-medium text-pine">
+            <p className="mt-2 flex items-center gap-2 text-sm font-medium text-pine dark:text-lime">
               <CheckCircle2Icon className="size-4 text-sage" />
               Você já passou neste quiz ({quiz.best.score} de {quiz.best.total}).
             </p>

@@ -44,7 +44,7 @@ export function ReviewForm({ initial, save }: ReviewFormProps) {
                   aria-hidden
                   className={cn(
                     'size-7 transition peer-focus-visible:rounded-sm peer-focus-visible:ring-4 peer-focus-visible:ring-ring/30',
-                    value <= shown ? 'fill-lime text-pine' : 'fill-transparent text-ink/25',
+                    value <= shown ? 'fill-lime text-pine dark:text-lime' : 'fill-transparent text-ink/25',
                   )}
                 />
                 <span className="sr-only">

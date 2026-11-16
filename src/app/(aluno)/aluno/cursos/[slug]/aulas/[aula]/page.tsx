@@ -100,7 +100,10 @@ export default async function LessonPage({ params }: PageProps) {
               </Link>
             )}
             {nextId && (
-              <Link href={lessonHref(nextId)} className="flex items-center gap-1.5 text-pine hover:underline">
+              <Link
+                href={lessonHref(nextId)}
+                className="flex items-center gap-1.5 text-pine hover:underline dark:text-lime"
+              >
                 Próxima
                 <ArrowRightIcon className="size-4" />
               </Link>

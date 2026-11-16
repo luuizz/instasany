@@ -44,7 +44,7 @@ src/
     admin/ auth/  telas do painel e do login
     courses/      card, capa, ementa e progresso (catálogo e área do aluno)
     lms/          player de vídeo próprio e lista de aulas
-    student/      moldura da área do aluno (student-shell: menu lateral, que vira só ícones na aula e no quiz; abas embaixo no celular) e blocos do início
+    student/      moldura da área do aluno (student-shell: paleta clara própria, tema claro/escuro/automático e menu recolhível, guardados nos cookies aluno-tema e aluno-menu; abas embaixo no celular) e blocos do início
   hooks/          hooks de cliente reaproveitados (use-form-action)
   config/         identidade, navegação e seções editáveis do CMS (cms.ts)
   data/           conteúdo padrão do site, usado enquanto a seção não é salva no painel
@@ -91,7 +91,7 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - Topo das páginas do painel é `PageHeader` (`admin/page-header.tsx`): trilha (`breadcrumbs`), selo de status, ações e, para ação destrutiva, `ActionsMenu` (menu "⋯" com confirmação).
 - Sanfonas são `Accordion` (FAQ, ementa), menus laterais são `Sheet`, dicas de botão são `Tooltip` (o `TooltipProvider` está no layout raiz), iniciais de usuário são `Avatar`.
 - Confirmação é `ConfirmDialog`/`ConfirmButton` (`ui/confirm-dialog.tsx`), nunca `window.confirm`. Sucesso de formulário vira toast (`useFormAction(..., 'mensagem')`); erro fica no formulário.
-- O site não tem tema escuro: `dark:` só vale dentro de `.dark` (`@custom-variant` no `globals.css`), para o modo escuro do sistema não alterar os componentes do shadcn.
+- Só a área do aluno tem tema escuro: `dark:` vale dentro de `.dark` (`@custom-variant` no `globals.css`), que o `StudentShell` põe no `<html>` enquanto ela está aberta; o site público e o painel ficam sempre claros. No `.dark`, `ink` vira texto claro e os tokens do shadcn mudam; para fundo escuro fixo (player, capas, sobreposições) use `night`, superfícies usam `bg-card` e texto verde-pinho leva `dark:text-lime`. Trecho que deve continuar claro dentro do escuro usa `light-surface`.
 - Ícones sempre do `lucide-react` (nada de emoji, seta em texto ou SVG de ícone em `public/`).
 - Animações de interface com as classes do `tw-animate-css` (`animate-in fade-in slide-in-from-bottom-2`, atraso com `style={{ animationDelay }}` + `fill-mode-both`); `prefers-reduced-motion` desliga todas no `globals.css`.
 

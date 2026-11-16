@@ -51,7 +51,7 @@ export default async function StudentHomePage() {
                 </h2>
                 <Link
                   href="/aluno/cursos"
-                  className="flex items-center gap-1 text-sm font-semibold text-pine hover:underline"
+                  className="flex items-center gap-1 text-sm font-semibold text-pine hover:underline dark:text-lime"
                 >
                   Meus cursos
                   <ArrowRightIcon className="size-4" />
@@ -81,7 +81,10 @@ export default async function StudentHomePage() {
             <h2 id="outros" className="text-2xl font-semibold text-ink">
               {dashboard.courses.length ? 'Para continuar aprendendo' : 'Cursos disponíveis'}
             </h2>
-            <Link href="/cursos" className="flex items-center gap-1 text-sm font-semibold text-pine hover:underline">
+            <Link
+              href="/cursos"
+              className="flex items-center gap-1 text-sm font-semibold text-pine hover:underline dark:text-lime"
+            >
               Explorar cursos
               <ArrowRightIcon className="size-4" />
             </Link>

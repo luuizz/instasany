@@ -101,7 +101,7 @@ export function LessonSidebar({
                     aria-current={currentQuiz === module.id ? 'page' : undefined}
                     className={cn(
                       'flex items-start gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition',
-                      currentQuiz === module.id ? 'bg-pine text-paper' : 'text-pine hover:bg-ink/5',
+                      currentQuiz === module.id ? 'bg-pine text-paper' : 'text-pine hover:bg-ink/5 dark:text-lime',
                     )}
                   >
                     <span

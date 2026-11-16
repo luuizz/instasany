@@ -1,9 +1,9 @@
 import 'server-only'
-import { asc, count, eq, inArray } from 'drizzle-orm'
+import { asc, avg, count, eq, inArray } from 'drizzle-orm'
 import { unstable_cache } from 'next/cache'
-import type { CourseLevel, CourseOutline, CourseSummary, ModuleItem } from '@/types/lms'
+import type { CatalogCourse, CourseLevel, CourseOutline, CourseSummary, ModuleItem } from '@/types/lms'
 import { db, isDatabaseConfigured } from '../db/client'
-import { courseModules, courses, lessons, quizQuestions, quizzes, type CourseRow } from '../db/schema'
+import { courseModules, courseReviews, courses, lessons, quizQuestions, quizzes, type CourseRow } from '../db/schema'
 
 export const COURSES_TAG = 'courses'
 
@@ -110,10 +110,43 @@ const publishedOutlines = unstable_cache(
   { tags: [COURSES_TAG], revalidate: 3600 },
 )
 
+export const REVIEWS_TAG = 'reviews'
+
+// Nota média por curso, em cache até alguém avaliar
+const courseRatings = unstable_cache(
+  async () => {
+    if (!isDatabaseConfigured()) return []
+    // Lista simples: o cache guarda em JSON, então nada de Map aqui
+    const rows = await db()
+      .select({ courseId: courseReviews.courseId, average: avg(courseReviews.rating), count: count() })
+      .from(courseReviews)
+      .groupBy(courseReviews.courseId)
+    return rows.map((row) => ({ courseId: row.courseId, average: Number(row.average ?? 0), count: Number(row.count) }))
+  },
+  ['course-ratings'],
+  { tags: [REVIEWS_TAG], revalidate: 3600 },
+)
+
 // Catálogo público (só cursos publicados), em cache até o painel alterar um curso
 export async function listPublishedCourses(): Promise<CourseSummary[]> {
   try {
     return (await publishedOutlines()).map(toSummary)
+  } catch (error) {
+    console.error('[cursos] falha ao ler o catálogo:', error)
+    return []
+  }
+}
+
+// Catálogo com o que a listagem e a busca precisam: módulos, nomes das aulas e nota média
+export async function listCatalog(): Promise<CatalogCourse[]> {
+  try {
+    const [outlines, ratings] = await Promise.all([publishedOutlines(), courseRatings()])
+    return outlines.map((course) => ({
+      ...toSummary(course),
+      moduleCount: course.modules.length,
+      keywords: course.modules.flatMap((module) => [module.title, ...module.lessons.map((lesson) => lesson.title)]),
+      rating: ratings.find((rating) => rating.courseId === course.id) ?? null,
+    }))
   } catch (error) {
     console.error('[cursos] falha ao ler o catálogo:', error)
     return []

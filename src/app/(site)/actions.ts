@@ -5,6 +5,8 @@ import { firstNameOf } from '@/lib/account'
 import { clientEventSchema } from '@/lib/validation/analytics'
 import { getCurrentProfile } from '@/server/auth/session'
 import { recordClientEvent } from '@/server/services/analytics'
+import { listCatalog } from '@/server/services/courses'
+import type { CatalogCourse } from '@/types/lms'
 import type { HeaderAccount } from '@/types/account'
 
 // O site é estático; o cabeçalho pergunta quem está logado depois de carregar
@@ -32,4 +34,9 @@ export async function trackEventAction(input: unknown): Promise<void> {
   } catch (error) {
     console.error('[análise] não foi possível gravar o evento:', error)
   }
+}
+
+// Dados da busca do cabeçalho (catálogo público, em cache); carregados quando a busca abre
+export async function searchCatalogAction(): Promise<CatalogCourse[]> {
+  return listCatalog()
 }

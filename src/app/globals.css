@@ -4,6 +4,7 @@
 /* Identidade da Instasany: verde-pinho com destaque em lima */
 @theme {
   --font-sans: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
 
   --color-pine: #1d3531;
   --color-pine-line: #2a4b46;
@@ -74,6 +75,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* O cabeçalho é fixo: as âncoras param logo abaixo dele */
+    scroll-padding-top: 6.5rem;
   }
 
   * {
@@ -100,4 +103,26 @@
 
 @utility bg-hero {
   background-image: url('/images/hero-bg.svg');
+}
+
+/* A única página feita para imprimir é o certificado: A4 deitado, sem margem */
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+/* Arte das capas sem imagem: brilho lima, grade fina e um anel, nas cores da marca */
+@utility cover-art {
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 30%,
+      color-mix(in oklab, var(--color-lime) 18%, transparent) 30.2% 30.6%,
+      transparent 31%
+    ),
+    radial-gradient(60% 80% at 85% 10%, color-mix(in oklab, var(--color-lime) 22%, transparent), transparent 70%),
+    linear-gradient(color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
+    linear-gradient(90deg, color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px) 0 0 / 1.5rem
+      1.5rem,
+    linear-gradient(155deg, var(--color-pine), var(--color-ink));
 }

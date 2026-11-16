@@ -32,6 +32,25 @@ export type StudentCourse = CourseSummary & {
   completedCount: number
   // Primeira aula ainda não concluída (ou a primeira, se todas foram)
   nextLessonId: number | null
+  nextLessonTitle: string | null
+}
+
+// Curso no dashboard do aluno, com o que falta e o que já tem
+export type DashboardCourse = StudentCourse & {
+  lastActivityAt: Date | null
+  certificateCode: string | null
+  // Onde parou no vídeo da próxima aula (segundos)
+  resumeAt: number
+}
+
+export type StudentDashboard = {
+  courses: DashboardCourse[]
+  // Curso mexido por último que ainda não terminou (ou o último, se todos terminaram)
+  current: DashboardCourse | null
+  stats: { inProgress: number; lessonsDone: number; watchedMinutes: number; certificates: number }
+  // Aulas concluídas por dia nos últimos 7 dias (fuso de São Paulo)
+  week: { day: string; count: number }[]
+  recent: { lessonTitle: string; courseTitle: string; href: string; completedAt: Date }[]
 }
 
 export type LessonAttachment = { id: number; title: string; url: string; sizeBytes: number; contentType: string }
@@ -69,10 +88,14 @@ export type CourseCompletion = {
 
 export type Certificate = {
   code: string
+  // Dono do certificado (para mostrar os botões de compartilhar só para ele)
+  profileId: string
   studentName: string
   courseTitle: string
   courseSlug: string | null
   totalMinutes: number
+  // Data da matrícula, se ela ainda existir
+  startedAt: Date | null
   issuedAt: Date
 }
 
@@ -94,4 +117,12 @@ export type AdminQuestion = QuestionThread & {
   courseTitle: string
   courseSlug: string
   answered: boolean
+}
+
+// Curso como aparece na listagem pública e na busca do site
+export type CatalogCourse = CourseSummary & {
+  moduleCount: number
+  // Nomes dos módulos e aulas, para a busca achar o curso pelo conteúdo
+  keywords: string[]
+  rating: { average: number; count: number } | null
 }

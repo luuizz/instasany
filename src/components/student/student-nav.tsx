@@ -61,7 +61,7 @@ export function StudentNav({ compact, staff }: { compact: boolean; staff: boolea
         <NavLink key={item.href} {...item} compact={compact} active={isActiveRoute(pathname, item.href, item.exact)} />
       ))}
       <span aria-hidden className="my-3 h-px bg-border" />
-      <NavLink {...exploreLink} compact={compact} />
+      <NavLink {...exploreLink} compact={compact} active={isActiveRoute(pathname, exploreLink.href)} />
       {staff && <NavLink href="/admin" label="Painel" icon={LayoutDashboardIcon} compact={compact} />}
     </nav>
   )

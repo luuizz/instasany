@@ -1,6 +1,6 @@
 'use client'
 
-import { SearchIcon, XIcon } from 'lucide-react'
+import { CheckCircle2Icon, SearchIcon, XIcon } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,8 +16,16 @@ const normalize = (text: string) =>
     .replace(/\p{Diacritic}/gu, '')
     .toLowerCase()
 
-// Listagem pública: busca por texto (título, resumo, módulos e aulas) e filtro por nível
-export function CourseCatalog({ courses }: { courses: CatalogCourse[] }) {
+type CourseCatalogProps = {
+  courses: CatalogCourse[]
+  // Onde o card leva: a página pública do curso ou a prévia dentro da área do aluno
+  hrefBase?: string
+  // Cursos em que a pessoa já está matriculada ganham um selo no card
+  enrolledIds?: number[]
+}
+
+// Busca por texto (título, resumo, módulos e aulas) e filtro por nível; usada no site e na área do aluno
+export function CourseCatalog({ courses, hrefBase = '/cursos', enrolledIds = [] }: CourseCatalogProps) {
   const [query, setQuery] = useState('')
   const [level, setLevel] = useState<CourseLevel | null>(null)
   const levels = COURSE_LEVELS.filter((option) => courses.some((course) => course.level === option))
@@ -82,7 +90,18 @@ export function CourseCatalog({ courses }: { courses: CatalogCourse[] }) {
               className="animate-in duration-500 fill-mode-both fade-in slide-in-from-bottom-2"
               style={{ animationDelay: `${index * 60}ms` }}
             >
-              <CourseCard course={course} href={`/cursos/${course.slug}`} />
+              <CourseCard
+                course={course}
+                href={`${hrefBase}/${course.slug}`}
+                footer={
+                  enrolledIds.includes(course.id) ? (
+                    <span className="flex items-center gap-2 text-sm font-semibold text-sage">
+                      <CheckCircle2Icon className="size-4" />
+                      Você já está matriculado
+                    </span>
+                  ) : undefined
+                }
+              />
             </li>
           ))}
         </ul>

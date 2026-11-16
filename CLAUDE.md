@@ -31,7 +31,7 @@ src/
     (auth)/       entrar e cadastro (tela dividida com AuthShowcase, abas AuthSwitch), com as Server Actions de login em actions.ts
     (admin)/      painel /admin (CMS); só admin, conferido no layout
     (site)/cursos catálogo público e página do curso, com a matrícula (actions.ts)
-    (aluno)/      área do aluno com moldura própria (StudentShell, sem o cabeçalho do site): início (services/student-dashboard.ts), /aluno/cursos, /aluno/certificados, /aluno/perfil e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
+    (aluno)/      área do aluno com moldura própria (StudentShell, sem o cabeçalho do site): início (services/student-dashboard.ts), /aluno/cursos, /aluno/explorar (catálogo e prévia do curso com matrícula, sem sair para o site público), /aluno/certificados, /aluno/perfil e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
     (admin)/admin/cursos  cursos, módulos e aulas (actions.ts)
     api/auth/     endpoints do Neon Auth no domínio do site
     api/uploads/  token de upload direto do navegador para o Vercel Blob (só admin)

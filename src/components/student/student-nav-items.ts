@@ -8,7 +8,7 @@ export const studentNav = [
   { href: '/aluno/perfil', label: 'Meu perfil', icon: UserRoundIcon },
 ]
 
-export const exploreLink = { href: '/cursos', label: 'Explorar cursos', icon: CompassIcon }
+export const exploreLink = { href: '/aluno/explorar', label: 'Explorar cursos', icon: CompassIcon }
 
 export function isActiveRoute(pathname: string, href: string, exact?: boolean) {
   return exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`)

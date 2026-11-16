@@ -6,6 +6,7 @@ import type { HeaderAccount } from '@/types/account'
 import { HeaderAccountLinks } from './header-account'
 import { HeaderAccountProvider } from './header-account-context'
 import { MobileMenu } from './mobile-menu'
+import { SiteSearch } from './site-search'
 import { SiteNav } from './site-nav'
 
 // O site é estático: o cabeçalho descobre no navegador se há alguém logado.
@@ -13,7 +14,7 @@ import { SiteNav } from './site-nav'
 export function SiteHeader({ account }: { account?: HeaderAccount }) {
   return (
     <HeaderAccountProvider known={account}>
-      <header className="relative z-30 flex h-header items-center bg-pine">
+      <header className="sticky top-0 z-30 flex h-20 items-center border-b border-pine-line bg-pine lg:h-header">
         <Container className="flex items-center justify-between gap-6">
           <Link href="/" aria-label={`${site.name}, página inicial`} className="shrink-0">
             <Image
@@ -26,17 +27,19 @@ export function SiteHeader({ account }: { account?: HeaderAccount }) {
             />
           </Link>
 
-          <div className="hidden items-center gap-4 text-sm lg:flex xl:gap-10 xl:text-base">
+          <div className="hidden lg:block">
             <SiteNav />
-            <div className="flex items-center gap-4 xl:gap-6">
-              <Link href="/cursos" aria-label="Ver os cursos">
-                <Image src="/icons/search.svg" alt="" width={22} height={23} />
-              </Link>
-              <HeaderAccountLinks />
-            </div>
           </div>
 
-          <MobileMenu />
+          <div className="hidden items-center gap-3 lg:flex">
+            <SiteSearch />
+            <HeaderAccountLinks />
+          </div>
+
+          <div className="flex items-center gap-1 lg:hidden">
+            <SiteSearch compact />
+            <MobileMenu />
+          </div>
         </Container>
       </header>
     </HeaderAccountProvider>

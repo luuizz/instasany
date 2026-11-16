@@ -5,10 +5,11 @@ export const site = {
   locale: 'pt_BR',
 }
 
+// "Cursos" é uma página; os demais são seções da home (âncoras)
 export const mainNav = [
-  { href: '#inicio', label: 'Início' },
-  { href: '#beneficios', label: 'Benefícios' },
-  { href: '#para-quem', label: 'Para quem é o curso' },
-  { href: '#precos', label: 'Preços promocionais' },
-  { href: '#sobre', label: 'Sobre nós' },
+  { href: '/cursos', label: 'Cursos' },
+  { href: '/#beneficios', label: 'Benefícios' },
+  { href: '/#para-quem', label: 'Para quem é' },
+  { href: '/#precos', label: 'Preços' },
+  { href: '/#sobre', label: 'Sobre nós' },
 ] as const

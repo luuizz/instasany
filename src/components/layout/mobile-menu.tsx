@@ -19,7 +19,7 @@ export function MobileMenu() {
   const close = () => setOpen(false)
 
   return (
-    <div className="lg:hidden">
+    <div>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" aria-label="Abrir menu" className="-mr-2 hover:bg-pine-line">
@@ -33,13 +33,10 @@ export function MobileMenu() {
           <SheetTitle className="sr-only">Menu</SheetTitle>
           <nav aria-label="Principal" className="flex flex-col gap-1">
             {mainNav.map((item) => (
-              <a key={item.href} href={`/${item.href}`} onClick={close} className={linkClass}>
+              <Link key={item.href} href={item.href} onClick={close} className={linkClass}>
                 {item.label}
-              </a>
+              </Link>
             ))}
-            <Link href="/cursos" onClick={close} className={linkClass}>
-              Cursos
-            </Link>
           </nav>
           <div className="mt-auto flex flex-col gap-2" onClick={close}>
             {account === 'loading' ? null : account ? (

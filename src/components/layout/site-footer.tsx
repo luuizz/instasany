@@ -21,7 +21,7 @@ export function SiteFooter({ content }: { content: FooterContent }) {
             <ul className="flex flex-col gap-2">
               {mainNav.map((item) => (
                 <li key={item.href}>
-                  <a href={`/${item.href}`} className={link}>
+                  <a href={item.href} className={link}>
                     {item.label}
                   </a>
                 </li>

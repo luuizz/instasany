@@ -142,3 +142,35 @@ export async function setRole(actorId: string, profileId: string, role: Role) {
     .returning({ id: profiles.id })
   return updated.length > 0
 }
+
+export type StudentExportRow = {
+  name: string
+  email: string
+  role: Role
+  createdAt: Date | null
+  lastActivity: Date | null
+  courses: number
+  completedLessons: number
+  certificates: number
+}
+
+// Todas as pessoas cadastradas para a planilha do painel
+export async function exportStudents(): Promise<StudentExportRow[]> {
+  const rows = await rawRows(sql`
+    select p.name, p.email, p.role, p.created_at, ${lastActivity} as last_activity,
+      (select count(*) from enrollments en where en.profile_id = p.id) as courses,
+      (select count(*) from lesson_progress lp where lp.profile_id = p.id) as completed,
+      (select count(*) from certificates c where c.profile_id = p.id) as certificates
+    from profiles p
+    order by p.created_at desc`)
+  return rows.map((row) => ({
+    name: str(row.name),
+    email: str(row.email),
+    role: toRole(row.role),
+    createdAt: date(row.created_at),
+    lastActivity: date(row.last_activity),
+    courses: num(row.courses),
+    completedLessons: num(row.completed),
+    certificates: num(row.certificates),
+  }))
+}

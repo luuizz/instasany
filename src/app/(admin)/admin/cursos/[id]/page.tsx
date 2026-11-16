@@ -1,4 +1,4 @@
-import { ExternalLinkIcon, EyeIcon } from 'lucide-react'
+import { ChartColumnIcon, ExternalLinkIcon, EyeIcon } from 'lucide-react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ActionsMenu } from '@/components/admin/actions-menu'
@@ -55,6 +55,10 @@ export default async function EditCoursePage({ params }: PageProps) {
         description={`${course.level} · ${countLabel(course.modules.length, 'módulo', 'módulos')} · ${countLabel(course.lessonCount, 'aula', 'aulas')} · ${formatDuration(course.totalMinutes)}`}
         actions={
           <>
+            <ButtonLink href={`/admin/cursos/${course.id}/relatorio`} variant="outline" size="default">
+              <ChartColumnIcon />
+              Relatório
+            </ButtonLink>
             {firstLesson && (
               <ButtonLink
                 href={`/aluno/cursos/${course.slug}/aulas/${firstLesson.id}`}

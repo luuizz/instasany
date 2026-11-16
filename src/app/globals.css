@@ -4,6 +4,7 @@
 /* Identidade da Instasany: verde-pinho com destaque em lima */
 @theme {
   --font-sans: 'Epilogue Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
 
   --color-pine: #1d3531;
   --color-pine-line: #2a4b46;
@@ -100,4 +101,10 @@
 
 @utility bg-hero {
   background-image: url('/images/hero-bg.svg');
+}
+
+/* A única página feita para imprimir é o certificado: A4 deitado, sem margem */
+@page {
+  size: A4 landscape;
+  margin: 0;
 }

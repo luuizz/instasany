@@ -1,0 +1,210 @@
+/*
+ * Peça de impressão: as medidas usam cqw (largura do certificado) para ele escalar como uma imagem,
+ * igual na tela, no celular e no PDF. As cores vêm dos tokens da marca em globals.css.
+ */
+.sheet {
+  container-type: inline-size;
+  position: relative;
+  aspect-ratio: 1.414;
+  overflow: hidden;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* Fundo: degradê pinho, brilho lima no alto, brilho sage embaixo e uma grade que some nas bordas */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(55% 70% at 88% 8%, color-mix(in oklab, var(--color-lime) 20%, transparent), transparent 70%),
+    radial-gradient(45% 60% at 0% 100%, color-mix(in oklab, var(--color-sage) 40%, transparent), transparent 70%),
+    linear-gradient(155deg, var(--color-pine) 0%, var(--color-ink) 75%);
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--color-paper) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--color-paper) 7%, transparent) 1px, transparent 1px);
+  background-size: 3.5cqw 3.5cqw;
+  mask-image: radial-gradient(65% 75% at 72% 35%, black 0%, transparent 100%);
+}
+
+/* Moldura fina e régua nas laterais, como uma prancheta */
+.frame {
+  position: absolute;
+  inset: 2cqw;
+  border: 1px solid color-mix(in oklab, var(--color-lime) 28%, transparent);
+  border-radius: 1.2cqw;
+}
+
+.ruler {
+  position: absolute;
+  top: 6cqw;
+  bottom: 6cqw;
+  width: 0.9cqw;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-paper) 22%, transparent) 0 1px,
+    transparent 1px 1.6cqw
+  );
+}
+
+.rulerLeft {
+  left: 2.6cqw;
+}
+
+.rulerRight {
+  right: 2.6cqw;
+}
+
+.content {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  padding: 5cqw 6.5cqw 4.5cqw;
+}
+
+.logo {
+  width: 13cqw;
+  height: auto;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 1.05cqw;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-paper) 55%, transparent);
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 1.7cqw;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-lime);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 1.2cqw;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-lime);
+}
+
+.lead {
+  font-size: 1.6cqw;
+  color: color-mix(in oklab, var(--color-paper) 72%, transparent);
+}
+
+/* Faixa lima com o nome, encostada na borda esquerda */
+.band {
+  width: fit-content;
+  max-width: 62cqw;
+  margin-left: -6.5cqw;
+  padding: 1cqw 3.2cqw 1cqw 6.5cqw;
+  border-radius: 0 99cqw 99cqw 0;
+  background: var(--color-lime);
+  color: var(--color-pine);
+  font-size: 4.2cqw;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.course {
+  max-width: 60cqw;
+  font-size: 3.6cqw;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.note {
+  max-width: 52cqw;
+  font-size: 1.3cqw;
+  line-height: 1.5;
+  color: color-mix(in oklab, var(--color-paper) 60%, transparent);
+}
+
+.seal {
+  width: 20cqw;
+}
+
+/* Métrica com cantoneiras nos quatro cantos */
+.metric {
+  padding: 1cqw 1.6cqw;
+  --corner: color-mix(in oklab, var(--color-lime) 60%, transparent);
+  background:
+    linear-gradient(var(--corner), var(--corner)) top left / 0.9cqw 1px no-repeat,
+    linear-gradient(var(--corner), var(--corner)) top left / 1px 0.9cqw no-repeat,
+    linear-gradient(var(--corner), var(--corner)) top right / 0.9cqw 1px no-repeat,
+    linear-gradient(var(--corner), var(--corner)) top right / 1px 0.9cqw no-repeat,
+    linear-gradient(var(--corner), var(--corner)) bottom left / 0.9cqw 1px no-repeat,
+    linear-gradient(var(--corner), var(--corner)) bottom left / 1px 0.9cqw no-repeat,
+    linear-gradient(var(--corner), var(--corner)) bottom right / 0.9cqw 1px no-repeat,
+    linear-gradient(var(--corner), var(--corner)) bottom right / 1px 0.9cqw no-repeat;
+}
+
+.metricValue {
+  font-size: 2.1cqw;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.divider {
+  width: 1px;
+  align-self: stretch;
+  background: color-mix(in oklab, var(--color-paper) 18%, transparent);
+}
+
+.qr {
+  width: 8.5cqw;
+  padding: 0.6cqw;
+  border-radius: 0.8cqw;
+  background: var(--color-paper);
+}
+
+.qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.verify {
+  max-width: 24cqw;
+  font-size: 1.05cqw;
+  line-height: 1.5;
+  color: color-mix(in oklab, var(--color-paper) 60%, transparent);
+}
+
+.verify strong {
+  color: var(--color-paper);
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.gap1 {
+  gap: 1cqw;
+}
+
+.gap2 {
+  gap: 2cqw;
+}
+
+/* Na impressão a folha ocupa o A4 deitado inteiro (sem a sobra que gera uma segunda página) */
+@media print {
+  .sheet {
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: auto;
+  }
+}

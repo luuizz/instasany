@@ -4,7 +4,7 @@ import { randomBytes } from 'node:crypto'
 import { and, eq } from 'drizzle-orm'
 import type { Certificate, CourseCompletion, CourseOutline } from '@/types/lms'
 import { db } from '../db/client'
-import { certificates, courses } from '../db/schema'
+import { certificates, courses, enrollments } from '../db/schema'
 import { getCourseBySlug } from './courses'
 import { completedLessonIds, isEnrolled } from './learning'
 import { passedQuizModules } from './quiz'
@@ -76,10 +76,15 @@ export async function getCertificate(code: string): Promise<Certificate | null> 
       courseTitle: certificates.courseTitle,
       courseSlug: courses.slug,
       totalMinutes: certificates.totalMinutes,
+      startedAt: enrollments.createdAt,
       issuedAt: certificates.issuedAt,
     })
     .from(certificates)
     .leftJoin(courses, eq(courses.id, certificates.courseId))
+    .leftJoin(
+      enrollments,
+      and(eq(enrollments.profileId, certificates.profileId), eq(enrollments.courseId, certificates.courseId)),
+    )
     .where(eq(certificates.code, code.toUpperCase()))
     .limit(1)
   return row ?? null

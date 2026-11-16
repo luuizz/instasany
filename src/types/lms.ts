@@ -73,6 +73,8 @@ export type Certificate = {
   courseTitle: string
   courseSlug: string | null
   totalMinutes: number
+  // Data da matrícula, se ela ainda existir
+  startedAt: Date | null
   issuedAt: Date
 }
 

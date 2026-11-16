@@ -1,7 +1,6 @@
 'use client'
 
 import { LayoutDashboardIcon } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
@@ -20,9 +19,8 @@ export function HeaderAccountLinks() {
     return (
       <Link
         href="/entrar"
-        className="flex animate-in items-center gap-2 font-medium text-paper duration-300 fade-in hover:text-lime"
+        className="flex h-10 animate-in items-center rounded-full bg-lime px-5 text-sm font-semibold whitespace-nowrap text-pine duration-300 fade-in hover:bg-lime/85"
       >
-        <Image src="/icons/user.svg" alt="" width={24} height={24} />
         Fazer login
       </Link>
     )
@@ -50,7 +48,7 @@ export function AccountLink({ firstName, className }: { firstName: string; class
     <Link
       href="/aluno"
       className={cn(
-        'group flex max-w-48 items-center gap-2 rounded-full bg-pine-line py-1 pr-4 pl-1 font-medium whitespace-nowrap text-paper transition hover:bg-pine-ring',
+        'group flex max-w-48 items-center gap-2 rounded-full bg-paper/10 py-1 pr-4 pl-1 text-sm font-medium whitespace-nowrap text-paper transition hover:bg-paper/15',
         className,
       )}
     >

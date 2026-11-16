@@ -1,4 +1,5 @@
 import 'server-only'
+import { cache } from 'react'
 import { sql } from 'drizzle-orm'
 import type { StudentDashboard } from '@/types/lms'
 import { date, num, rawRows, str } from '../db/raw'
@@ -68,8 +69,8 @@ async function watchedMinutes(profileId: string) {
   return Math.round(num(row.seconds) / 60)
 }
 
-// Tudo o que a página inicial da área do aluno mostra
-export async function getStudentDashboard(profileId: string): Promise<StudentDashboard> {
+// Tudo o que a área do aluno mostra; cache() evita repetir as consultas quando o layout e a página pedem na mesma requisição
+export const getStudentDashboard = cache(async (profileId: string): Promise<StudentDashboard> => {
   const base = await listStudentCourses(profileId)
   const nextIds = base.map((course) => course.nextLessonId).filter((id): id is number => id !== null)
   const [activity, certificates, resume, weekData, recentData, minutes] = await Promise.all([
@@ -103,4 +104,4 @@ export async function getStudentDashboard(profileId: string): Promise<StudentDas
     week: weekData,
     recent: recentData,
   }
-}
+})

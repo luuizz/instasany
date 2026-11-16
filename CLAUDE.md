@@ -31,7 +31,7 @@ src/
     (auth)/       entrar e cadastro (tela dividida com AuthShowcase, abas AuthSwitch), com as Server Actions de login em actions.ts
     (admin)/      painel /admin (CMS); só admin, conferido no layout
     (site)/cursos catálogo público e página do curso, com a matrícula (actions.ts)
-    (aluno)/      área do aluno /aluno: dashboard (services/student-dashboard.ts) e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
+    (aluno)/      área do aluno com moldura própria (StudentShell, sem o cabeçalho do site): início (services/student-dashboard.ts), /aluno/cursos, /aluno/certificados, /aluno/perfil e a tela da aula (/aluno/cursos/[slug]/aulas/[id])
     (admin)/admin/cursos  cursos, módulos e aulas (actions.ts)
     api/auth/     endpoints do Neon Auth no domínio do site
     api/uploads/  token de upload direto do navegador para o Vercel Blob (só admin)
@@ -44,7 +44,7 @@ src/
     admin/ auth/  telas do painel e do login
     courses/      card, capa, ementa e progresso (catálogo e área do aluno)
     lms/          player de vídeo próprio e lista de aulas
-    student/      blocos do dashboard do aluno (continuar, números, semana, certificados)
+    student/      moldura da área do aluno (student-shell: menu lateral, que vira só ícones na aula e no quiz; abas embaixo no celular) e blocos do início
   hooks/          hooks de cliente reaproveitados (use-form-action)
   config/         identidade, navegação e seções editáveis do CMS (cms.ts)
   data/           conteúdo padrão do site, usado enquanto a seção não é salva no painel
@@ -77,7 +77,7 @@ database/migrations/  SQL gerado pelo drizzle-kit; nunca editar uma migration ap
 - Liberação gradual: `lessons.release_after_days` (0 = abre na matrícula). A regra fica em `lib/release.ts`; aula fechada não entrega texto, vídeo nem materiais, não pode ser concluída, aparece com cadeado e data na lista, e o quiz do módulo só abre quando todas as aulas dele abriram. Admin sem matrícula vê tudo aberto.
 - Matrícula é gratuita (projeto fictício). Ordem de módulos e aulas por `sort_order`, trocada com o vizinho.
 - Vídeos e capas: upload direto do navegador para o Vercel Blob (`components/admin/media-field.tsx` + `api/uploads`); limites em `lib/media.ts`. Arquivo trocado ou excluído sai do Blob com `after()`. Sem `BLOB_READ_WRITE_TOKEN` o painel aceita só a URL.
-- Cabeçalho do site: fixo no topo, sem fundo próprio sobre a faixa escura e virando pílula flutuante ao rolar (`layout/header-shell.tsx`); menu em `config/site.ts` (`mainNav`: "Cursos" é página, o resto são âncoras da home, destacadas pelo `SiteNav`) e busca em `layout/site-search.tsx` (Command do shadcn, abre pelo botão, `/` ou ⌘K/Ctrl+K, e procura no catálogo de `listCatalog` pelo título, resumo, nível, módulos e aulas). As páginas públicas são estáticas, então o cabeçalho descobre quem está logado no navegador (`layout/header-account-context.tsx` chama a action `getHeaderAccountAction` uma vez por montagem). Visitante vê "Fazer login"; aluno vê o nome; admin vê também "Painel". Na área do aluno o layout passa a conta pronta em `SiteHeader account`.
+- Cabeçalho do site: fixo no topo, sem fundo próprio sobre a faixa escura e virando pílula flutuante ao rolar (`layout/header-shell.tsx`); menu em `config/site.ts` (`mainNav`: "Cursos" é página, o resto são âncoras da home, destacadas pelo `SiteNav`) e busca em `layout/site-search.tsx` (Command do shadcn, abre pelo botão, `/` ou ⌘K/Ctrl+K, e procura no catálogo de `listCatalog` pelo título, resumo, nível, módulos e aulas). As páginas públicas são estáticas, então o cabeçalho descobre quem está logado no navegador (`layout/header-account-context.tsx` chama a action `getHeaderAccountAction` uma vez por montagem). Visitante vê "Fazer login"; aluno vê o nome; admin vê também "Painel". A área do aluno não usa o cabeçalho do site: tem a própria moldura (`components/student/student-shell.tsx`).
 - Painel: `/admin` é a visão geral (números de `services/dashboard.ts`), `/admin/cursos`, `/admin/alunos` (lista com busca e detalhe com cursos, progresso, papel e atividade; `services/students.ts`), `/admin/analise` e `/admin/conteudo`. Cada página entra com o `template.tsx` e mostra o `loading.tsx` enquanto carrega.
 - Listas do painel (cursos, seções do site) alternam entre grade e lista (`components/admin/view-toggle.tsx`); a escolha fica no cookie `painel-visualizacao`, lido no servidor por `server/admin-view.ts`.
 - Análise de uso própria (sem gtag): tabela `analytics_events`. O navegador envia `page_view`, `video_play` e `video_watch` pela action `trackEventAction` (`components/analytics/track.ts`, com id aleatório no localStorage e respeito a Do Not Track/GPC); `enrollment` e `lesson_complete` são gravados pelo servidor com `after()`. Uso de admin não é gravado. Relatórios em `services/analytics-report.ts` (SQL puro via `db/raw.ts`, dias no fuso de São Paulo). A página `/privacidade` explica o que é medido; evento novo entra nela.

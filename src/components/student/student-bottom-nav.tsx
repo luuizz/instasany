@@ -5,8 +5,12 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { exploreLink, isActiveRoute, studentNav } from './student-nav-items'
 
-// No celular cabem cinco abas: as seções da área do aluno e o catálogo
-const tabs = [...studentNav.slice(0, 2), { ...exploreLink, label: 'Explorar', exact: false }, ...studentNav.slice(2)]
+// No celular cabem cinco abas: as seções principais e o catálogo (anotações ficam no menu da conta)
+const tabs = [
+  ...studentNav.filter((item) => item.href === '/aluno' || item.href === '/aluno/cursos'),
+  { ...exploreLink, label: 'Explorar', exact: false },
+  ...studentNav.filter((item) => item.href === '/aluno/certificados' || item.href === '/aluno/perfil'),
+]
 
 // No celular as seções da área do aluno ficam em abas fixas embaixo, como num app
 export function StudentBottomNav() {

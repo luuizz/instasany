@@ -118,6 +118,22 @@ export const lessonProgress = pgTable(
 )
 
 // Onde a pessoa parou no vídeo de cada aula, para continuar dali
+// Anotação pessoal do aluno em cada aula (uma por pessoa e aula)
+export const lessonNotes = pgTable(
+  'lesson_notes',
+  {
+    profileId: text('profile_id')
+      .notNull()
+      .references(() => profiles.id, { onDelete: 'cascade' }),
+    lessonId: integer('lesson_id')
+      .notNull()
+      .references(() => lessons.id, { onDelete: 'cascade' }),
+    content: text('content').notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.profileId, table.lessonId] })],
+)
+
 export const lessonPositions = pgTable(
   'lesson_positions',
   {

@@ -128,3 +128,12 @@ export type CatalogCourse = CourseSummary & {
   keywords: string[]
   rating: { average: number; count: number } | null
 }
+
+export type StudentNote = {
+  lessonId: number
+  lessonTitle: string
+  courseTitle: string
+  courseSlug: string
+  content: string
+  updatedAt: Date
+}

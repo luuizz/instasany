@@ -1,9 +1,10 @@
-import { AwardIcon, BookOpenIcon, CompassIcon, HomeIcon, UserRoundIcon } from 'lucide-react'
+import { AwardIcon, BookOpenIcon, CompassIcon, HomeIcon, NotebookPenIcon, UserRoundIcon } from 'lucide-react'
 
 // Menu da área do aluno; exact: só a própria rota acende o item
 export const studentNav = [
   { href: '/aluno', label: 'Início', icon: HomeIcon, exact: true },
   { href: '/aluno/cursos', label: 'Meus cursos', icon: BookOpenIcon },
+  { href: '/aluno/anotacoes', label: 'Anotações', icon: NotebookPenIcon },
   { href: '/aluno/certificados', label: 'Certificados', icon: AwardIcon },
   { href: '/aluno/perfil', label: 'Meu perfil', icon: UserRoundIcon },
 ]

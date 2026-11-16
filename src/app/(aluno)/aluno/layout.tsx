@@ -1,7 +1,7 @@
-import { isStaff } from '@/lib/roles'
 import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/layout/site-header'
 import { firstNameOf } from '@/lib/account'
+import { isStaff } from '@/lib/roles'
 import { requireUser } from '@/server/auth/session'
 
 export const metadata: Metadata = { title: 'Área do aluno', robots: { index: false } }

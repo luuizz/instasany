@@ -38,6 +38,10 @@ test('aluno se matricula, estuda, faz o quiz, pergunta e avalia', async ({ page 
 
   await page.goto(`/cursos/${COURSE.slug}`)
   await expect(page.getByText('Aulas curtas e práticas.')).toBeVisible()
+
+  await page.goto('/aluno')
+  await expect(page.getByRole('heading', { name: 'Meus cursos' })).toBeVisible()
+  await expect(page.locator('#continuar')).toBeVisible()
 })
 
 test('aluno troca o nome no perfil', async ({ page }) => {

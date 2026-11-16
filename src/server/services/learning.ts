@@ -77,7 +77,13 @@ export async function listStudentCourses(profileId: string): Promise<StudentCour
         items.map((lesson) => lesson.id),
       )
       const enrolledAt = enrolled.find((row) => row.courseId === summary.id)?.createdAt ?? null
-      return { ...summary, completedCount: done.size, nextLessonId: nextLesson(items, done, enrolledAt) }
+      const nextLessonId = nextLesson(items, done, enrolledAt)
+      return {
+        ...summary,
+        completedCount: done.size,
+        nextLessonId,
+        nextLessonTitle: items.find((lesson) => lesson.id === nextLessonId)?.title ?? null,
+      }
     }),
   )
 }

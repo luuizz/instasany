@@ -8,7 +8,7 @@ import { CourseAside } from '@/components/lms/course-aside'
 import { VideoPlayer } from '@/components/lms/video-player'
 import { Container } from '@/components/ui/container'
 import { formatDateTime } from '@/lib/dates'
-import { CheckIcon, LockIcon } from 'lucide-react'
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, LockIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SubmitButton } from '@/components/ui/submit-button'
 import { requireUser } from '@/server/auth/session'
@@ -95,13 +95,15 @@ export default async function LessonPage({ params }: PageProps) {
           </form>
           <div className="ml-auto flex gap-4 text-sm font-semibold">
             {previousId && (
-              <Link href={lessonHref(previousId)} className="text-ink/60 hover:text-ink">
-                ← Anterior
+              <Link href={lessonHref(previousId)} className="flex items-center gap-1.5 text-ink/60 hover:text-ink">
+                <ArrowLeftIcon className="size-4" />
+                Anterior
               </Link>
             )}
             {nextId && (
-              <Link href={lessonHref(nextId)} className="text-pine hover:underline">
-                Próxima →
+              <Link href={lessonHref(nextId)} className="flex items-center gap-1.5 text-pine hover:underline">
+                Próxima
+                <ArrowRightIcon className="size-4" />
               </Link>
             )}
           </div>

@@ -3,10 +3,12 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { after } from 'next/server'
-import { lessonPositionSchema } from '@/lib/validation/lms'
+import { fail, ok, type ActionResult } from '@/lib/result'
+import { lessonNoteSchema, lessonPositionSchema } from '@/lib/validation/lms'
 import { getCurrentProfile, requireUser } from '@/server/auth/session'
 import { recordServerEvent } from '@/server/services/analytics'
 import { saveLessonPosition, setLessonCompleted } from '@/server/services/learning'
+import { saveNote } from '@/server/services/notes'
 
 // nextHref: próxima aula ou o quiz do módulo, sempre dentro do curso
 type Target = { slug: string; lessonId: number; nextHref: string | null }
@@ -32,4 +34,15 @@ export async function saveLessonPositionAction(input: unknown): Promise<void> {
   } catch (error) {
     console.error('[aula] não foi possível salvar a posição do vídeo:', error)
   }
+}
+
+// Anotação da aula, salva automaticamente pelo bloco de notas enquanto a pessoa digita
+export async function saveNoteAction(input: unknown): Promise<ActionResult<{ savedAt: string }>> {
+  const parsed = lessonNoteSchema.safeParse(input)
+  if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? 'Não foi possível salvar a anotação.')
+  const profile = await requireUser()
+  const saved = await saveNote(profile, parsed.data.lessonId, parsed.data.content)
+  if (!saved) return fail('Você precisa estar matriculado no curso para anotar.')
+  revalidatePath('/aluno/anotacoes')
+  return ok({ savedAt: saved.updatedAt.toISOString() })
 }

@@ -9,12 +9,14 @@ import { Field, FieldDescription, FieldLabel } from './field'
 type LabeledFieldProps = {
   label: string
   hint?: string
+  // Conteúdo ao lado do rótulo, como um link "Esqueci a senha"
+  aside?: React.ReactNode
   className?: string
   children: React.ReactElement<{ id?: string; 'aria-describedby'?: string }>
 }
 
 // Field do shadcn com rótulo e dica já ligados ao controle (id gerado quando o controle não tem)
-export function LabeledField({ label, hint, className, children }: LabeledFieldProps) {
+export function LabeledField({ label, hint, aside, className, children }: LabeledFieldProps) {
   const generated = useId()
   const id = (isValidElement(children) && children.props.id) || generated
   const hintId = hint ? `${id}-dica` : undefined
@@ -22,9 +24,18 @@ export function LabeledField({ label, hint, className, children }: LabeledFieldP
 
   return (
     <Field className={cn('gap-2', className)}>
-      <FieldLabel htmlFor={id} className="font-semibold">
-        {label}
-      </FieldLabel>
+      {aside ? (
+        <div className="flex items-baseline justify-between gap-3">
+          <FieldLabel htmlFor={id} className="font-semibold">
+            {label}
+          </FieldLabel>
+          {aside}
+        </div>
+      ) : (
+        <FieldLabel htmlFor={id} className="font-semibold">
+          {label}
+        </FieldLabel>
+      )}
       {control}
       {hint && (
         <FieldDescription id={hintId} className="text-xs">

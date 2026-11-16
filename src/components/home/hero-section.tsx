@@ -17,7 +17,7 @@ export function HeroSection({ content }: HeroSectionProps) {
     <section
       ref={scope}
       id="inicio"
-      className="relative overflow-hidden border-t border-pine-line bg-pine bg-hero bg-top bg-no-repeat pt-12 pb-84 sm:pb-100 lg:pt-16 lg:pb-128"
+      className="relative overflow-hidden bg-pine bg-hero bg-top bg-no-repeat pt-12 pb-84 sm:pb-100 lg:pt-16 lg:pb-128"
     >
       <Container className="flex flex-col items-center">
         <div data-reveal="hero-text" className="w-full max-w-hero-text text-center opacity-0">

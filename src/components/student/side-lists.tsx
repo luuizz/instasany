@@ -6,7 +6,7 @@ import type { DashboardCourse, StudentDashboard } from '@/types/lms'
 export function CertificateList({ courses }: { courses: DashboardCourse[] }) {
   const issued = courses.filter((course) => course.certificateCode)
   return (
-    <section aria-labelledby="certificados" className="rounded-3xl border border-ink/10 bg-paper p-5">
+    <section aria-labelledby="certificados" className="rounded-3xl border border-ink/10 bg-card p-5">
       <h2 id="certificados" className="font-semibold text-ink">
         Certificados
       </h2>
@@ -36,7 +36,7 @@ export function CertificateList({ courses }: { courses: DashboardCourse[] }) {
 export function RecentList({ items }: { items: StudentDashboard['recent'] }) {
   if (!items.length) return null
   return (
-    <section aria-labelledby="conquistas" className="rounded-3xl border border-ink/10 bg-paper p-5">
+    <section aria-labelledby="conquistas" className="rounded-3xl border border-ink/10 bg-card p-5">
       <h2 id="conquistas" className="font-semibold text-ink">
         Últimas aulas concluídas
       </h2>

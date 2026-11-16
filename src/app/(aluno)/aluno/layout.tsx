@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { cookies } from 'next/headers'
 import { StudentShell } from '@/components/student/student-shell'
 import { isStaff } from '@/lib/roles'
+import { MENU_COOKIE, parseMenu, parseTheme, THEME_COOKIE } from '@/lib/student-preferences'
 import { requireUser } from '@/server/auth/session'
 import { getStudentDashboard } from '@/server/services/student-dashboard'
 
@@ -11,13 +13,15 @@ export const metadata: Metadata = {
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
   const profile = await requireUser()
-  const { current } = await getStudentDashboard(profile.id)
+  const [{ current }, jar] = await Promise.all([getStudentDashboard(profile.id), cookies()])
   const done = current ? current.completedCount >= current.lessonCount : true
   return (
     <StudentShell
       name={profile.name || profile.email}
       email={profile.email}
       staff={isStaff(profile.role)}
+      initialTheme={parseTheme(jar.get(THEME_COOKIE)?.value)}
+      initialMenu={parseMenu(jar.get(MENU_COOKIE)?.value)}
       current={
         current && !done
           ? {

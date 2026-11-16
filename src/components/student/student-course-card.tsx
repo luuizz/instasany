@@ -17,7 +17,7 @@ export function StudentCourseCard({ course }: { course: DashboardCourse }) {
           {course.certificateCode ? (
             <Link
               href={`/certificado/${course.certificateCode}`}
-              className="flex items-center gap-2 text-sm font-semibold text-pine hover:underline"
+              className="flex items-center gap-2 text-sm font-semibold text-pine hover:underline dark:text-lime"
             >
               <AwardIcon className="size-4 text-sage" />
               Ver certificado

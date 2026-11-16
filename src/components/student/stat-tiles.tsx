@@ -19,10 +19,10 @@ export function StatTiles({ stats }: { stats: StudentDashboard['stats'] }) {
       {tiles.map(({ icon: Icon, label, value, hint }, index) => (
         <li
           key={label}
-          className="flex animate-in flex-col items-start gap-3 rounded-3xl border border-ink/10 bg-paper p-4 shadow-sm duration-500 fill-mode-both fade-in slide-in-from-bottom-2 sm:flex-row sm:items-center sm:gap-4 sm:p-5"
+          className="flex animate-in flex-col items-start gap-3 rounded-3xl border border-ink/10 bg-card p-4 shadow-sm duration-500 fill-mode-both fade-in slide-in-from-bottom-2 sm:flex-row sm:items-center sm:gap-4 sm:p-5"
           style={{ animationDelay: `${index * 70}ms` }}
         >
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-pine">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-pine dark:text-lime">
             <Icon className="size-5" />
           </span>
           <span className="min-w-0">

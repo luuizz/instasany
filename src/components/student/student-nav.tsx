@@ -24,7 +24,7 @@ function NavLink({ href, label, icon: Icon, active = false, compact }: NavLinkPr
       className={cn(
         'group relative flex items-center gap-3 rounded-2xl py-2.5 font-medium transition-all duration-200',
         compact ? 'justify-center px-0' : 'px-4',
-        active ? 'bg-pine-line text-paper' : 'text-paper/60 hover:bg-pine-line/60 hover:text-paper',
+        active ? 'bg-secondary text-ink' : 'text-ink/60 hover:bg-secondary/70 hover:text-ink',
       )}
     >
       <span
@@ -34,7 +34,12 @@ function NavLink({ href, label, icon: Icon, active = false, compact }: NavLinkPr
           active ? 'opacity-100' : 'h-0 opacity-0',
         )}
       />
-      <Icon className={cn('size-5 shrink-0 transition-colors', active ? 'text-lime' : 'group-hover:text-paper')} />
+      <Icon
+        className={cn(
+          'size-5 shrink-0 transition-colors',
+          active ? 'text-sage dark:text-lime' : 'group-hover:text-ink',
+        )}
+      />
       {!compact && label}
     </Link>
   )
@@ -55,7 +60,7 @@ export function StudentNav({ compact, staff }: { compact: boolean; staff: boolea
       {studentNav.map((item) => (
         <NavLink key={item.href} {...item} compact={compact} active={isActiveRoute(pathname, item.href, item.exact)} />
       ))}
-      <span aria-hidden className="my-3 h-px bg-pine-line" />
+      <span aria-hidden className="my-3 h-px bg-border" />
       <NavLink {...exploreLink} compact={compact} />
       {staff && <NavLink href="/admin" label="Painel" icon={LayoutDashboardIcon} compact={compact} />}
     </nav>

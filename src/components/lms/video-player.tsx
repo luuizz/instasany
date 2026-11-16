@@ -79,7 +79,7 @@ export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerPr
       onKeyDown={onKeyDown}
       aria-label={`Vídeo: ${title}`}
       role="region"
-      className="group relative aspect-video overflow-hidden rounded-3xl bg-ink outline-none focus-visible:ring-4 focus-visible:ring-lime"
+      className="group relative aspect-video overflow-hidden rounded-3xl bg-night outline-none focus-visible:ring-4 focus-visible:ring-lime"
     >
       <video
         ref={video}
@@ -93,7 +93,7 @@ export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerPr
       {resume.resumedFrom !== null && (
         <div
           role="status"
-          className="absolute top-4 left-4 flex animate-in items-center gap-1 rounded-full bg-ink/80 py-1 pr-1 pl-4 text-sm text-paper backdrop-blur fade-in slide-in-from-top-2"
+          className="absolute top-4 left-4 flex animate-in items-center gap-1 rounded-full bg-night/80 py-1 pr-1 pl-4 text-sm text-paper backdrop-blur fade-in slide-in-from-top-2"
         >
           Continuando de {clock(resume.resumedFrom)}
           <Button
@@ -132,7 +132,7 @@ export function VideoPlayer({ src, title, lessonId, startAt = 0 }: VideoPlayerPr
 
       <div
         className={cn(
-          'absolute inset-x-0 bottom-0 flex flex-col gap-3 bg-gradient-to-t from-ink/90 to-transparent px-4 pt-10 pb-3 transition-opacity duration-300',
+          'absolute inset-x-0 bottom-0 flex flex-col gap-3 bg-gradient-to-t from-night/90 to-transparent px-4 pt-10 pb-3 transition-opacity duration-300',
           playing && 'opacity-0 group-focus-within:opacity-100 group-hover:opacity-100',
         )}
       >

@@ -20,7 +20,7 @@ export function LessonAttachments({ items }: { items: LessonAttachment[] }) {
               download
               className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-4 transition hover:border-sage focus-visible:ring-4 focus-visible:ring-ring/30 focus-visible:outline-none"
             >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-pine">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-pine dark:text-lime">
                 <FileTextIcon className="size-5" />
               </span>
               <span className="min-w-0 flex-1">

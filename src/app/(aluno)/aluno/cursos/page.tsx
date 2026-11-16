@@ -50,7 +50,9 @@ export default async function MyCoursesPage({ searchParams }: PageProps) {
                 aria-current={item.id === filter ? 'page' : undefined}
                 className={cn(
                   'flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition',
-                  item.id === filter ? 'bg-pine text-paper' : 'bg-paper text-ink/70 ring-1 ring-ink/10 hover:text-pine',
+                  item.id === filter
+                    ? 'bg-pine text-paper'
+                    : 'bg-card text-ink/70 ring-1 ring-ink/10 hover:text-pine dark:hover:text-lime',
                 )}
               >
                 {item.label}
@@ -74,7 +76,7 @@ export default async function MyCoursesPage({ searchParams }: PageProps) {
               ))}
             </ul>
           ) : (
-            <p className="rounded-3xl bg-paper p-10 text-center text-ink/60 ring-1 ring-ink/10">
+            <p className="rounded-3xl bg-card p-10 text-center text-ink/60 ring-1 ring-ink/10">
               {filter === 'concluidos' ? 'Nenhum curso concluído ainda. Falta pouco!' : 'Nenhum curso em andamento.'}
             </p>
           )}

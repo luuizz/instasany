@@ -22,7 +22,7 @@ export function SidebarContinue({ course }: { course: SidebarCourse }) {
         </span>
       </span>
       <span className="flex items-center gap-2">
-        <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-ink/30">
+        <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-night/30">
           <span className="block h-full rounded-full bg-lime" style={{ width: `${course.percent}%` }} />
         </span>
         <span className="text-xs font-semibold text-paper/70 tabular-nums">{course.percent}%</span>

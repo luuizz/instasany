@@ -17,6 +17,8 @@
   --color-lime: #ccec60;
   --color-ink: #0f1f1c;
   --color-paper: #ffffff;
+  /* Fundo escuro fixo (player, capas, sobreposições): não muda com o tema, ao contrário de ink */
+  --color-night: #0f1f1c;
 
   --container-grid: 77.5rem;
   --container-hero-text: 66rem;
@@ -53,6 +55,40 @@
   --border: color-mix(in oklab, var(--color-ink) 10%, white);
   --input: color-mix(in oklab, var(--color-ink) 15%, white);
   --ring: var(--color-sage);
+}
+
+/* Tema escuro, só da área do aluno: o StudentShell põe .dark no <html> enquanto ela está aberta.
+   O site público nunca usa .dark. */
+.dark {
+  color-scheme: dark;
+  --color-ink: #e4ece7;
+  --color-sage: #8bb3ac;
+  --background: #0c1513;
+  --foreground: var(--color-ink);
+  --card: #13201c;
+  --card-foreground: var(--color-ink);
+  --popover: #13201c;
+  --popover-foreground: var(--color-ink);
+  --secondary: #1b2c27;
+  --secondary-foreground: var(--color-ink);
+  --muted: #16231f;
+  --muted-foreground: #9fb2aa;
+  --accent: #1b2c27;
+  --accent-foreground: var(--color-ink);
+  --border: color-mix(in oklab, white 10%, transparent);
+  --input: color-mix(in oklab, white 16%, transparent);
+  --ring: var(--color-lime);
+}
+
+/* Trecho que continua claro dentro do tema escuro (ex.: a prévia em papel do certificado) */
+.light-surface {
+  color-scheme: light;
+  --color-ink: #0f1f1c;
+  --card: var(--color-paper);
+  --card-foreground: #0f1f1c;
+  --secondary: color-mix(in oklab, var(--color-sage-light) 14%, white);
+  --secondary-foreground: var(--color-pine);
+  --border: color-mix(in oklab, #0f1f1c 10%, white);
 }
 
 @theme inline {
@@ -132,5 +168,5 @@
     linear-gradient(color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px) 0 0 / 1.5rem 1.5rem,
     linear-gradient(90deg, color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px) 0 0 / 1.5rem
       1.5rem,
-    linear-gradient(155deg, var(--color-pine), var(--color-ink));
+    linear-gradient(155deg, var(--color-pine), var(--color-night));
 }

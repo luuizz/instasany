@@ -38,7 +38,7 @@ export function SectionCollection({ sections, view }: SectionCollectionProps) {
                 {status(section)}
               </span>
               <span className="text-lg font-semibold text-ink group-hover:underline">{section.title}</span>
-              <span className="flex-1 text-sm text-ink/60">{section.description}</span>
+              <span className="flex-1 text-sm text-ink/65">{section.description}</span>
               <span className="flex items-center gap-1 text-sm font-semibold text-pine">
                 Editar
                 <ChevronRightIcon className="size-4 transition group-hover:translate-x-0.5" />
@@ -61,7 +61,7 @@ export function SectionCollection({ sections, view }: SectionCollectionProps) {
             <span className="w-6 shrink-0 text-sm font-bold text-sage">{String(index + 1).padStart(2, '0')}</span>
             <span className="min-w-0 flex-1">
               <span className="block font-semibold text-ink group-hover:underline">{section.title}</span>
-              <span className="block truncate text-sm text-ink/50">{section.description}</span>
+              <span className="block truncate text-sm text-ink/65">{section.description}</span>
             </span>
             <span className="hidden sm:block">{status(section)}</span>
             <ChevronRightIcon className="size-4 shrink-0 text-ink/30 group-hover:text-pine" />

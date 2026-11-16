@@ -46,7 +46,7 @@ export function CourseFinishCard({ slug, completion, certificateCode }: CourseFi
           </form>
         </>
       ) : (
-        <p className="mt-2 text-sm text-ink/60">{missing(completion)} para liberar o certificado.</p>
+        <p className="mt-2 text-sm text-ink/65">{missing(completion)} para liberar o certificado.</p>
       )}
     </section>
   )

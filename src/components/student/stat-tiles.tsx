@@ -27,7 +27,7 @@ export function StatTiles({ stats }: { stats: StudentDashboard['stats'] }) {
           </span>
           <span className="min-w-0">
             <span className="block text-2xl font-semibold text-ink tabular-nums">{value}</span>
-            <span className="block text-xs text-ink/60 sm:truncate">
+            <span className="block text-xs text-ink/65 sm:truncate">
               {label} <span className="hidden sm:inline">· {hint}</span>
             </span>
           </span>

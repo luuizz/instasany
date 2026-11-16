@@ -39,21 +39,21 @@ export function AuthShowcase() {
               <PlayIcon className="ml-0.5 size-4 fill-pine" />
             </span>
             <span className="min-w-0">
-              <span className="block text-xs text-ink/50">Continue de onde parou</span>
+              <span className="block text-xs text-ink/65">Continue de onde parou</span>
               <span className="block truncate text-sm font-semibold">Bio que converte</span>
             </span>
           </div>
           <span className="h-2 overflow-hidden rounded-full bg-secondary">
             <span className="block h-full w-3/5 rounded-full bg-sage" />
           </span>
-          <span className="flex items-center gap-2 text-xs text-ink/60">
+          <span className="flex items-center gap-2 text-xs text-ink/65">
             <AwardIcon className="size-3.5 text-sage" />
             Faltam 3 aulas para o certificado
           </span>
         </div>
       </div>
 
-      <p className="relative text-sm text-paper/50">
+      <p className="relative text-sm text-paper/65">
         © {site.name} ·{' '}
         <Link href="/privacidade" className="underline-offset-4 hover:text-paper hover:underline">
           Privacidade

@@ -25,11 +25,11 @@ export function CertificatePromo({ courseTitle }: { courseTitle: string }) {
         <div aria-hidden className="rotate-2 rounded-2xl bg-paper p-5 text-ink shadow-2xl shadow-ink/50">
           <div className="rounded-xl p-5 ring-1 ring-pine/15">
             <p className="text-xs font-semibold tracking-widest text-sage uppercase">Certificado de conclusão</p>
-            <p className="mt-3 text-sm text-ink/60">Certificamos que</p>
+            <p className="mt-3 text-sm text-ink/65">Certificamos que</p>
             <p className="text-2xl font-semibold">Seu nome aqui</p>
-            <p className="mt-2 text-sm text-ink/60">concluiu o curso</p>
+            <p className="mt-2 text-sm text-ink/65">concluiu o curso</p>
             <p className="font-semibold text-pine">{courseTitle}</p>
-            <div className="mt-5 flex items-center justify-between text-xs text-ink/50">
+            <div className="mt-5 flex items-center justify-between text-xs text-ink/65">
               <span>{site.name}</span>
               <span className="flex items-center gap-1 text-sage">
                 <BadgeCheckIcon className="size-4" />

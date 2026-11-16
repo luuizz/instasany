@@ -49,9 +49,9 @@ export function StudentAccountMenu({ name, email, staff, variant, theme }: Stude
           <>
             <span className="min-w-0 flex-1">
               <span className="block truncate font-medium text-ink">{name}</span>
-              <span className="block truncate text-xs text-ink/50">{email}</span>
+              <span className="block truncate text-xs text-ink/65">{email}</span>
             </span>
-            <ChevronsUpDownIcon className="size-4 text-ink/50" />
+            <ChevronsUpDownIcon className="size-4 text-ink/65" />
           </>
         )}
       </DropdownMenuTrigger>

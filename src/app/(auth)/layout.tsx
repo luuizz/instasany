@@ -22,7 +22,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="-mt-8 flex flex-1 flex-col rounded-t-4xl bg-paper px-5 pt-7 pb-10 sm:px-10 lg:mt-0 lg:rounded-none lg:px-12 lg:py-10">
           <Link
             href="/"
-            className="flex items-center gap-2 self-start text-sm font-medium text-ink/60 transition hover:text-pine"
+            className="flex items-center gap-2 self-start text-sm font-medium text-ink/65 transition hover:text-pine"
           >
             <ArrowLeftIcon className="size-4" />
             Voltar ao site

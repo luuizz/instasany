@@ -7,7 +7,7 @@ import type { RefObject } from 'react'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
-// Celular aparece com zoom; título e cards entram quando a seção chega ao centro da tela
+// Título e cards entram quando a seção chega ao centro da tela (o zoom do celular é CSS, para não atrasar o LCP)
 export function useShowcaseAnimation(scope: RefObject<HTMLElement | null>) {
   useGSAP(
     () => {
@@ -16,11 +16,6 @@ export function useShowcaseAnimation(scope: RefObject<HTMLElement | null>) {
       const media = gsap.matchMedia()
 
       media.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.fromTo(
-          '[data-reveal="phone"]',
-          { opacity: 0, scale: 0.5 },
-          { opacity: 1, scale: 1, duration: 1, ease: 'power4.out' },
-        )
         gsap.fromTo(
           '[data-reveal="title"]',
           { opacity: 0, y: 100 },

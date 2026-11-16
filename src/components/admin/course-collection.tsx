@@ -39,8 +39,8 @@ export function CourseCollection({ courses, view }: CourseCollectionProps) {
               <div className="flex flex-1 flex-col gap-2 p-5">
                 <p className="text-sm font-medium text-sage">{course.level}</p>
                 <h2 className="text-lg font-semibold text-ink group-hover:underline">{course.title}</h2>
-                <p className="line-clamp-2 text-sm text-ink/60">{course.summary}</p>
-                <p className="mt-auto flex items-center justify-between pt-3 text-sm text-ink/50">
+                <p className="line-clamp-2 text-sm text-ink/65">{course.summary}</p>
+                <p className="mt-auto flex items-center justify-between pt-3 text-sm text-ink/65">
                   {stats(course)}
                   <ChevronRightIcon className="size-4 text-ink/30 transition group-hover:translate-x-0.5 group-hover:text-pine" />
                 </p>
@@ -54,7 +54,7 @@ export function CourseCollection({ courses, view }: CourseCollectionProps) {
 
   return (
     <div className="animate-in overflow-hidden rounded-3xl border border-border bg-card duration-500 fade-in slide-in-from-bottom-2">
-      <div className="hidden grid-cols-[minmax(0,1fr)_8rem_6rem_6rem_7rem] gap-4 border-b border-ink/10 bg-ink/3 px-5 py-3 text-xs font-bold tracking-wide text-ink/50 uppercase lg:grid">
+      <div className="hidden grid-cols-[minmax(0,1fr)_8rem_6rem_6rem_7rem] gap-4 border-b border-ink/10 bg-ink/3 px-5 py-3 text-xs font-bold tracking-wide text-ink/65 uppercase lg:grid">
         <span>Curso</span>
         <span>Nível</span>
         <span>Aulas</span>
@@ -77,7 +77,7 @@ export function CourseCollection({ courses, view }: CourseCollectionProps) {
                 />
                 <span className="min-w-0">
                   <span className="block truncate font-semibold text-ink group-hover:underline">{course.title}</span>
-                  <span className="block truncate text-sm text-ink/50">
+                  <span className="block truncate text-sm text-ink/65">
                     <span className="lg:hidden">
                       <span className="sm:hidden">{course.published ? 'Publicado' : 'Rascunho'} · </span>
                       {course.level} · {stats(course)}

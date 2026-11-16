@@ -7,7 +7,7 @@ export function StudentPageHeader({ eyebrow, title, description, actions }: Stud
       <div>
         {eyebrow && <p className="text-sm font-medium text-sage">{eyebrow}</p>}
         <h1 className="mt-1 text-3xl font-semibold text-balance text-ink sm:text-4xl">{title}</h1>
-        {description && <p className="mt-2 max-w-2xl text-ink/60">{description}</p>}
+        {description && <p className="mt-2 max-w-2xl text-ink/65">{description}</p>}
       </div>
       {actions}
     </header>

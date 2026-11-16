@@ -19,7 +19,7 @@ export function AuthSwitch({ current, back }: AuthSwitchProps) {
           aria-current={tab.id === current ? 'page' : undefined}
           className={cn(
             'rounded-full py-2.5 text-center text-sm font-semibold transition',
-            tab.id === current ? 'bg-paper text-pine shadow-sm' : 'text-ink/60 hover:text-pine',
+            tab.id === current ? 'bg-paper text-pine shadow-sm' : 'text-ink/65 hover:text-pine',
           )}
         >
           {tab.label}

@@ -30,8 +30,8 @@ export function CourseCard({ course, href, cta = 'Ver curso', footer }: CourseCa
             {course.title}
           </Link>
         </h3>
-        <p className="line-clamp-2 text-ink/60">{course.summary}</p>
-        <p className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2 text-sm text-ink/60">
+        <p className="line-clamp-2 text-ink/65">{course.summary}</p>
+        <p className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-2 text-sm text-ink/65">
           <span className="flex items-center gap-1.5">
             <BookOpenIcon className="size-4 text-sage" />
             {countLabel(course.lessonCount, 'aula', 'aulas')}
@@ -44,7 +44,7 @@ export function CourseCard({ course, href, cta = 'Ver curso', footer }: CourseCa
             <span className="flex items-center gap-1.5">
               <StarIcon className="size-4 fill-pine text-pine dark:text-lime" />
               {course.rating.average.toFixed(1).replace('.', ',')}
-              <span className="text-ink/40">({course.rating.count})</span>
+              <span className="text-ink/65">({course.rating.count})</span>
             </span>
           )}
         </p>

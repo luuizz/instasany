@@ -17,7 +17,7 @@ export function CourseHighlights({ modules }: { modules: ModuleItem[] }) {
             </span>
             <span>
               <span className="block font-semibold text-ink">{module.title}</span>
-              <span className="mt-1 line-clamp-2 block text-sm text-ink/60">
+              <span className="mt-1 line-clamp-2 block text-sm text-ink/65">
                 {module.lessons
                   .slice(0, 3)
                   .map((lesson) => lesson.title)

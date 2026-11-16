@@ -15,7 +15,7 @@ export function SidebarContinue({ course }: { course: SidebarCourse }) {
           <PlayIcon className="ml-0.5 size-4 fill-pine" />
         </span>
         <span className="min-w-0">
-          <span className="block text-xs text-paper/50">Continuar</span>
+          <span className="block text-xs text-paper/65">Continuar</span>
           <span className="block truncate text-sm font-semibold text-paper">
             {course.nextLessonTitle ?? course.title}
           </span>

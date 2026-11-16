@@ -32,7 +32,7 @@ export function ShowcaseSection({ content }: ShowcaseSectionProps) {
         width={329}
         height={663}
         priority
-        className="relative z-10 mx-auto -mt-80 mb-12 w-52 opacity-0 sm:-mt-96 sm:w-64 lg:sticky lg:top-56 lg:-mt-128 lg:mb-16 lg:w-auto"
+        className="relative z-10 mx-auto -mt-80 mb-12 w-52 animate-in duration-1000 ease-out zoom-in-50 sm:-mt-96 sm:w-64 lg:sticky lg:top-56 lg:-mt-128 lg:mb-16 lg:w-auto"
       />
       <h2
         data-reveal="title"

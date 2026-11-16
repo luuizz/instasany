@@ -48,7 +48,7 @@ export function ContinueCard({ course }: { course: DashboardCourse }) {
           {course.nextLessonTitle && !done && (
             <p className="mt-2 text-ink/70">
               Próxima aula: <span className="font-medium text-ink">{course.nextLessonTitle}</span>
-              {course.resumeAt > 0 && <span className="text-ink/50"> · parou em {clock(course.resumeAt)}</span>}
+              {course.resumeAt > 0 && <span className="text-ink/65"> · parou em {clock(course.resumeAt)}</span>}
             </p>
           )}
         </div>
@@ -56,7 +56,7 @@ export function ContinueCard({ course }: { course: DashboardCourse }) {
           <Progress value={percent} aria-label={`${percent}% do curso`} className="h-2.5" />
           <span className="w-12 text-right text-sm font-semibold tabular-nums">{percent}%</span>
         </div>
-        <p className="text-sm text-ink/50">
+        <p className="text-sm text-ink/65">
           {course.completedCount} de {course.lessonCount} aulas concluídas
         </p>
         <div className="mt-auto flex flex-wrap gap-3 pt-2">

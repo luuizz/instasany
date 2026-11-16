@@ -63,7 +63,7 @@ export function CourseIncludes({ course }: { course: CourseOutline }) {
               <Icon className="size-5" />
             </span>
             <span className="font-semibold text-ink">{title}</span>
-            <span className="text-sm text-ink/60">{text}</span>
+            <span className="text-sm text-ink/65">{text}</span>
           </li>
         ))}
       </ul>

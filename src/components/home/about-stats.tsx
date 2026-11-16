@@ -38,12 +38,12 @@ function Detail({ value }: { value: string }) {
 // Faixa de números da seção "Sobre nós", com contagem ao entrar na tela
 export function AboutStats({ stats }: { stats: Stat[] }) {
   return (
-    <dl className={cn('grid grid-cols-2 gap-4', columns[stats.length])}>
+    <ul className={cn('grid grid-cols-2 gap-4', columns[stats.length])}>
       {stats.map((stat, index) => {
         const Icon = icons[index % icons.length] ?? StarIcon
         const highlight = index === 0
         return (
-          <div
+          <li
             key={stat.label}
             data-reveal-item
             className={cn(
@@ -59,17 +59,17 @@ export function AboutStats({ stats }: { stats: Stat[] }) {
             >
               <Icon className="size-5" />
             </span>
-            <dt className={cn('order-last text-sm', highlight ? 'text-pine/75' : 'text-ink/60')}>{stat.label}</dt>
-            <dd className="flex flex-col gap-2">
+            <p className={cn('order-last text-sm', highlight ? 'text-pine/75' : 'text-ink/65')}>{stat.label}</p>
+            <div className="flex flex-col gap-2">
               <CountUp
                 value={stat.value}
                 className="text-4xl font-semibold tracking-tight text-ink tabular-nums lg:text-5xl"
               />
               <Detail value={stat.value} />
-            </dd>
-          </div>
+            </div>
+          </li>
         )
       })}
-    </dl>
+    </ul>
   )
 }

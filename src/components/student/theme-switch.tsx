@@ -6,9 +6,9 @@ import type { StudentTheme } from '@/lib/student-preferences'
 import { cn } from '@/lib/utils'
 
 export const themeOptions = [
-  { id: 'light', label: 'Claro', short: 'Claro', icon: SunIcon },
-  { id: 'dark', label: 'Escuro', short: 'Escuro', icon: MoonIcon },
-  { id: 'system', label: 'Automático', short: 'Auto', icon: MonitorIcon },
+  { id: 'light', label: 'Claro', icon: SunIcon },
+  { id: 'dark', label: 'Escuro', icon: MoonIcon },
+  { id: 'system', label: 'Automático', icon: MonitorIcon },
 ] as const
 
 type ThemeSwitchProps = { theme: StudentTheme; onChange: (theme: StudentTheme) => void; compact?: boolean }
@@ -38,7 +38,7 @@ export function ThemeSwitch({ theme, onChange, compact = false }: ThemeSwitchPro
   }
   return (
     <div role="radiogroup" aria-label="Tema" className="grid grid-cols-3 gap-1 rounded-2xl bg-secondary p-1">
-      {themeOptions.map(({ id, label, short, icon: Icon }) => (
+      {themeOptions.map(({ id, label, icon: Icon }) => (
         <button
           key={id}
           type="button"
@@ -48,12 +48,11 @@ export function ThemeSwitch({ theme, onChange, compact = false }: ThemeSwitchPro
           title={label}
           onClick={() => onChange(id)}
           className={cn(
-            'flex items-center justify-center gap-1.5 rounded-xl py-1.5 text-xs font-medium transition',
+            'flex items-center justify-center rounded-xl py-2 transition',
             theme === id ? 'bg-card text-ink shadow-sm' : 'text-ink/55 hover:text-ink',
           )}
         >
-          <Icon className="size-3.5" />
-          {short}
+          <Icon className="size-4" />
         </button>
       ))}
     </div>

@@ -6,6 +6,7 @@ import { num, rawRows, str } from '../db/raw'
 import { emailLog, lessonQuestions, lessons, profiles } from '../db/schema'
 import { answerEmail, enrollmentEmail, reminderEmail, welcomeEmail } from '../emails/messages'
 import { sendEmail } from '../integrations/email'
+import { pushNotification } from './inbox'
 
 type Person = { id?: string; name: string; email: string }
 type Kind = 'welcome' | 'enrollment' | 'answer' | 'reminder'
@@ -37,14 +38,21 @@ export const notifyWelcome = (person: Person) =>
   safely('boas-vindas', () => deliver(person, 'welcome', welcomeEmail(firstNameOf(person.name, person.email))))
 
 export const notifyEnrollment = (person: Person, course: { id: number; title: string; slug: string }) =>
-  safely('matrícula', () =>
-    deliver(
+  safely('matrícula', async () => {
+    if (person.id)
+      await pushNotification(person.id, {
+        kind: 'enrollment',
+        title: 'Matrícula confirmada',
+        body: `Você entrou no ${course.title}. Bons estudos!`,
+        href: `/aluno/cursos/${course.slug}`,
+      })
+    await deliver(
       person,
       'enrollment',
       enrollmentEmail(firstNameOf(person.name, person.email), course.title, `/aluno/cursos/${course.slug}`),
       course.id,
-    ),
-  )
+    )
+  })
 
 // Avisa quem perguntou que alguém respondeu (não avisa quando a pessoa responde a si mesma)
 export const notifyAnswer = (questionId: number, replier: Person & { id: string }, slug: string, excerpt: string) =>
@@ -63,6 +71,14 @@ export const notifyAnswer = (questionId: number, replier: Person & { id: string 
       .where(eq(lessonQuestions.id, questionId))
       .limit(1)
     if (!row || row.id === replier.id) return
+    const short = excerpt.length > 280 ? `${excerpt.slice(0, 277)}...` : excerpt
+    const path = `/aluno/cursos/${slug}/aulas/${row.lessonId}#duvidas`
+    await pushNotification(row.id, {
+      kind: 'answer',
+      title: `${firstNameOf(replier.name, replier.email)} respondeu sua dúvida`,
+      body: `Em "${row.lessonTitle}": ${short}`,
+      href: path,
+    })
     await deliver(
       row,
       'answer',
@@ -70,8 +86,8 @@ export const notifyAnswer = (questionId: number, replier: Person & { id: string 
         firstName: firstNameOf(row.name, row.email),
         replierName: firstNameOf(replier.name, replier.email),
         lessonTitle: row.lessonTitle,
-        excerpt: excerpt.length > 280 ? `${excerpt.slice(0, 277)}...` : excerpt,
-        path: `/aluno/cursos/${slug}/aulas/${row.lessonId}#duvidas`,
+        excerpt: short,
+        path,
       }),
     )
   })

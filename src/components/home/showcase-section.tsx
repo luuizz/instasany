@@ -32,7 +32,7 @@ export function ShowcaseSection({ content }: ShowcaseSectionProps) {
         width={329}
         height={663}
         priority
-        className="relative z-10 mx-auto -mt-80 mb-12 w-52 animate-in duration-1000 ease-out zoom-in-50 sm:-mt-96 sm:w-64 lg:sticky lg:top-56 lg:-mt-128 lg:mb-16 lg:w-auto"
+        className="relative z-10 mx-auto -mt-80 mb-12 w-52 animate-in duration-1000 ease-out zoom-in-50 sm:-mt-96 sm:w-64 lg:sticky lg:top-56 lg:-mt-128 lg:showcase-phone"
       />
       <h2
         data-reveal="title"
@@ -51,9 +51,10 @@ export function ShowcaseSection({ content }: ShowcaseSectionProps) {
             width={250}
             height={175}
             className={cn(
-              'h-auto w-full rounded-3xl opacity-0 lg:absolute lg:w-auto lg:rounded-none',
+              'h-auto w-full rounded-3xl opacity-0 lg:absolute lg:rounded-none',
+              // Largura fixa: com w-auto a imagem encolhia pela metade em telas de densidade alta
+              card.decorative ? 'hidden lg:block lg:w-59.5' : 'lg:w-62.5',
               desktopPositions[index],
-              card.decorative && 'hidden lg:block',
             )}
           />
         ))}

@@ -156,6 +156,24 @@
 }
 
 /* Arte das capas sem imagem: brilho lima, grade fina e um anel, nas cores da marca */
+/* Celular da vitrine no desktop: 663px de altura, mas nunca maior que a tela (ele fica sticky a 14rem do topo).
+   A largura vem da proporção, não do arquivo, para não encolher em telas de densidade 1,5x ou 2x,
+   e a margem de baixo devolve o que ele perdeu de altura, para o título não subir para dentro do hero. */
+/* Faixa com rolagem lateral pelo toque, sem barra visível */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility showcase-phone {
+  --showcase-phone-h: min(41.4375rem, calc(100svh - 15rem));
+  height: var(--showcase-phone-h);
+  width: auto;
+  margin-bottom: calc(41.4375rem - var(--showcase-phone-h) + 4rem);
+}
+
 @utility cover-art {
   background:
     radial-gradient(

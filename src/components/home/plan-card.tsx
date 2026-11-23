@@ -1,4 +1,5 @@
 import { ButtonLink } from '@/components/ui/button'
+import { touchScrollItem } from '@/components/ui/touch-scroll'
 import { CheckIcon } from 'lucide-react'
 import { formatPrice } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -12,6 +13,7 @@ export function PlanCard({ plan, href }: PlanCardProps) {
     <article
       data-reveal-item
       className={cn(
+        touchScrollItem,
         'relative flex flex-col gap-6 rounded-3xl p-6 lg:p-8',
         featured
           ? 'bg-paper text-ink shadow-2xl shadow-ink/40 lg:-my-4 lg:py-12'

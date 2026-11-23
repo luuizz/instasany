@@ -20,7 +20,12 @@ export function MobileMenu() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Abrir menu" className="-mr-2 hover:bg-pine-line">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Abrir menu"
+          className="rounded-full text-paper hover:bg-paper/10 hover:text-paper"
+        >
           <MenuIcon className="size-6" />
         </Button>
       </SheetTrigger>

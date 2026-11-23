@@ -56,7 +56,7 @@ export function SiteSearch({ compact = false }: { compact?: boolean }) {
           size="icon"
           aria-label="Buscar cursos"
           onClick={() => setOpen(true)}
-          className="text-paper hover:bg-paper/10 hover:text-paper"
+          className="rounded-full text-paper hover:bg-paper/10 hover:text-paper"
         >
           <SearchIcon className="size-5" />
         </Button>

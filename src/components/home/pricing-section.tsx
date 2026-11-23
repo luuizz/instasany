@@ -1,6 +1,7 @@
 import { Container } from '@/components/ui/container'
 import { RevealOnScroll } from '@/components/ui/reveal-on-scroll'
 import { SectionHeading } from '@/components/ui/section-heading'
+import { TouchScroll } from '@/components/ui/touch-scroll'
 import { cn } from '@/lib/utils'
 import type { PricingContent } from '@/types/home'
 import { PlanCard } from './plan-card'
@@ -18,11 +19,16 @@ export function PricingSection({ content }: { content: PricingContent }) {
       <Container>
         <RevealOnScroll>
           <SectionHeading eyebrow={content.eyebrow} title={content.title} tone="dark" />
-          <div className={cn('mx-auto mt-12 grid gap-6 md:grid-cols-2 lg:mt-20', columns[content.plans.length])}>
+          <TouchScroll
+            className={cn(
+              'mt-8 pt-4 md:mx-auto md:mt-12 md:grid md:grid-cols-2 md:gap-6 lg:mt-20',
+              columns[content.plans.length],
+            )}
+          >
             {content.plans.map((plan) => (
               <PlanCard key={plan.name} plan={plan} href={content.ctaHref} />
             ))}
-          </div>
+          </TouchScroll>
           <p data-reveal-item className="mx-auto mt-12 max-w-2xl text-center text-sm text-paper/60">
             {content.note}
           </p>
